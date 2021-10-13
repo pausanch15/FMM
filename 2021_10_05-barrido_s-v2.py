@@ -78,6 +78,7 @@ plt.plot(tiempo_estimulo, estimulo, '--', label='Estímulo', color='k')
 plt.xlim(0, 10)
 plt.title(f'Parámetros de Fede\nk1 = {params[1]}, k2 = {params[2]}, K2 = {params[3]}, n = {params[4]}, k3 = {params[5]}')
 plt.legend(); plt.grid(); plt.show()
+# plt.savefig('barrido_f.pdf', dpi=300, bbox_inches='tight')
 
 #%%
 #Integro el estímulo constante para todos los f que elegí.
@@ -108,11 +109,12 @@ fig, axs = plt.subplots(2, 3, sharex=True, sharey=True)
 fig.suptitle(f'Estímulo Constante', fontsize=13)
 for i, ax in enumerate(axs.flatten()):
     ax.plot(tiempo_estimulo, estimulo, '--', color='k', alpha=0.35)
-    ax.plot(tiempos[i], As[i])
+    ax.plot(tiempos[i], As[i], color='c')
     ax.set_xlabel('Tiempo')
     ax.set_ylabel('A')
     ax.annotate(f"f={F[i]}", (65, 0.2), fontsize=10)
 plt.show()
+# plt.savefig('2021_10_12-estimulo_constante.pdf', dpi=300, bbox_inches='tight')
 
 #%%
 #Ahora para el pulso
@@ -143,11 +145,13 @@ fig, axs = plt.subplots(2, 3, sharex=True, sharey=True)
 fig.suptitle(f'Estímulo Pulso', fontsize=13)
 for i, ax in enumerate(axs.flatten()):
     ax.plot(tiempo_estimulo, estimulo, '--', color='k', alpha=0.35)
-    ax.plot(tiempos[i], As[i])
+    ax.plot(tiempos[i], As[i], color='c')
     ax.set_xlabel('Tiempo')
     ax.set_ylabel('A')
     ax.annotate(f"f={F[i]}", (65, 0.2), fontsize=10)
+    ax.set_xlim(0, 15)
 plt.show()
+# plt.savefig('2021_10_12-pulso_corto_zoom.pdf', dpi=300, bbox_inches='tight')
 
 #%%
 #Ahora para los dos pulsos
@@ -178,8 +182,10 @@ fig, axs = plt.subplots(2, 3, sharex=True, sharey=True)
 fig.suptitle(f'Estímulo Dos Pulso', fontsize=13)
 for i, ax in enumerate(axs.flatten()):
     ax.plot(tiempo_estimulo, estimulo, '--', color='k', alpha=0.35)
-    ax.plot(tiempos[i], As[i])
+    ax.plot(tiempos[i], As[i], color='c')
     ax.set_xlabel('Tiempo')
     ax.set_ylabel('A')
     ax.annotate(f"f={F[i]}", (65, 0.2), fontsize=10)
+    ax.set_xlim(0, 50)
 plt.show()
+# plt.savefig('2021_10_12-dos_pulsos_zoom.pdf', dpi=300, bbox_inches='tight')
