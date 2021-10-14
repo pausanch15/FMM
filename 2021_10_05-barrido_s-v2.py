@@ -189,3 +189,64 @@ for i, ax in enumerate(axs.flatten()):
     ax.set_xlim(0, 50)
 plt.show()
 # plt.savefig('2021_10_12-dos_pulsos_zoom.pdf', dpi=300, bbox_inches='tight')
+
+#%%
+#Varío el tiempo entre pulsos para los dos pulsos aplicados al f=1.7, que corresponde a biestabilidad reversible.
+N_estimulo = 10000 
+tiempo_max_estimulo = 100 
+tiempo_estimulo = np.linspace(0,tiempo_max_estimulo,N_estimulo) 
+tiempo_escalon = 2 
+tiempo_entre_escalones = np.arange(0, 20, 3.5)
+
+plt.figure()
+for t in tiempo_entre_escalones:
+    dos_pulsos = np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon) - np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon*2) + np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon+t) - np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon*2+t)
+
+    plt.plot(tiempo_estimulo, dos_pulsos, label=f'Tiempo Entre Pulsos = {t}')
+    
+plt.grid()
+plt.legend()
+plt.show()
+
+#%%
+F = [1.6, 1.65, 1.7, 1.75, 1.8, 1.9, 2]
+tiempos = []
+As = []
+estimulos = []
+
+for f in F:
+    for t in tiempo_entre_escalones:
+        dos_pulsos = np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon) - np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon*2) + np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon+t) - np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon*2+t)
+        
+        estimulo = dos_pulsos #El estímulo que quiero pasar en etse caso
+        condiciones_iniciales = [0]
+        tiempo_min = 100
+        tiempo_max = 1000
+        
+        k1 = 1
+        k2 = f #Bietsabilidad reversible
+        K2 = 0.5
+        n = 3
+        k3 = 1
+        params = [0, k1, k2, K2, n, k3]
+        
+        interpolar_estimulo = interpolate.interp1d(tiempo_estimulo,estimulo)
+        tiempo, variables = rks.integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
+
+        tiempos.append(tiempo)
+        As.append(variables[0])
+        estimulos.append(estimulo)
+
+    # plt.rc("text", usetex=True)
+    fig, axs = plt.subplots(2, 3, sharex=True, sharey=True)
+    fig.suptitle(f'Estímulo Dos Pulso: f={f}', fontsize=13)
+    for i, ax in enumerate(axs.flatten()):
+        ax.plot(tiempo_estimulo, estimulos[i], '--', color='k', alpha=0.35)
+        ax.plot(tiempos[i], As[i], color='c')
+        ax.set_xlabel('Tiempo')
+        ax.set_ylabel('A')
+        ax.set_xlim(0, 30)
+        ax.grid()
+    plt.show()
+    plt.savefig('2021_10_14-dos_pulsos_reversible_f={f}.pdf', dpi=300, bbox_inches='tight')
+     
