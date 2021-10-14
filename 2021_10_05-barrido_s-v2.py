@@ -247,6 +247,6 @@ for f in F:
         ax.set_ylabel('A')
         ax.set_xlim(0, 30)
         ax.grid()
-    plt.show()
-    plt.savefig('2021_10_14-dos_pulsos_reversible_f={f}.pdf', dpi=300, bbox_inches='tight')
+    # plt.show()
+    plt.savefig(f'2021_10_14-dos_pulsos_reversible_f={f}.pdf', dpi=300, bbox_inches='tight')
      
