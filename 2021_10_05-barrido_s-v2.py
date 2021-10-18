@@ -210,11 +210,12 @@ plt.show()
 
 #%%
 F = [1.6, 1.65, 1.7, 1.75, 1.8, 1.9, 2]
-tiempos = []
-As = []
-estimulos = []
 
 for f in F:
+    tiempos = []
+    As = []
+    estimulos = []
+    
     for t in tiempo_entre_escalones:
         dos_pulsos = np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon) - np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon*2) + np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon+t) - np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon*2+t)
         
@@ -249,4 +250,4 @@ for f in F:
         ax.grid()
     # plt.show()
     plt.savefig(f'2021_10_14-dos_pulsos_reversible_f={f}.pdf', dpi=300, bbox_inches='tight')
-     
+         
