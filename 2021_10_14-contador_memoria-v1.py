@@ -149,6 +149,7 @@ for i in range(len(A_wos)):
     axs[0].legend()
     axs[0].grid()
     axs[0].set_ylabel('A')
+    axs[0].set_xlim(0, 15)
 
     axs[1].plot(t, A_wos_ev[i], label='Sin Estímulo', color='k')
     axs[1].plot(t, A_ws_ev[i], label='Con Estímulo', color='c')
@@ -157,8 +158,9 @@ for i in range(len(A_wos)):
     axs[1].grid()
     axs[1].set_xlabel('Tiempo')
     axs[1].set_ylabel('A')
+    axs[1].set_xlim(0, 15)
 
-    # plt.savefig(f'2020_10_18-interpolacion_f={F[i]}.pdf', dpi=300, bbox_inches='tight')
+    plt.savefig(f'2020_10_18-interpolacion_f={F[i]}.pdf', dpi=300, bbox_inches='tight')
 
 
 #%%
