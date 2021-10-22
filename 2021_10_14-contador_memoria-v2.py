@@ -192,13 +192,16 @@ M = [] #Lista en la que voy a guardar los contadores
 
 for awos, aws in zip(A_wos_ev, A_ws_ev):
     M.append(aws - awos)
+    for i, ti in enumerate(t):
+        if ti < tiempo_escalon*2:
+            M[-1][i] = 'nan'
 
 #Hago la figura que dijo Ale
 plt.figure()
 plt.plot(tiempo_estimulo, estimulo, 'k--', label='Estímulo', alpha=0.45)
 for i in range(len(F)):
     plt.plot(t, M[i], label=f'f={F[i]}')
-plt.legend(loc='upper right')
+plt.legend(loc='upper left')
 plt.grid()
 plt.xlim(0, 15)
 plt.ylabel('Contador de Memoria')
