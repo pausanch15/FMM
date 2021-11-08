@@ -52,8 +52,8 @@ def modelo(vars, params, interpolar_estimulo, tiempo):
     B=vars[1]
 
     # Sistema de ecuaciones
-    dA = S*k_sa*k_ba*(1-A)/(K_sa + 1-A) - B*A*(1-A)/(K_ba+A)
-    dB = k_ab*k_sb*(1-B)/(K_sb + 1-B) - A*B*(1-B)/(K_ab+B)
+    dA = S*k_sa*k_ba*(1-A)/(K_sa + 1-A) - B*(1-A)/(K_ba+A)
+    dB = k_ab*k_sb*(1-B)/(K_sb + 1-B) - A*(1-B)/(K_ab+B)
     
     return np.array([dA,dB])
 
@@ -76,15 +76,15 @@ params = [k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
 
 interpolar_estimulo = interpolate.interp1d(tiempo_estimulo,estimulo)
 tiempo, variables = rks.integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
-# 
-# plt.figure(figsize=(10, 7))
-# plt.subplot(211)
-# plt.plot(tiempo_estimulo[tiempo_estimulo<tiempo[-1]], estimulo[tiempo_estimulo<tiempo[-1]], label='Estímulo', color='k')
-# plt.xlabel('Tiempo'); plt.ylabel('Estímulo'); plt.grid()
-# plt.subplot(212)
-# plt.plot(tiempo,variables[0], label='A', color='c')
-# plt.plot(tiempo,variables[1], label='B', color='g')
-# plt.xlabel('Tiempo'); plt.ylabel('A, B'); plt.legend(); plt.grid(); plt.show()
+
+plt.figure(figsize=(10, 7))
+plt.subplot(211)
+plt.plot(tiempo_estimulo[tiempo_estimulo<tiempo[-1]], estimulo[tiempo_estimulo<tiempo[-1]], label='Estímulo', color='k')
+plt.xlabel('Tiempo'); plt.ylabel('Estímulo'); plt.grid()
+plt.subplot(212)
+plt.plot(tiempo,variables[0], label='A', color='c')
+plt.plot(tiempo,variables[1], label='B', color='g')
+plt.xlabel('Tiempo'); plt.ylabel('A, B'); plt.legend(); plt.grid(); plt.show()
 
 #%%
 #Hago un barrido de estímulos y calculo la memoria de cada uno
@@ -127,14 +127,14 @@ for i_barrido in range(N_barrido):
   lista_variables_sin.append(variables)
 
 #Ploteo
-fig, axs = plt.subplots(2, 5, figsize=(20, 10), sharex=True, sharey=True)
-fig.suptitle(f'Barrido en Estímulos: Cambia la altura del escalón', fontsize=20)
-for i_barrido, ax in enumerate(axs.flatten()):
-    tiempo = lista_tiempos_con[i_barrido]
-    A = lista_variables_con[i_barrido][0]
-    B = lista_variables_con[i_barrido][1]
-    ax.plot(tiempo, A, color='c', label='A')
-    ax.plot(tiempo, B, color='g', label='B')
-    ax.annotate(f'Altura = {np.max(lista_estimulos_con[i_barrido]):.2f}', (30., 0.15))
-    ax.legend()
-    ax.grid()
+# fig, axs = plt.subplots(2, 5, figsize=(20, 10), sharex=True, sharey=True)
+# fig.suptitle(f'Barrido en Estímulos: Cambia la altura del escalón', fontsize=20)
+# for i_barrido, ax in enumerate(axs.flatten()):
+    # tiempo = lista_tiempos_con[i_barrido]
+    # A = lista_variables_con[i_barrido][0]
+    # B = lista_variables_con[i_barrido][1]
+    # ax.plot(tiempo, A, color='c', label='A')
+    # ax.plot(tiempo, B, color='g', label='B')
+    # ax.annotate(f'Altura = {np.max(lista_estimulos_con[i_barrido]):.2f}', (30., 0.15))
+    # ax.legend()
+    # ax.grid()
