@@ -52,8 +52,8 @@ def modelo(vars, params, interpolar_estimulo, tiempo):
     B=vars[1]
 
     # Sistema de ecuaciones
-    dA = S*k_sa*(1-A)/(K_sa + 1-A) - K_ba*A/((K_ba+A)*B)
-    dB = k_sb*(1-B)/(K_sb + 1-B) - K_ba*A/((K_ab+B)*A)
+    dA = S*k_sa*(1-A)/(K_sa + 1-A) - k_ba*A/((K_ba+A)*(B+1))
+    dB = k_sb*(1-B)/(K_sb + 1-B) - k_ab*B/((K_ab+B)*(A+1))
     
     return np.array([dA,dB])
 
@@ -74,7 +74,7 @@ K_ab = 0.01
 
 params = [k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
 
-#Con Memoria
+#Integro
 S_alto = 2
 S_bajo = .2
 
@@ -92,75 +92,3 @@ plt.subplot(212)
 plt.plot(tiempo,variables[0], label='A', color='c')
 plt.plot(tiempo,variables[1], label='B', color='g')
 plt.xlabel('Tiempo'); plt.ylabel('A, B'); plt.legend(); plt.grid(); plt.show()
-
-#Sin Memoria
-S_alto = 0.25
-S_bajo = .2
-
-estimulo = S_alto*np.ones(N_estimulo)*(tiempo_estimulo>tiempo_subida)*(tiempo_estimulo<tiempo_bajada)
-estimulo = estimulo + S_bajo*np.ones(N_estimulo)*((tiempo_estimulo<tiempo_subida)+(tiempo_estimulo>tiempo_bajada))
-
-interpolar_estimulo = interpolate.interp1d(tiempo_estimulo,estimulo)
-tiempo, variables = rks.integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
-
-plt.figure(figsize=(10, 7))
-plt.subplot(211)
-plt.plot(tiempo_estimulo[tiempo_estimulo<tiempo[-1]], estimulo[tiempo_estimulo<tiempo[-1]], label='Estímulo', color='k')
-plt.xlabel('Tiempo'); plt.ylabel('Estímulo'); plt.grid()
-plt.subplot(212)
-plt.plot(tiempo,variables[0], label='A', color='c')
-plt.plot(tiempo,variables[1], label='B', color='g')
-plt.xlabel('Tiempo'); plt.ylabel('A, B'); plt.legend(); plt.grid(); plt.show()
-
-#%%
-#Hago un barrido de estímulos y calculo la memoria de cada uno
-#Defino los estímulos para el barrido
-N_barrido = 10
-barrido_estimulos = np.linspace(1.5,2,N_barrido)
-S_bajo = 0.2
-
-lista_estimulos_con = []
-for i_barrido in range(N_barrido):
-    S_alto = barrido_estimulos[i_barrido]
-    estimulo = S_alto*np.ones(N_estimulo)*(tiempo_estimulo>tiempo_subida)*(tiempo_estimulo<tiempo_bajada) 
-    estimulo = estimulo + S_bajo*np.ones(N_estimulo)*((tiempo_estimulo<tiempo_subida)+(tiempo_estimulo>tiempo_bajada))
-    lista_estimulos_con.append(estimulo)
-
-lista_estimulos_sin = []
-for i_barrido in range(N_barrido):
-    estimulo = S_bajo*np.ones(N_estimulo)
-    lista_estimulos_sin.append(estimulo)
-
-#Integro para cada estímulo y su control
-lista_tiempos_con = []
-lista_variables_con = []
-for i_barrido in range(N_barrido):
-    estimulo = lista_estimulos_con[i_barrido]
-    interpolar_estimulo = interpolate.interp1d(tiempo_estimulo,estimulo)
-    tiempo, variables = rks.integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
-    lista_tiempos_con.append(tiempo)
-    lista_variables_con.append(variables)
-
-lista_tiempos_sin = []
-lista_variables_sin = []
-for i_barrido in range(N_barrido):
-  tiempo_min = lista_tiempos_con[i_barrido][-1]
-  tiempo_max = lista_tiempos_con[i_barrido][-1]
-  estimulo = lista_estimulos_sin[i_barrido]
-  interpolar_estimulo = interpolate.interp1d(tiempo_estimulo,estimulo)
-  tiempo, variables = rks.integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
-  lista_tiempos_sin.append(tiempo)
-  lista_variables_sin.append(variables)
-
-#Ploteo
-fig, axs = plt.subplots(2, 5, figsize=(20, 10), sharex=True, sharey=True)
-fig.suptitle(f'Barrido en Estímulos: Cambia la altura del escalón', fontsize=20)
-for i_barrido, ax in enumerate(axs.flatten()):
-    tiempo = lista_tiempos_con[i_barrido]
-    A = lista_variables_con[i_barrido][0]
-    B = lista_variables_con[i_barrido][1]
-    ax.plot(tiempo, A, color='c', label='A')
-    ax.plot(tiempo, B, color='g', label='B')
-    # ax.annotate(f'Altura = {np.max(lista_estimulos_con[i_barrido]):.2f}', (30., 0.15))
-    ax.legend()
-    ax.grid()
