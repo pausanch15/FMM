@@ -13,8 +13,8 @@ plt.ion()
 #Defino el modelo
 def modelo(vars, params):
 
-    S = params[0]  #aca lo interpola
-
+    S = params[0]  
+    
     # Parámetros de síntesis de A y B
     k_sa = params[1]
     k_sb = params[2]
@@ -108,16 +108,20 @@ S = np.concatenate((S_ida, S_vuelta))
 
 #%%
 #Ploteo
-# for ksa in k_sa_s:
+for j, ksa in enumerate(k_sa_s):
     # fig, axs = plt.subplots(2, 3, figsize=(20, 10), sharex=True, sharey=True)
-    # fig.suptitle(f'Barrido: k_sa = {ksaf}, k_sb entre {k_sb_s[0]} y {k_sb_s[-1]}.', fontsize=20)
-    # for i, ax in enumerate(axs.flatten()):
-        # ax.plot(S[:int(len(S)/2)], A_s[i][:int(len(A_s[i])/2)], 'o', fillstyle='none', label='A: Ida', color='indianred')
-        # ax.plot(S[int(len(S)/2):], A_s[i][int(len(A_s[i])/2):], '.', label='A: Vuelta', color='indianred')
-        # ax.plot(S[:int(len(S)/2)], B_s[i][:int(len(B_s[i])/2)], 'o', fillstyle='none', label='B: Ida', color='royalblue')
-        # ax.plot(S[int(len(S)/2):], B_s[i][int(len(B_s[i])/2):], '.', label='B: Vuelta', color='royalblue')
-        # ax.legend(loc='lower right')
-        # ax.set_xlabel('Input')
-        # ax.set_ylabel('A')
+    fig, axs = plt.subplots(2, 3, sharex=True, sharey=True)
+    fig.suptitle(f'Barrido: k_sa = {ksa}, k_sb entre {k_sb_s[0]} y {k_sb_s[-1]}.', fontsize=20)
+    for i, ax in enumerate(axs.flatten()):
+        ax.plot(S[:int(len(S)/2)], A_s[6*j+i][:int(len(A_s[6*j+i])/2)], 'o', fillstyle='none', label='A: Ida', color='indianred')
+        ax.plot(S[int(len(S)/2):], A_s[6*j+i][int(len(A_s[6*j+i])/2):], '.', label='A: Vuelta', color='indianred')
+        ax.plot(S[:int(len(S)/2)], B_s[6*j+i][:int(len(B_s[6*j+i])/2)], 'o', fillstyle='none', label='B: Ida', color='royalblue')
+        ax.plot(S[int(len(S)/2):], B_s[6*j+i][int(len(B_s[6*j+i])/2):], '.', label='B: Vuelta', color='royalblue')
+        ax.legend(loc='lower right')
+        ax.set_xlabel('Input')
+        ax.set_ylabel('A')
         # ax.annotate(f"f={F[i]:.2}", (0.8, 0.3), fontsize=10)
-    # plt.show()
+    plt.show()
+
+#Hay biestabilidad para estos valores a partir de k_sa=2
+#Sería una buena idea hacer un barrido más fino para 1 < k_sa < 3
