@@ -42,8 +42,6 @@ def modelo(vars, params):
 #Primero voy a barrer solamente en los parámetros de feedback: k_sa y k_sb
 condiciones_iniciales = [0, 0]
 
-# k_sa = 1
-# k_sb = 10
 K_sa = 1
 K_sb = 0.1
 
@@ -52,8 +50,8 @@ k_ab = 1
 K_ba = 0.01
 K_ab = 0.01
 
-k_sa_s = np.linspace(1, 5, 5)
-k_sb_s = np.linspace(8, 13, 6)
+k_sa_s = np.linspace(1, 3, 5)
+k_sb_s = np.linspace(5, 10, 6)
 
 tiempo_max = 1000
 S_max = 1 #El máximo input que voy a usar
@@ -69,12 +67,9 @@ for ksa in k_sa_s:
     print(f'Va por k_sa={ksa}.\n')
     for ksb in k_sb_s:
         lista_condiciones_iniciales = [[0, 0]] 
-        # tiempo_max = 1000
         k_sb = ksb
         A_conv = []
         B_conv = []
-        # S_max = 1 #El máximo input que voy a usar
-        # pasos = 50
 
         #Ida
         S_ida = np.linspace(0, S_max, pasos) #Los inputs que voy barriendo
@@ -123,5 +118,6 @@ for j, ksa in enumerate(k_sa_s):
         # ax.annotate(f"f={F[i]:.2}", (0.8, 0.3), fontsize=10)
     plt.show()
 
-#Hay biestabilidad para estos valores a partir de k_sa=2
+#Hay biestabilidad para estos valores a partir de k_sa = 2
 #Sería una buena idea hacer un barrido más fino para 1 < k_sa < 3
+#Con esto encontré que es buena idea analizar esto en k_sa = 2, 1 < k_sb < 7. Hago esto en la v2 de este mismo código.
