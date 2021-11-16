@@ -1,4 +1,5 @@
 #Trato de hacer lo mismo que en la v2 pero usando dataframes de pandas
+#Este código solo genera el dataframe, va a haber otro que los levante y haga los gráficos
 #%%
 #Librerías
 import matplotlib.pyplot as plt
@@ -84,7 +85,7 @@ K_ba = 0.01
 K_ab = 0.01
 
 k_sa = 2
-k_sb_s = np.linspace(5.2, 5.3, 8)
+k_sb_s = np.linspace(4, 6, 8)
 
 tiempo_max = 1000
 S_max = 1 #El máximo input que voy a usar
@@ -95,7 +96,7 @@ S_ida = np.linspace(0, S_max, pasos)
 S_vuelta = np.linspace(S_max, 0, pasos)
 S = np.concatenate((S_ida, S_vuelta))
 
-columnas = [f'k_sb={ksb}' for ksb in k_sb_s]
+columnas = [f'k_sb={ksb:.3f}' for ksb in k_sb_s]
 codes_0 = sorted([i for i in range(len(k_sb_s))]*2)
 codes_1 = [0, 1]*len(k_sb_s)
 
@@ -104,36 +105,37 @@ cols = pd.MultiIndex(levels=[columnas, ["A", "B"]], codes=[codes_0, codes_1])
 df = pd.DataFrame(columns=cols, index=S)
 
 #Empiezo el recorrido
-# A_s = []
-# B_s = []
-# 
-# for ksb in k_sb_s:
-    # lista_condiciones_iniciales = [[0, 0]]
-    # k_sb = ksb
-    # A_conv = []
-    # B_conv = []
-# 
-    # #Ida
-    # for i, s in enumerate(S_ida):
-        # condiciones_iniciales = lista_condiciones_iniciales[-1]
-        # params = [s, k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
-        # tiempo, variables = rk.integrar(modelo, params, condiciones_iniciales, tiempo_max)
-        # A_conv.append(variables[0][-1])
-        # B_conv.append(variables[1][-1])
-        # lista_condiciones_iniciales.append([variables[0][-1], variables[1][-1]])
-        # del(tiempo, variables)
-# 
-    # #Vuelta
-    # for i, s in enumerate(S_vuelta):
-        # condiciones_iniciales = lista_condiciones_iniciales[-1]
-        # params = [s, k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
-        # tiempo, variables = rk.integrar(modelo, params, condiciones_iniciales, tiempo_max)
-        # A_conv.append(variables[0][-1])
-        # B_conv.append(variables[1][-1])
-        # lista_condiciones_iniciales.append([variables[0][-1], variables[1][-1]])
-        # del(tiempo, variables)
-# 
-    # #Guardo en A_s y B_s
-    # A_s.append(A_conv)
-    # B_s.append(B_conv)
-    # del(A_conv, B_conv, lista_condiciones_iniciales)
+for ksb, col in zip(k_sb_s, columnas):
+    lista_condiciones_iniciales = [[0, 0]]
+    k_sb = ksb
+    A_conv = []
+    B_conv = []
+
+    #Ida
+    for i, s in enumerate(S_ida):
+        condiciones_iniciales = lista_condiciones_iniciales[-1]
+        params = [s, k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
+        tiempo, variables = rk.integrar(modelo, params, condiciones_iniciales, tiempo_max)
+        A_conv.append(variables[0][-1])
+        B_conv.append(variables[1][-1])
+        lista_condiciones_iniciales.append([variables[0][-1], variables[1][-1]])
+        del(tiempo, variables)
+
+    #Vuelta
+    for i, s in enumerate(S_vuelta):
+        condiciones_iniciales = lista_condiciones_iniciales[-1]
+        params = [s, k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
+        tiempo, variables = rk.integrar(modelo, params, condiciones_iniciales, tiempo_max)
+        A_conv.append(variables[0][-1])
+        B_conv.append(variables[1][-1])
+        lista_condiciones_iniciales.append([variables[0][-1], variables[1][-1]])
+        del(tiempo, variables)
+
+    #Guardo en df
+    df.loc[:, (col, 'A')] = A_conv
+    df.loc[:, (col, 'B')] = B_conv    
+    del(A_conv, B_conv, lista_condiciones_iniciales)
+
+#Guardo el dataframe como csv
+#El nombre es 2021_11_16-doble_positivo-modelo_1-kb_kbminimo_kbmaximo
+df.to_csv('2021_11_16-doble_positivo-modelo_1-kb_4_6.csv')
