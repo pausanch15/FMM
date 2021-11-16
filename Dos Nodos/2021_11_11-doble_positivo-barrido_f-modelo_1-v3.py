@@ -29,7 +29,7 @@ plt.ion()
 
 #%%
 #Lo que quiero hacer
-#  S  │   k_sa=5  │   k_sb=6  │
+#  S  │   k_sb=5  │   k_sb=6  │
 # ────┼─────┬─────┼─────┬─────┼
 #     │  A  │  B  │  A  │  B  │
 # ────┼─────┼─────┼─────┼─────┼
@@ -137,5 +137,5 @@ for ksb, col in zip(k_sb_s, columnas):
     del(A_conv, B_conv, lista_condiciones_iniciales)
 
 #Guardo el dataframe como csv
-#El nombre es 2021_11_16-doble_positivo-modelo_1-kb_kbminimo_kbmaximo
-df.to_csv('2021_11_16-doble_positivo-modelo_1-kb_4_6.csv')
+#El nombre es 2021_11_16-doble_positivo-modelo_1-ksa_valorka_ksb_kbminimo_kbmaximo
+df.to_csv('2021_11_16-doble_positivo-modelo_1-ksa_2-ksb_4_6.csv')
