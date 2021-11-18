@@ -66,10 +66,10 @@ K_ba = 0.01
 K_ab = 0.01
 
 k_sa = 2
-k_sb_s = np.linspace(4, 6, 8)
+k_sb_s = np.linspace(0, 3, 8)
 
 tiempo_max = 1000
-S_max = 1 #El máximo input que voy a usar
+S_max = 2 #El máximo input que voy a usar
 pasos = 50
 
 #Armo el dataframe vacío
@@ -119,4 +119,4 @@ for ksb, col in zip(k_sb_s, columnas):
 
 #Guardo el dataframe como csv
 #El nombre es 2021_11_16-doble_positivo-modelo_1-ksa_valorka_ksb_kbminimo_kbmaximo
-df.to_csv('2021_11_16-doble_positivo-modelo_1-ksa_2-ksb_4_6.csv')
+df.to_csv('2021_11_18-doble_positivo-modelo_1-ksa_2-ksb_4_6.csv')

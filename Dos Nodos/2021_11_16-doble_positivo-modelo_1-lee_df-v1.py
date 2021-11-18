@@ -9,7 +9,7 @@ plt.ion()
 
 #%%
 #Traigo el csv como dataframe
-fname ='2021_11_16-doble_positivo-modelo_1-ksa_2-ksb_4_6.csv'
+fname ='2021_11_18-doble_positivo-modelo_1-ksa_2-ksb_4_6.csv'
 k_sa = float(re.findall("ksa_([^-]*)", fname)[0])
 df = pd.read_csv(fname, header=[0,1], index_col=0)
 
@@ -32,5 +32,5 @@ for i, (ax, name_ksb) in enumerate(zip(axs.flatten(), df.columns.levels[0])):
     ax.legend(loc='upper left')
     ax.set_xlabel('Input')
     ax.set_ylabel('A')
-    # ax.annotate(f"f={k_sb_s[i]:.2}", (0.75, 0.2), fontsize=10)
+    ax.annotate(f"k_sb={k_sb_s[i]:.2}", (1.2, 0.2), fontsize=10)
 plt.show()
