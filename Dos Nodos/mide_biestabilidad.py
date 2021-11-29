@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import re
 
-def mide_biestabilidad(csv, p=False):
+def mide_biestabilidad_csv(csv, p=False):
     '''
     csv = string con el nombre del archivo con los modelos a evaluar
     p = print. Si p=False (dafault), la función no imprime nada. Si p=True, imprime si se trata de un caso monoestable o biestable para cada modelo del csv
@@ -31,7 +31,7 @@ def mide_biestabilidad(csv, p=False):
     
     ds = S[1] - S[0]
     
-    for ksb in df.columns.levels[0]:    
+    for ksb in df.columns.levels[0]: 
         #Rescato A_s y B_s
         A_s = df[ksb]['A'].to_numpy()
         B_s = df[ksb]['B'].to_numpy()
