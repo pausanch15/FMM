@@ -9,7 +9,7 @@ plt.ion()
 
 #%%
 #Traigo el csv como dataframe
-fname ='2021_11_18-doble_positivo-modelo_1-ksa_2-ksb_0_3.csv'
+fname = '2021_11_18-doble_positivo-modelo_1-ksa_2-ksb_0_3.csv'
 k_sa = float(re.findall("ksa_([^-]*)", fname)[0])
 df = pd.read_csv(fname, header=[0,1], index_col=0)
 

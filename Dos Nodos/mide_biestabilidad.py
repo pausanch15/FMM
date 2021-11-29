@@ -19,9 +19,11 @@ def mide_biestabilidad(csv, p=False):
     
     #Creo el vector de inputs a partir de df
     S = df.index.to_numpy()
+
+    #Creo la lista en donde voy a ir guardando las áreas biestables
+    areas_biestables = []
     
-    #%%
-    #Lo que debería después ser una función
+    #La función
     mitad = int(len(S)/2)
     
     S_ida = S[:mitad]
@@ -62,7 +64,9 @@ def mide_biestabilidad(csv, p=False):
 
                 if p==True:
                     print(f'Para k_sa = {k_sa}, k_sb = {ksb} el área biestable es de {area_biestable}.')
-                return area_biestable
+
+                areas_biestables.append(area_biestable)
+                
                 del(A_s, B_s, A_s_ida, A_s_vuelta, dif_ida, dif_vuelta, max_dif_ida, ind_max_dif_ida, max_dif_vuelta, ind_max_dif_vuelta, area_ida, area_vuelta, area_biestable)
     
         #Si no hay discontinuidad, que me diga que para este ksb el sistema es monoestable
@@ -71,3 +75,6 @@ def mide_biestabilidad(csv, p=False):
                 print(f'Para k_sa = {k_sa}, k_sb = {ksb} el sistema es monoestable.')
 
             del(A_s, B_s, A_s_ida, A_s_vuelta, dif_ida, dif_vuelta, max_dif_ida, ind_max_dif_ida, max_dif_vuelta, ind_max_dif_vuelta)
+
+    if len(areas_biestables)>0:
+        return areas_biestables
