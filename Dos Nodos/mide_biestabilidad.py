@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import re
 
+#Función para cuando los datos estan en csv
 def mide_biestabilidad_csv(csv, p=False):
     '''
     csv = string con el nombre del archivo con los modelos a evaluar
@@ -78,3 +79,53 @@ def mide_biestabilidad_csv(csv, p=False):
 
     if len(areas_biestables)>0:
         return areas_biestables
+
+#Función para cuando los datos están en listas
+def mide_biestabilidad(A_s, S, p=False):
+    '''
+    p = print. Si p=False (dafault), la función no imprime nada. Si p=True, imprime si se trata de un caso monoestable o biestable para cada modelo del csv
+    '''    
+    #Como criterio voy a medir biestabilidad en A_s
+    #Separo entonces en ida y vuelta
+    mitad = int(len(S)/2)
+
+    S_ida = S[:mitad]
+    S_vuelta = S[mitad:]
+    
+    ds = S[1] - S[0]
+    
+    A_s_ida = A_s[:mitad]
+    A_s_vuelta = A_s[mitad:]
+
+    #Calculo los arrays de las diferencias punto a punto
+    dif_ida = np.abs(np.diff(A_s_ida))
+    dif_vuelta = np.abs(np.diff(A_s_vuelta))
+
+    #Me fijo donde está la mayor diferencia: su valor y su índice
+    max_dif_ida = np.max(dif_ida)
+    ind_max_dif_ida = np.where(dif_ida == max_dif_ida)[0][0]
+    
+    max_dif_vuelta = np.max(dif_vuelta)
+    ind_max_dif_vuelta = np.where(dif_vuelta == max_dif_vuelta)[0][0]
+    
+    #Comparo con 5 veces la diferencia anterior
+    #Acá decido si hay discontinuidad o no
+    #Si hay, calculo el área biestable y la devuelvo
+    if (max_dif_ida > 5*dif_ida[ind_max_dif_ida-1]) and (max_dif_ida > 1e-3):
+        if (max_dif_vuelta > 5*dif_vuelta[ind_max_dif_vuelta-1]) and (max_dif_vuelta > 1e-3):
+            area_ida = np.trapz(A_s_ida, dx=ds)
+            area_vuelta = np.trapz(A_s_vuelta, dx=ds)
+            
+            area_biestable = area_vuelta - area_ida
+
+            if p==True:
+                print(f'El área biestable es de {area_biestable}.')
+
+            return area_biestable
+
+    #Si no hay discontinuidad, que me diga que para este ksb el sistema es monoestable
+    else:
+        if p==True:
+            print(f'El sistema es monoestable.')
+
+        return 0
