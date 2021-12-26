@@ -52,7 +52,7 @@ print(f'Tarda {tf -ti} segundos en hacer todo el análisis para 10 sets de pará
 df = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb'])
 
 n_parametros = 8
-n_barrido = 10
+n_barrido = 1
 parametros = lhs.lhs(n_parametros, n_barrido)
 
 areas = []

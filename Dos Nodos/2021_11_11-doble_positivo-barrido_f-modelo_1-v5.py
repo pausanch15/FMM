@@ -3,7 +3,7 @@
 #Librerías
 import matplotlib.pyplot as plt
 import numpy as np
-import mide_biestabilidad as mb
+import mide_biestabilidad-v1 as mb
 import runge_kuta as rk
 import going_up_comming_down_doble_positivo_modelo_1 as gucd
 import latin_hypercube_sampling as lhs
@@ -16,7 +16,7 @@ plt.ion()
 df = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb'])
 
 n_parametros = 8
-n_barrido = 10
+n_barrido = 10000
 parametros = lhs.lhs(n_parametros, n_barrido)
 
 areas = []
@@ -33,5 +33,5 @@ for params in parametros:
             del(df1)
     del(A_s, B_s, S, area)
 tf = time()
-print(f'Tarda {tf -ti} segundos en hacer todo el análisis para 10 sets de parámetros.')
+print(f'Tarda {tf -ti} segundos en hacer todo el análisis para {n_barrido} sets de parámetros.')
 df.to_csv('2021_11_29-parametros_biestables.csv')

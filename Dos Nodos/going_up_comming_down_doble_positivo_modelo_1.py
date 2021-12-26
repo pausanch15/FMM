@@ -5,7 +5,7 @@
 #Librerías
 import matplotlib.pyplot as plt
 import numpy as np
-import mide_biestabilidad as mb
+import mide_biestabilidad_v2 as mb
 import runge_kuta as rk
 plt.ion()
 
