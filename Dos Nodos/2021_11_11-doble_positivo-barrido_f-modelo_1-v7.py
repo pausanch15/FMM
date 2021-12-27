@@ -39,21 +39,21 @@ df.to_csv('2021_12_24-parametros_biestables.csv')
 
 #%%
 #Levanto el csv y veo algunos plots
-# fname = '2021_12_24-parametros_biestables.csv'
-# df = pd.read_csv(fname, index_col=0)
-# 
-# #Armo un array con todas las áreas biestables
-# areas = df.index.to_numpy()
-# 
-# #Elijo algún conjunto de parámetros e integro el modelo para ellos
-# n = 50
-# params = df.loc[areas[n], :].to_numpy()
-# A_s, B_s, S = gucd.gucd_modelo_1(*params, 1000, 2, 50)
-# 
-# #Ploteo
-# plt.figure()
-# plt.plot(S, A_s, 'o', label='A')
-# plt.plot(S, B_s, '.', label='B')
-# plt.grid()
-# plt.legend()
-# plt.show()
+fname = '2021_12_24-parametros_biestables.csv'
+df = pd.read_csv(fname, index_col=0)
+
+#Armo un array con todas las áreas biestables
+areas = df.index.to_numpy()
+
+#Elijo algún conjunto de parámetros e integro el modelo para ellos
+n = 50
+params = df.loc[areas[n], :].to_numpy()
+A_s, B_s, S = gucd.gucd_modelo_1(*params, 1000, 2, 50)
+
+#Ploteo
+plt.figure()
+plt.plot(S, A_s, 'o', label='A')
+plt.plot(S, B_s, '.', label='B')
+plt.grid()
+plt.legend()
+plt.show()
