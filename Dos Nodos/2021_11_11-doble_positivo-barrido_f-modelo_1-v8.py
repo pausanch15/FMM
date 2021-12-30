@@ -25,18 +25,23 @@ print(f'El porcentaje de biestabilidad es del {porcentaje_biestabilidad}%.')
 
 #%%
 #Veo algunos plots para ver más o menos como dieron
+# fig = plt.figure()
+# ax = plt.axes()
 # for n in range(len(areas)):
-    # if n%10 != 0: pass
+    # if n%10 != 0:
+        # continue
+    # print(n)
     # params = df.loc[areas[n], :].to_numpy()
     # A_s, B_s, S = gucd.gucd_modelo_1(*params, 1000, 2, 50)
     # 
     # #Ploteo
-    # plt.figure()
-    # plt.plot(S, A_s, 'o', label='A')
-    # plt.plot(S, B_s, '.', label='B')
-    # plt.grid()
-    # plt.legend()
-    # plt.show()
+    # ax.plot(S, A_s, 'o', label='A')
+    # ax.plot(S, B_s, '.', label='B')
+    # ax.grid()
+    # ax.legend()
+    # fig.savefig(f'resultados/it_{n}.png', dpi=200)
+    # ax.cla()
+
 #%%
 #Hago el histograma de las áreas
 plt.hist(areas, bins='auto', color='c', edgecolor='black', zorder=2)
@@ -46,7 +51,7 @@ plt.grid(zorder=1)
 #Intento medir memoria en estos sistemas
 #Para eso tengo que pasarle un estímulo escalón al sistema ya estabilizado
 #Elijo algún sistema para empezar
-area = 10
+area = 30
 params = df.loc[areas[area], :].to_numpy()
 
 #Veo cuál es, así sé con qué trabajo
@@ -145,8 +150,8 @@ plt.show()
 N_estimulo = 10000 #resolucion para el estimulo
 tiempo_max_estimulo = 1000 #tiempo hasta donde llega
 tiempo_estimulo = np.linspace(0,tiempo_max_estimulo,N_estimulo) #vector de tiempo para el estimulo
-tiempo_subida = 30 #Este sistema en particular, en 25 ya se estacionó
-tiempo_bajada = 50
+tiempo_subida = 80  #Este sistema en particular, en 25 ya se estacionó
+tiempo_bajada = 100
 
 S_alto = 100
 S_bajo = .2
