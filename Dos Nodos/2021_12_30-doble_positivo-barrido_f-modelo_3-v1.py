@@ -16,7 +16,7 @@ plt.ion()
 df = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On'])
 
 n_parametros = 8
-n_barrido = 10
+n_barrido = 100
 parametros = lhs.lhs(n_parametros, n_barrido)
 
 tiempo_max = 100
@@ -36,8 +36,8 @@ for params, i in zip(parametros, tqdm(range(n_barrido))):
                 alto_off = resultado_medicion[2]
                 alto_on = resultado_medicion[3]
                 
-                df1 = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb'], index=[str(area)])
-                df1.loc[str(area), :] = params + [ancho, alto_off, alto_on]
+                df1 = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On'], index=[str(area)])
+                df1.loc[str(area), :] = np.array(list(params) + [ancho, alto_off, alto_on])
                 df = df.append(df1)
                 
                 del(df1)
@@ -46,22 +46,29 @@ for params, i in zip(parametros, tqdm(range(n_barrido))):
 df.to_csv('2022_01_13-parametros_biestables-modelo_3.csv')
 
 #%%
-# #Levanto el csv y veo algunos plots
-# fname = '2022_01_13-parametros_biestables-modelo_3.csv'
-# df = pd.read_csv(fname, index_col=0)
-# 
-# #Armo un array con todas las áreas biestables
-# areas = df.index.to_numpy()
-# 
-# #Elijo algún conjunto de parámetros e integro el modelo para ellos
-# n = 50
-# params = df.loc[areas[n], :].to_numpy()
-# A_s, B_s, S = gucd.gucd_modelo_1(*params, 1000, 2, 50)
-# 
-# #Ploteo
-# plt.figure()
-# plt.plot(S, A_s, 'o', label='A')
-# plt.plot(S, B_s, '.', label='B')
-# plt.grid()
-# plt.legend()
-# plt.show()
+#Levanto el csv y veo algunos plots
+fname = '2022_01_13-parametros_biestables-modelo_3.csv'
+df = pd.read_csv(fname, index_col=0)
+
+#Armo un array con todas las áreas biestables
+areas = df.index.to_numpy()
+
+#Por ahora solo encontré dos sistemas biestables, así que los ploteo a ambos
+tiempo_max = 100
+S_max = 1
+S_min = 0
+pasos = 1000
+
+for n, area in enumerate(areas):
+    params = df.loc[areas[n], :].to_numpy()[:-3]
+    A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
+
+    plt.figure()
+    plt.plot(S, A_s, 'o', label='A')
+    plt.plot(S, B_s, '.', label='B')
+    plt.grid()
+    plt.legend()
+    plt.title(f'Área Biestable: {area}')
+    plt.show()
+
+
