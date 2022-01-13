@@ -19,11 +19,15 @@ n_parametros = 8
 n_barrido = 10
 parametros = lhs.lhs(n_parametros, n_barrido)
 
+tiempo_max = 100
+S_max = 1
+S_min = 0
+pasos = 1000
+
 areas = []
 
 for params, i in zip(parametros, tqdm(range(n_barrido))):
-    # try:
-    A_s, B_s, S = gucd.gucd_modelo_1(*params, 1000, 2, 50)
+    A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
     resultado_medicion = mb.mide_biestabilidad(A_s, S)
     if str(type(resultado_medicion)) != r"<class 'NoneType'>":
             if len(resultado_medicion) > 1:
@@ -38,28 +42,26 @@ for params, i in zip(parametros, tqdm(range(n_barrido))):
                 
                 del(df1)
                 del(A_s, B_s, S, area, ancho, alto_off, alto_on, resultado_medicion)
-    # except:
-        # pass
     
-df.to_csv('2021_12_30-parametros_biestables-modelo_3.csv')
+df.to_csv('2022_01_13-parametros_biestables-modelo_3.csv')
 
 #%%
-#Levanto el csv y veo algunos plots
-fname = '2021_12_30-parametros_biestables-modelo_3.csv'
-df = pd.read_csv(fname, index_col=0)
-
-#Armo un array con todas las áreas biestables
-areas = df.index.to_numpy()
-
-#Elijo algún conjunto de parámetros e integro el modelo para ellos
-n = 50
-params = df.loc[areas[n], :].to_numpy()
-A_s, B_s, S = gucd.gucd_modelo_1(*params, 1000, 2, 50)
-
-#Ploteo
-plt.figure()
-plt.plot(S, A_s, 'o', label='A')
-plt.plot(S, B_s, '.', label='B')
-plt.grid()
-plt.legend()
-plt.show()
+# #Levanto el csv y veo algunos plots
+# fname = '2022_01_13-parametros_biestables-modelo_3.csv'
+# df = pd.read_csv(fname, index_col=0)
+# 
+# #Armo un array con todas las áreas biestables
+# areas = df.index.to_numpy()
+# 
+# #Elijo algún conjunto de parámetros e integro el modelo para ellos
+# n = 50
+# params = df.loc[areas[n], :].to_numpy()
+# A_s, B_s, S = gucd.gucd_modelo_1(*params, 1000, 2, 50)
+# 
+# #Ploteo
+# plt.figure()
+# plt.plot(S, A_s, 'o', label='A')
+# plt.plot(S, B_s, '.', label='B')
+# plt.grid()
+# plt.legend()
+# plt.show()

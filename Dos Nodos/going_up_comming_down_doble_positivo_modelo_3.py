@@ -11,7 +11,7 @@ import runge_kuta as rk
 plt.ion()
 
 #%%
-def gucd_modelo_1(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, tiempo_max, S_max, pasos):
+def gucd_modelo_3(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, tiempo_max, S_max, S_min, pasos):
     '''
     Las condiciones iniciales que usa son A=0 y B=0.
     '''
@@ -38,7 +38,7 @@ def gucd_modelo_1(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, tiempo_max, S_
     
         # Sistema de ecuaciones
         dA = S*k_sa*(1-A)/(K_sa+1-A) + B*k_ba*(1-A)/(K_ba+1-A) - k_ba*A/(K_ba+A)
-        dB = S*k_sb*(1-B)/(K_sb+1-B) + B*k_ab*(1-B)/(K_ab+1-B) - k_ab*B/(K_ab+B)
+        dB = S*k_sb*(1-B)/(K_sb+1-B) + A*k_ab*(1-B)/(K_ab+1-B) - k_ab*B/(K_ab+B)
         
         return np.array([dA,dB])
     
@@ -48,7 +48,7 @@ def gucd_modelo_1(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, tiempo_max, S_
     lista_condiciones_iniciales = [[0, 0]] 
     
     #Ida
-    S_ida = np.linspace(0.5, S_max, pasos) #Los inputs que voy barriendo
+    S_ida = np.linspace(S_min, S_max, pasos) #Los inputs que voy barriendo
     for i, s in enumerate(S_ida):
         condiciones_iniciales = lista_condiciones_iniciales[-1]
         params = [s, k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
@@ -59,7 +59,7 @@ def gucd_modelo_1(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, tiempo_max, S_
         del(tiempo, variables)
     
     #Vuelta
-    S_vuelta = np.linspace(S_max, 0.5, pasos) #Los inputs que voy barriendo: los de antes pero al revés
+    S_vuelta = np.linspace(S_max, S_min, pasos) #Los inputs que voy barriendo: los de antes pero al revés
     for i, s in enumerate(S_vuelta):
         condiciones_iniciales = lista_condiciones_iniciales[-1]
         params = [s, k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
