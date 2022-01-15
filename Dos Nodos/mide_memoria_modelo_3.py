@@ -147,4 +147,4 @@ def mide_memoria(parametros, S_alto=100, S_bajo=0.1, plot_estimulo=False, plot_m
         plt.plot(t, memoria_B, label='Memoria B')
         plt.show(), plt.grid(), plt.legend()
 
-    return [memoria_A, memoria_B]
+    return [memoria_A, memoria_B, t]
