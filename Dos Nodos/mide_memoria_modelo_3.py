@@ -12,7 +12,7 @@ import runge_kuta_estimulo as rks
 plt.ion()
 
 #La función
-def mide_memoria(parametros, S_alto=100, S_bajo=0.1, plot_estimulo=False, plot_memoria=False):
+def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=100, S_bajo=0.1, plot_estimulo=False, plot_memoria=False):
     '''
     parametros: lista de parámetros del modelo SIN el S
     S_alto y S_bajo son esos valores para el escalón
@@ -72,12 +72,12 @@ def mide_memoria(parametros, S_alto=100, S_bajo=0.1, plot_estimulo=False, plot_m
         
         return np.array([dA,dB])
 
-    params = parametros
-
+    params = [k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
+    
     #Integro sin estímulo
     tiempo_min = 100
     tiempo_max = 1000
-    S = .01
+    S = S_bajo
     
     params = np.insert(params, 0, S) #Agrego S a params
     
@@ -120,31 +120,7 @@ def mide_memoria(parametros, S_alto=100, S_bajo=0.1, plot_estimulo=False, plot_m
         plt.xlabel('Tiempo'); plt.ylabel('A, B'); plt.legend(); plt.grid(); plt.show()
 
     #Calculo la memoria
-    #Interpolamos, extrapolamo
-    A_wos_int = interpolate.interp1d(tiempo_wos, A_wos, fill_value="extrapolate")
-    B_wos_int = interpolate.interp1d(tiempo_wos, B_wos, fill_value="extrapolate")
+    memoria_A = A_ws[-1] - A_wos[-1]
+    memoria_B = B_ws[-1] - B_wos[-1]
 
-    A_ws_int = interpolate.interp1d(tiempo_ws, A_ws, fill_value="extrapolate")
-    B_ws_int = interpolate.interp1d(tiempo_ws, B_ws, fill_value="extrapolate")
-
-    #Construyo un array de tiempos en los cuales evaluar lo que interpolé y lo evalúo. La memoria solo tiene sentido una vez que saqué el escalón, así que y empieza en tiempo_bajada
-    t = np.linspace(tiempo_bajada, tiempo_max, 1000)
-
-    A_wos_ev = A_wos_int(t)
-    B_wos_ev = B_wos_int(t)
-
-    A_ws_ev = A_ws_int(t)
-    B_ws_ev = B_ws_int(t)
-
-    #Calculo memoria
-    memoria_A = A_ws_ev - A_wos_ev
-    memoria_B = B_ws_ev - B_wos_ev
-
-    #Grafico la memoria si plot_memoria es True
-    if plot_memoria == True:
-        plt.figure()
-        plt.plot(t, memoria_A, label='Memoria A')
-        plt.plot(t, memoria_B, label='Memoria B')
-        plt.show(), plt.grid(), plt.legend()
-
-    return [memoria_A, memoria_B, t]
+    return [memoria_A, memoria_B]

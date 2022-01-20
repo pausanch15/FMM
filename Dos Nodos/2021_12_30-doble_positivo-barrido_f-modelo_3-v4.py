@@ -47,28 +47,30 @@ areas = df.index.to_numpy()
 
 #Intento medir memoria en estos sistemas
 #Para eso tengo que pasarle un estímulo escalón al sistema ya estabilizado
-# memorias_A = []
-# memorias_B = []
+#También veo los sistemas con los que trabajo
+tiempo_max = 100
+S_max = 1
+S_min = 0
+pasos = 1000
+
+#Arrays donde me voy a guardar los valores de memoria
+mem_A = np.zeros_like(areas)
+mem_B = np.zeros_like(areas)
+
 for n, area in enumerate(areas):
     parametros = df.loc[areas[n], :].to_numpy()[:8]
-    mem_A, mem_B, t = mm.mide_memoria(parametros)
-    # memorias_A.append(mem_A)
-    # memorias_B.append(mem_B)
 
-    #Prueboo los distintos contadores de memoria que propuso Fede
-    #OJO: el dice que pruebe estas cosas una vez que el sistema ya estabilizó habiendo sacado el escalón, pero yo los voy a probar un en el transitorio
-    
-    #Ploteo
-    plt.figure()
-    plt.title(f'Conjunto de parámetros {n}')
-    
-    plt.plot(t, mem_A, label='Memoria A', color='red', linestyle='solid')
-    plt.plot(t, mem_B, label='Memoria B', color='red', linestyle='dashed')
+    # Veo el going up coming down de estos sistemas
+    # A_s, B_s, S = gucd.gucd_modelo_3(*parametros, tiempo_max, S_max, S_min, pasos)
+# 
+    # plt.figure()
+    # plt.plot(S, A_s, 'o', label='A')
+    # plt.plot(S, B_s, '.', label='B')
+    # plt.grid()
+    # plt.legend()
+    # plt.title(f'Área Biestable: {area}')
+    # plt.show()
 
-    plt.plot(t, np.abs(mem_A), label='Módulo Memoria A', color='blue', linestyle='solid')
-    plt.plot(t, np.abs(mem_B), label='Módulo Memoria B', color='blue', linestyle='dashed')
-
-    plt.plot(t, mem_A**2, label='Cuadrado Memoria A', color='green', linestyle='solid')
-    plt.plot(t, mem_B**2, label='Cuadrado Memoria B', color='green', linestyle='dashed')
-    
-    plt.show(), plt.grid(), plt.legend()
+    #Calculo memoria
+    mem_A[n], mem_B[n] = mm.mide_memoria(*parametros, S_alto=2, S_bajo=0.5, plot_estimulo=False, plot_memoria=False)
+    # mem_A[n], mem_B[n] = mm.mide_memoria(*parametros, S_alto=2, S_bajo=0.5, plot_estimulo=True, plot_memoria=True)

@@ -34,13 +34,9 @@ def mide_biestabilidad(A_s, S, W_lim=1e-4, area_lim=1e-4):
     dif_vuelta = np.abs(np.diff(A_s_vuelta))
 
     #Me fijo donde está la mayor diferencia: su valor y su índice
-    # max_dif_ida = np.max(dif_ida)
-    # ind_max_dif_ida = np.where(dif_ida == max_dif_ida)[0][0]
     ind_max_dif_ida = np.argmax(dif_ida)
     max_dif_ida = dif_ida[ind_max_dif_ida]
     
-    # max_dif_vuelta = np.max(dif_vuelta)
-    # ind_max_dif_vuelta = np.where(dif_vuelta == max_dif_vuelta)[0][0]
     ind_max_dif_vuelta = np.argmax(dif_vuelta)
     max_dif_vuelta = dif_vuelta[ind_max_dif_vuelta]
 
@@ -58,11 +54,6 @@ def mide_biestabilidad(A_s, S, W_lim=1e-4, area_lim=1e-4):
     if (max_dif_ida > 5*dif_ida[ind_max_dif_ida-1]) and (max_dif_ida > 1e-3) \
     and (max_dif_vuelta > 5*dif_vuelta[ind_max_dif_vuelta-1]) and (max_dif_vuelta > 1e-3):
         #Si todo lo anterior se cumplió, calculo las áreas
-        # area_ida = np.trapz(A_s_ida, dx=ds)
-        # area_vuelta = np.trapz(A_s_vuelta, dx=ds)
-# 
-        # area_biestable = area_vuelta - area_ida
-
         zona_biestable = A_s_vuelta - A_s_ida
         area_biestable = np.trapz(zona_biestable, dx=ds)
 
