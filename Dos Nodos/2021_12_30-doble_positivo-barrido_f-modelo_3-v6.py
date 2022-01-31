@@ -19,11 +19,11 @@ plt.ion()
 
 #%%
 #Dejo anotado el orden que tiene que tener la lista siempre
-# ['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On']
+# ['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On', S_on. S_off]
 
 #%%
 n_parametros = 8
-n_barrido = 100
+n_barrido = 10000
 parame = lhs.lhs(n_parametros, n_barrido)
 
 #Elegimos entre que valores queremos la distribucion
@@ -67,7 +67,7 @@ def integra(params):
 
     #Nos fijamos si es biestable el sistema
     if resultado_medicion is not None:
-        area, ancho, alto_off, alto_on = resultado_medicion
+        area, ancho, alto_off, alto_on, S_on, S_off = resultado_medicion
         lista_resultado = [area] + list(params) + [ancho, alto_off, alto_on, S_on, S_off]
         
         #Si es biestable, nos guardamos lista_resultado en un pickle
