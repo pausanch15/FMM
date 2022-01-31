@@ -68,7 +68,7 @@ def integra(params):
     #Nos fijamos si es biestable el sistema
     if resultado_medicion is not None:
         area, ancho, alto_off, alto_on = resultado_medicion
-        lista_resultado = [area] + list(params) + [ancho, alto_off, alto_on]
+        lista_resultado = [area] + list(params) + [ancho, alto_off, alto_on, S_on, S_off]
         
         #Si es biestable, nos guardamos lista_resultado en un pickle
         with open(f'{nombre_archivo}.pkl', 'wb') as f:

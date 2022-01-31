@@ -59,6 +59,6 @@ def mide_biestabilidad(A_s, S, W_lim=1e-4, area_lim=1e-4):
 
         #Filtro por área
         if area_biestable > area_lim:
-            return [area_biestable, W, max_dif_vuelta, max_dif_ida] 
+            return [area_biestable, W, max_dif_vuelta, max_dif_ida, S_on, S_off] 
 
     return None

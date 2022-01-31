@@ -14,8 +14,8 @@ import pickle
 plt.ion()
 
 #%%
-#Me gijo si el csv existe. Si no existe, lo creo. Si existe, lo levanto y mido la memoria en los sistemas
-fname = '2022_01_28-parametros_biestables-modelo_3.csv'
+#Me fijo si el csv existe. Si no existe, lo creo. Si existe, lo levanto y mido la memoria en los sistemas
+fname = '2022_01_31-parametros_biestables-modelo_3.csv'
 
 if fname in os.listdir():
     #Levanto el csv y veo algunos plots
@@ -35,7 +35,7 @@ if fname in os.listdir():
     pasos = 1000
     
     for n, area in enumerate(areas):
-        params = df.loc[areas[n], :].to_numpy()[:-3]
+        params = df.loc[areas[n], :].to_numpy()[:-5]
         A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
     
         plt.figure()
@@ -55,7 +55,7 @@ else:
     archivos_pickle = glob("*pkl")
 
     #Guardo las listas que estan en los pickles en un csv
-    df = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On'])
+    df = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On', 'S_on', 'S_off'])
 
     for archivo in archivos_pickle:
         with open(archivo, 'rb') as f:
@@ -65,7 +65,7 @@ else:
             param_ancho_alto = resultados[1:]
             del(resultados)
 
-            df1 = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On'], index=[str(area)])
+            df1 = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On', 'S_on', 'S_off'], index=[str(area)])
             df1.loc[str(area), :] = param_ancho_alto
 
             df = df.append(df1)
