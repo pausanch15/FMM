@@ -23,7 +23,7 @@ plt.ion()
 
 #%%
 n_parametros = 8
-n_barrido = 10000
+n_barrido = 100
 parame = lhs.lhs(n_parametros, n_barrido)
 
 #Elegimos entre que valores queremos la distribucion

@@ -46,9 +46,13 @@ if fname in os.listdir():
         plt.title(f'Área Biestable: {area}')
         plt.show()
 
-        #Calculo memoria        
-        # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=Sbajo, plot_estimulo=False, plot_memoria=False)
-        mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=Sbajo, plot_estimulo=True, plot_memoria=True)
+        #Calculo memoria
+        S_on = df.loc[areas[n], :].to_numpy()[-2]
+        S_off = df.loc[areas[n], :].to_numpy()[-1]
+        S_bajo = (S_on + S_off)/2
+        
+        # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
+        mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
 
 else:
     #Traigo todos los archivos pickle que haya en el directorio
@@ -62,14 +66,14 @@ else:
             resultados = pickle.load(f)
 
             area = resultados[0]
-            param_ancho_alto = resultados[1:]
+            param_ancho_alto_s= resultados[1:]
             del(resultados)
 
             df1 = pd.DataFrame(columns=['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On', 'S_on', 'S_off'], index=[str(area)])
-            df1.loc[str(area), :] = param_ancho_alto
+            df1.loc[str(area), :] = param_ancho_alto_s
 
             df = df.append(df1)
 
-            del(df1, area, param_ancho_alto)
+            del(df1, area, param_ancho_alto_s)
 
     df.to_csv(fname)
