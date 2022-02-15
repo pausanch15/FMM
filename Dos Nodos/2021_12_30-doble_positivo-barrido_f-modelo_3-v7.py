@@ -15,7 +15,7 @@ plt.ion()
 
 #%%
 #Me fijo si el csv existe. Si no existe, lo creo. Si existe, lo levanto y mido la memoria en los sistemas
-fname = '2022_01_31-parametros_biestables-modelo_3.csv'
+fname = '2022_02_14-parametros_biestables-modelo_3.csv'
 
 if fname in os.listdir():
     #Levanto el csv y veo algunos plots
@@ -35,24 +35,25 @@ if fname in os.listdir():
     pasos = 1000
     
     for n, area in enumerate(areas):
-        params = df.loc[areas[n], :].to_numpy()[:-5]
-        A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
-    
-        plt.figure()
-        plt.plot(S, A_s, 'o', label='A')
-        plt.plot(S, B_s, '.', label='B')
-        plt.grid()
-        plt.legend()
-        plt.title(f'Área Biestable: {area}')
-        plt.show()
-
-        #Calculo memoria
-        S_on = df.loc[areas[n], :].to_numpy()[-2]
-        S_off = df.loc[areas[n], :].to_numpy()[-1]
-        S_bajo = (S_on + S_off)/2
+        if n%10 == 0:
+            params = df.loc[areas[n], :].to_numpy()[:-5]
+            A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
         
-        # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
-        mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
+            plt.figure()
+            plt.plot(S, A_s, 'o', label='A')
+            plt.plot(S, B_s, '.', label='B')
+            plt.grid()
+            plt.legend()
+            plt.title(f'Área Biestable: {area}')
+            plt.show()
+
+            #Calculo memoria
+            S_on = df.loc[areas[n], :].to_numpy()[-2]
+            S_off = df.loc[areas[n], :].to_numpy()[-1]
+            S_bajo = (S_on + S_off)/2
+            
+            # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
+            mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
 
 else:
     #Traigo todos los archivos pickle que haya en el directorio
