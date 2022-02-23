@@ -115,3 +115,65 @@ for i, ax in enumerate(axs.flatten()):
     ax.grid()
 
 plt.show()
+
+#Calculo correlación ignorando los casos de memoria 0. Uso solo el coeficiente de Spearman porque tiene más sentido por lo que contó Fede
+for par_A, par_B, nombre in zip(ejes_x_A_may, ejes_x_B_may, labels_x):
+    r_spearman_A, pv_spearman_A = spearmanr(par_A, mem_A_may[0])
+    r_spearman_B, pv_spearman_B = spearmanr(par_B, mem_B_may[0])
+
+    print(f'Para la memoria en A, el coeficiente de Spearman entre memoria y {nombre} es {r_spearman_A} con un p-valor de {pv_spearman_A}.')
+    print(f'Para la memoria en B, el coeficiente de Spearman entre memoria y {nombre} es {r_spearman_B} con un p-valor de {pv_spearman_B}.')
+
+#Para aquellos casos en donde la memoria haya dado menor a 0.1, vuelco a calcularla cambiando ambas cosas que dijo Fede: el valor de S_alto y el valor de la diferencia temporal que la integración toma como constante
+#Para todo esto voy a usar que i_mem_A_men = i_mem_B_men
+mem_A_salto = np.zeros_like(i_mem_A_men[0])
+mem_B_salto = np.zeros_like(i_mem_A_men[0])
+
+mem_A_tes = np.zeros_like(i_mem_A_men[0])
+mem_B_tes = np.zeros_like(i_mem_A_men[0])
+
+# for n, i in zip(i_mem_A_men[0], range(len(i_mem_A_men[0]))):
+    # params = df.loc[areas[n], :].to_numpy()[:-5]
+    # S_on = df.loc[areas[n], :].to_numpy()[-2]
+    # S_off = df.loc[areas[n], :].to_numpy()[-1]
+    # S_bajo = (S_on + S_off)/2
+# 
+    # #Aumento el S_alto
+    # mem_A_salto[i], mem_B_salto[i] = mm.mide_memoria(*params, S_alto=5, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
+# 
+# with open(f'mem_A_salto.pkl', 'wb') as f:
+            # pickle.dump(mem_A_salto, f)
+# with open(f'mem_B_salto.pkl', 'wb') as f:
+            # pickle.dump(mem_B_salto, f)
+
+    #Cambio la diferencia temporal considerada constante
+    mem_A_tes[n], mem_B_tes[n] = mm.mide_memoria(*params, S_alto=5, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
+
+with open(f'mem_A_tes.pkl', 'wb') as f:
+            pickle.dump(mem_A_tes, f)
+with open(f'mem_B_tes.pkl', 'wb') as f:
+            pickle.dump(mem_B_tes, f)
+
+#Repito los gŕaficos con estos cambios
+with open(f'mem_A_salto.pkl', 'rb') as f:
+            mem_A_salto = pickle.load(f)                
+with open(f'mem_B_salto.pkl', 'rb') as f:
+            mem_B_salto = pickle.load(f)
+
+#Para la memoria en A
+fig, axs = plt.subplots(2, 2, sharex=True, sharey=True)
+for i, ax in enumerate(axs.flatten()):
+    ax.plot(ejes_x_A_may[i], mem_A_may[0], '.c', alpha=0.5)
+    ax.plot(ejes_x_A_men[i], mem_A_salto, '.r', alpha=0.5)
+    ax.set_xlabel(labels_x[i])
+    ax.set_ylabel('Memoria en A')
+    ax.grid()
+
+#Para la memoria en B
+fig, axs = plt.subplots(2, 2, sharex=True, sharey=True)
+for i, ax in enumerate(axs.flatten()):
+    ax.plot(ejes_x_B_may[i], mem_B_may[0], '.c', alpha=0.5)
+    ax.plot(ejes_x_B_men[i], mem_B_salto, '.r', alpha=0.5)
+    ax.set_xlabel(labels_x[i])
+    ax.set_ylabel('Memoria en B')
+    ax.grid()
