@@ -61,7 +61,10 @@ i_mem_B = np.where(mem_B>1e3)
 # S_min = 0
 # pasos = 1000
 # 
+# print('Integro loscasos complicados')
 # for i in i_mem_A[0]:
+    # print(f'Va por el caso complicado {i}')
+    # print()
     # params = df.loc[areas[i], :].to_numpy()[:-5]
     # A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
     # plt.figure()
@@ -87,6 +90,7 @@ plt.figure()
 plt.hist(areas, bins='auto', facecolor='c', density=True, stacked=True, edgecolor = "black")
 plt.title('Histograma Áreas')
 plt.grid(zorder=0)
+plt.savefig('histograma_areas.pdf')
 
 #Histograma de memoria en A y B
 fig, ax = plt.subplots(2, 1)
@@ -97,6 +101,7 @@ ax[0].grid()
 ax[1].hist(mem_B, bins='auto', facecolor='c', density=True, stacked=True, edgecolor = "black")
 ax[1].set_title('Memoria en B')
 ax[1].grid()
+plt.savefig('histograma_memoria.pdf')
 
 #Plots
 ejes_x = [areas, anchos, altos_on, altos_off]
@@ -109,6 +114,7 @@ for i, ax in enumerate(axs.flatten()):
     ax.set_xlabel(labels_x[i])
     ax.set_ylabel('Memoria en A')
     ax.grid()
+plt.savefig(f'A_{labels_x[i]}.pdf')
 
 #Para la memoria en B
 fig, axs = plt.subplots(2, 2, sharex=True, sharey=True)
@@ -117,6 +123,7 @@ for i, ax in enumerate(axs.flatten()):
     ax.set_xlabel(labels_x[i])
     ax.set_ylabel('Memoria en B')
     ax.grid()
+plt.savefig(f'B_{labels_x[i]}.pdf')
 
 plt.show()
 
