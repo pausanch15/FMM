@@ -22,6 +22,8 @@ areas = df.index.to_numpy()
 anchos = df.loc[:, 'Ancho'].to_numpy()
 altos_on = df.loc[:, 'Alto On'].to_numpy()
 altos_off = df.loc[:, 'Alto Off'].to_numpy()
+S_on = df.loc[:, 'S_on'].to_numpy()
+S_off = df.loc[:, 'S_off'].to_numpy()
 
 #Levanto la memoria de los sistemas, calculada como hasta ahora
 with open(f'mem_A.pkl', 'rb') as f:
@@ -52,7 +54,7 @@ plt.grid(zorder=0)
 
 #Histograma de memoria en A y B, en log-log
 
-#esta línea ignora los warnings que aparecen, pero el histograma que resulta no esta ok.
+#Esta línea ignora los warnings que aparecen, pero el histograma que resulta no esta ok.
 # np.seterr(divide='warn', invalid='warn')
 
 # fig, ax = plt.subplots(2, 1)
@@ -146,19 +148,19 @@ mem_B_tes = np.zeros_like(i_mem_A_men[0])
 # with open(f'mem_B_salto.pkl', 'wb') as f:
             # pickle.dump(mem_B_salto, f)
 
-    #Cambio la diferencia temporal considerada constante
-    mem_A_tes[n], mem_B_tes[n] = mm.mide_memoria(*params, S_alto=5, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
-
-with open(f'mem_A_tes.pkl', 'wb') as f:
-            pickle.dump(mem_A_tes, f)
-with open(f'mem_B_tes.pkl', 'wb') as f:
-            pickle.dump(mem_B_tes, f)
-
-#Repito los gŕaficos con estos cambios
-with open(f'mem_A_salto.pkl', 'rb') as f:
-            mem_A_salto = pickle.load(f)                
-with open(f'mem_B_salto.pkl', 'rb') as f:
-            mem_B_salto = pickle.load(f)
+    # #Cambio la diferencia temporal considerada constante
+    # mem_A_tes[n], mem_B_tes[n] = mm.mide_memoria(*params, S_alto=5, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
+# 
+# with open(f'mem_A_tes.pkl', 'wb') as f:
+            # pickle.dump(mem_A_tes, f)ç
+# with open(f'mem_B_tes.pkl', 'wb') as f:
+            # pickle.dump(mem_B_tes, f)
+# 
+# #Repito los gŕaficos con estos cambios
+# with open(f'mem_A_salto.pkl', 'rb') as f:
+            # mem_A_salto = pickle.load(f)
+# with open(f'mem_B_salto.pkl', 'rb') as f:
+            # mem_B_salto = pickle.load(f)
 
 #Para la memoria en A
 fig, axs = plt.subplots(2, 2, sharex=True, sharey=True)
@@ -177,3 +179,23 @@ for i, ax in enumerate(axs.flatten()):
     ax.set_xlabel(labels_x[i])
     ax.set_ylabel('Memoria en B')
     ax.grid()
+
+#Veo curva de histéresis de los casos men
+#Integro estos sistemas
+tiempo_max = 100
+S_max = 1
+S_min = 0
+pasos = 1000
+
+for i in i_mem_A_men[0][:1]:
+    params = df.loc[areas[i], :].to_numpy()[:-5]
+    A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
+    plt.figure()
+    plt.plot(S, A_s, 'o', label='A')
+    plt.plot(S, B_s, '.', label='B')
+    plt.grid()
+    plt.legend()
+    plt.title(f'Área Biestable: {areas[i]}')
+    plt.show()
+
+
