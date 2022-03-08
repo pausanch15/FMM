@@ -15,7 +15,7 @@ plt.ion()
 
 #%%
 #Levanto el csv y veo algunos plots
-fname = '2022_02_14-parametros_biestables-modelo_3.csv'
+fname = '2022_03_07-parametros_biestables-modelo_3.csv'
 df = pd.read_csv(fname, index_col=0)
 
 #Armo un array con todas las áreas biestables
@@ -25,10 +25,10 @@ altos_on = df.loc[:, 'Alto On'].to_numpy()
 altos_off = df.loc[:, 'Alto Off'].to_numpy()
 
 #Calculo la memoria de los sistemas, si no la calculé antes
-if 'mem_A.pkl' in os.listdir() and 'mem_B.pkl' in os.listdir():
-    with open(f'mem_A.pkl', 'rb') as f:
+if '2022_03_07-mem_A.pkl' in os.listdir() and '2022_03_07-mem_B.pkl' in os.listdir():
+    with open(f'2022_03_07-mem_A.pkl', 'rb') as f:
                 mem_A = pickle.load(f)                
-    with open(f'mem_B.pkl', 'rb') as f:
+    with open(f'2022_03_07-mem_B.pkl', 'rb') as f:
                 mem_B = pickle.load(f)
 
 else:
@@ -44,9 +44,9 @@ else:
 
         mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
 
-    with open(f'mem_A.pkl', 'wb') as f:
+    with open(f'2022_03_07-mem_A.pkl', 'wb') as f:
                 pickle.dump(mem_A, f)                
-    with open(f'mem_B.pkl', 'wb') as f:
+    with open(f'2022_03_07-mem_B.pkl', 'wb') as f:
                 pickle.dump(mem_B, f)
 
 #%%
@@ -75,12 +75,12 @@ i_mem_B = np.where(mem_B>1e3)
     # mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
     
 #Hago los plots que dijo Ale. Saco los casos problemáticos
-areas = np.delete(areas, i_mem_A[0])
-anchos = np.delete(anchos, i_mem_A[0])
-altos_on = np.delete(altos_on, i_mem_A[0])
-altos_off = np.delete(altos_off, i_mem_A[0])
-mem_A = np.delete(mem_A, i_mem_A[0])
-mem_B = np.delete(mem_B, i_mem_A[0])
+areas = np.delete(areas, i_mem_B[0])
+anchos = np.delete(anchos, i_mem_B[0])
+altos_on = np.delete(altos_on, i_mem_B[0])
+altos_off = np.delete(altos_off, i_mem_B[0])
+mem_A = np.delete(mem_A, i_mem_B[0])
+mem_B = np.delete(mem_B, i_mem_B[0])
 
 #Histograma de áreas
 plt.figure()

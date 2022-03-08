@@ -14,7 +14,7 @@ from scipy.stats import pearsonr, spearmanr
 plt.ion()
 
 #Levanto el csv
-fname = '2022_02_14-parametros_biestables-modelo_3.csv'
+fname = '2022_03_07-parametros_biestables-modelo_3.csv'
 df = pd.read_csv(fname, index_col=0)
 
 #Armo un array con todas las áreas biestables
@@ -26,21 +26,21 @@ S_on = df.loc[:, 'S_on'].to_numpy()
 S_off = df.loc[:, 'S_off'].to_numpy()
 
 #Levanto la memoria de los sistemas, calculada como hasta ahora
-with open(f'mem_A.pkl', 'rb') as f:
+with open(f'2022_03_07-mem_A.pkl', 'rb') as f:
             mem_A = pickle.load(f)                
-with open(f'mem_B.pkl', 'rb') as f:
+with open(f'2022_03_07-mem_B.pkl', 'rb') as f:
             mem_B = pickle.load(f)
 
 #Saco los valores que dan memoria infinita
 i_mem_A = np.where(mem_A>1e3)
 i_mem_B = np.where(mem_B>1e3)
 
-areas = np.delete(areas, i_mem_A[0])
-anchos = np.delete(anchos, i_mem_A[0])
-altos_on = np.delete(altos_on, i_mem_A[0])
-altos_off = np.delete(altos_off, i_mem_A[0])
-mem_A = np.delete(mem_A, i_mem_A[0])
-mem_B = np.delete(mem_B, i_mem_A[0])
+areas = np.delete(areas, i_mem_B[0])
+anchos = np.delete(anchos, i_mem_B[0])
+altos_on = np.delete(altos_on, i_mem_B[0])
+altos_off = np.delete(altos_off, i_mem_B[0])
+mem_A = np.delete(mem_A, i_mem_B[0])
+mem_B = np.delete(mem_B, i_mem_B[0])
 
 #Histograma de áreas, en log-log
 plt.figure()
@@ -76,7 +76,6 @@ plt.grid(zorder=0)
 # ax[1].grid()
 
 #Rehago los gráficos que ven correlación pintando los valores de memoria menores a 0.1 de otro color, y les pongo un alpha para ver la densidad de puntos en el gráfico
-
 ejes_x = [areas, anchos, altos_on, altos_off]
 labels_x = ['Área', 'Ancho', 'Alto On', 'Altos Off']
 
@@ -126,7 +125,7 @@ for par_A, par_B, nombre in zip(ejes_x_A_may, ejes_x_B_may, labels_x):
     print(f'Para la memoria en A, el coeficiente de Spearman entre memoria y {nombre} es {r_spearman_A} con un p-valor de {pv_spearman_A}.')
     print(f'Para la memoria en B, el coeficiente de Spearman entre memoria y {nombre} es {r_spearman_B} con un p-valor de {pv_spearman_B}.')
 
-#Para aquellos casos en donde la memoria haya dado menor a 0.1, vuelco a calcularla cambiando ambas cosas que dijo Fede: el valor de S_alto y el valor de la diferencia temporal que la integración toma como constante
+#Para aquellos casos en donde la memoria haya dado menor a 0.1, vuelvo a calcularla cambiando ambas cosas que dijo Fede: el valor de S_alto y el valor de la diferencia temporal que la integración toma como constante
 #Para todo esto voy a usar que i_mem_A_men = i_mem_B_men
 mem_A_salto = np.zeros_like(i_mem_A_men[0])
 mem_B_salto = np.zeros_like(i_mem_A_men[0])
@@ -197,5 +196,4 @@ for i in i_mem_A_men[0][:1]:
     plt.legend()
     plt.title(f'Área Biestable: {areas[i]}')
     plt.show()
-
 
