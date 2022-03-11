@@ -77,8 +77,8 @@ labels_x = ['Área', 'Ancho', 'Alto On', 'Altos Off']
 i_mem_A_may = np.where(mem_A>=0.1)
 i_mem_A_men = np.where(mem_A<0.1)
 
-i_mem_B_may = np.where(mem_A>=0.1)
-i_mem_B_men = np.where(mem_A<0.1)
+i_mem_B_may = np.where(mem_B>=0.1)
+i_mem_B_men = np.where(mem_B<0.1)
 
 mem_A_may = [mem_A[i] for i in i_mem_A_may]
 mem_A_men = [mem_A[i] for i in i_mem_A_men]
@@ -143,6 +143,8 @@ else:
                 pickle.dump(mem_B_men_nuevas, f)
 
 #Grafico nuevamente para ver cuánto dieron estos valores ahora
+ejes_x_B_men = [arr[i] for arr in ejes_x for i in i_mem_A_men]
+
 #Para la memoria en A
 fig, axs = plt.subplots(2, 2, sharex=True, sharey=True)
 for i, ax in enumerate(axs.flatten()):
@@ -164,3 +166,13 @@ for i, ax in enumerate(axs.flatten()):
     ax.grid()
 
 plt.show()
+
+#Para aquellos valores que sigan dando menor a 0.1, veo los gráficos que obtengo al calcular memoria
+# for n, S_bajo in zip(i_mem_A_men[0], S_bajos_nuevos):
+    # if not np.isnan(S_bajo):
+        # print(f'Va por n={n}')
+        # params = df.loc[areas[n], :].to_numpy()[:-5]
+        # mm.mide_memoria(*params, S_alto=10, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
+        # plt.savefig(f'resultados/2022_03_11-memoria_estimulo_{n}.pdf')
+
+#Y... es un desastre lo que calcula. No se me ocurre cómo modificar la función para que no sea asi, y tampoco tendría sentido, pues a los sistemas que andan ok les calcula bien la memoria. Entonces, puedo calcular a mano la memoria en estos casos

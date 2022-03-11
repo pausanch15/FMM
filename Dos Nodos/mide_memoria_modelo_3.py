@@ -110,14 +110,15 @@ def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=100, S_b
 
     #Grafico los sistemas y el escalon si plot_estimulo es True
     if plot_estimulo == True:
-        fig = plt.figure(figsize=(10, 7))
-        plt.subplot(211)
+        plt.figure()
         plt.plot(tiempo_estimulo[tiempo_estimulo<tiempo_ws[-1]], estimulo[tiempo_estimulo<tiempo_ws[-1]], label='Estímulo', color='k')
         plt.xlabel('Tiempo'); plt.ylabel('Estímulo'); plt.grid()
-        plt.subplot(212)
+
+    if plot_memoria == True:
+        plt.figure()
         plt.plot(tiempo_ws, A_ws, label='A', color='c')
         plt.plot(tiempo_ws, B_ws, label='B', color='g')
-        plt.xlabel('Tiempo'); plt.ylabel('A, B'); plt.legend(); plt.grid(); plt.show()
+        plt.xlabel('Tiempo'); plt.ylabel('A, B'); plt.legend(); plt.grid()
 
     #Calculo la memoria
     memoria_A = A_ws[-1] - A_wos[-1]
