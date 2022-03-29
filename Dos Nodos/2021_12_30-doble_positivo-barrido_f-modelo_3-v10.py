@@ -175,4 +175,4 @@ plt.show()
         # mm.mide_memoria(*params, S_alto=10, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
         # plt.savefig(f'resultados/2022_03_11-memoria_estimulo_{n}.pdf')
 
-#Y... es un desastre lo que calcula. No se me ocurre cómo modificar la función para que no sea asi, y tampoco tendría sentido, pues a los sistemas que andan ok les calcula bien la memoria. Entonces, puedo calcular a mano la memoria en estos casos
+#Y... es un desastre lo que calcula. No se me ocurre cómo modificar la función para que no sea asi, y tampoco tendría sentido, pues a los sistemas que andan ok les calcula bien la memoria. Entonces, puedo calcular a mano la memoria en estos casos. Lo hago en otro código.
