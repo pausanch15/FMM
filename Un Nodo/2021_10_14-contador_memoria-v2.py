@@ -183,7 +183,7 @@ for i in range(len(A_wos)):
     axs[1].set_ylabel('A')
     axs[1].set_xlim(0, 15)
 
-    plt.savefig(f'2020_10_22-interpolacion_f={F[i]}.pdf', dpi=300, bbox_inches='tight')
+    # plt.savefig(f'2020_10_22-interpolacion_f={F[i]}.pdf', dpi=300, bbox_inches='tight')
 
 #%%
 #Pruebo el contador de memoria.
@@ -192,16 +192,16 @@ M = [] #Lista en la que voy a guardar los contadores
 
 for awos, aws in zip(A_wos_ev, A_ws_ev):
     M.append(aws - awos)
-    for i, ti in enumerate(t):
-        if ti < tiempo_escalon*2:
-            M[-1][i] = 'nan'
+    # for i, ti in enumerate(t):
+        # if ti < tiempo_escalon*2:
+            # M[-1][i] = 'nan'
 
 #Hago la figura que dijo Ale
 plt.figure()
 plt.plot(tiempo_estimulo, estimulo, 'k--', label='Estímulo', alpha=0.45)
 for i in range(len(F)):
     plt.plot(t, M[i], label=f'f={F[i]}')
-plt.legend(loc='upper left')
+plt.legend(loc='upper right')
 plt.grid()
 plt.xlim(0, 15)
 plt.ylabel('Contador de Memoria')
