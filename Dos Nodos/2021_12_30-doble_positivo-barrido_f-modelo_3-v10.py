@@ -69,6 +69,7 @@ plt.xscale('log')
 plt.yscale('log')
 plt.title('Histograma Áreas')
 plt.grid(zorder=0)
+plt.savefig(f'histograma_areas_loglog.pdf')
 
 #Rehago los gráficos que ven correlación pintando los valores de memoria menores a 0.1 de otro color, y les pongo un alpha para ver la densidad de puntos en el gráfico
 ejes_x = [areas, anchos, altos_on, altos_off]
@@ -100,6 +101,7 @@ for i, ax in enumerate(axs.flatten()):
     ax.set_xlabel(labels_x[i])
     ax.set_ylabel('Memoria en A')
     ax.grid()
+plt.savefig(f'memAcorr.pdf')
 
 #Para la memoria en B
 fig, axs = plt.subplots(2, 2, sharex=True, sharey=True)
@@ -109,6 +111,7 @@ for i, ax in enumerate(axs.flatten()):
     ax.set_xlabel(labels_x[i])
     ax.set_ylabel('Memoria en B')
     ax.grid()
+plt.savefig(f'memBcorr.pdf')
 
 plt.show()
 

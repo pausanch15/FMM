@@ -14,7 +14,7 @@ import pickle
 from multiprocessing import Pool
 from itertools import combinations
 import random
-plt.ion()
+#plt.ion()
 
 #Levanto el csv y veo algunos plots
 fname = '2022_03_07-parametros_biestables-modelo_3-todos_juntos.csv'
@@ -86,15 +86,22 @@ pares_num = list(combinations(parametros_num, 2))
 
 #Hago todas las combinaciones posibles
 for par, par_num in zip(pares, pares_num):
-    x_max, x_min = np.max(par_num[0]), np.min(par_num[0])
-    y_max, y_min = np.max(par_num[1]), np.min(par_num[1])
-    x, y = np.meshgrid(np.linspace(x_min, x_max, 59), np.linspace(y_min, y_max, 10))
-    z = np.reshape(mem_A, np.shape(x))
     plt.figure()
-    plt.pcolor(x, y, z, shading='auto', cmap='PuBu')
+    # Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
+    plt.scatter(*par_num, c=mem_A, marker=".",cmap="cividis")
+    
     plt.colorbar()
     plt.xlabel(par[0])
     plt.ylabel(par[1])
-    plt.savefig(f'resultados/2022_03_30-{par[0]}_{par[1]}.pdf')
-    # plt.show()
-    plt.close()
+    # plt.savefig(f'resultados/2022_03_30-{par[0]}_{par[1]}.pdf')
+    plt.show()
+    # plt.close()
+
+# Histograms de los parametros
+# for col in df:
+    # plt.figure()
+    # df[col].hist(bins="auto")
+    # plt.xlabel(f"{col}")
+    # plt.ylabel("# sistemas")
+    # plt.savefig(f"resultados/2022_04_04-histogramas_{col}.pdf")
+    # plt.close()
