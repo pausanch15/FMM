@@ -14,7 +14,7 @@ import pickle
 from multiprocessing import Pool
 from itertools import combinations
 import random
-#plt.ion()
+plt.ion()
 
 #Levanto el csv y veo algunos plots
 fname = '2022_03_07-parametros_biestables-modelo_3-todos_juntos.csv'
@@ -88,20 +88,51 @@ pares_num = list(combinations(parametros_num, 2))
 for par, par_num in zip(pares, pares_num):
     plt.figure()
     # Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
-    plt.scatter(*par_num, c=mem_A, marker=".",cmap="cividis")
-    
+    plt.scatter(*par_num, c=mem_A, marker=".",cmap="cividis")    
     plt.colorbar()
     plt.xlabel(par[0])
     plt.ylabel(par[1])
-    # plt.savefig(f'resultados/2022_03_30-{par[0]}_{par[1]}.pdf')
+    plt.savefig(f'resultados/2022_03_30-{par[0]}_{par[1]}.pdf')
     plt.show()
-    # plt.close()
+    plt.close()
 
-# Histograms de los parametros
-# for col in df:
-    # plt.figure()
-    # df[col].hist(bins="auto")
-    # plt.xlabel(f"{col}")
-    # plt.ylabel("# sistemas")
+#Acomodo los plots de alguna forma que se entienda todo un poco más. Tomo la sugerencia de la matriz triangular superior.
+fig, axs = plt.subplots(8, 8, sharex=True, sharey=True)
+for i_par, par in enumerate(pares):
+    for n in range(1, 8):
+        i = int(i_par + (0.5*n*(n+1)))
+        if i >= 3*n:
+            axs.flatten()[i].scatter(*pares_num[i_par], c=mem_A, marker=".",cmap="cividis")
+        # if i in range(len(axs.flatten())):
+            # axs.flatten()[i].scatter(*pares_num[i_par], c=mem_A, marker=".",cmap="cividis")
+
+#Histogramas de los parametros
+n_parametros = 8
+n_barrido = 100
+parame = lhs.lhs(n_parametros, n_barrido)
+
+#Elegimos entre que valores queremos la distribucion
+parametros= np.copy(parame)
+
+#Permito solo que los k chiquitos se muevan entre 10**(-2) y 10**2
+parametros[:, 2] = 10**((parame[:,2]-0.5)*4)
+parametros[:, 3] = 10**((parame[:,3]-0.5)*4)
+parametros[:, 6] = 10**((parame[:,6]-0.5)*4)
+parametros[:, 7] = 10**((parame[:,7]-0.5)*4)
+
+#Y que que los K grandes se muevan entre entre 0.01 y 1
+parametros[:, 0] = 10**((parame[:,2]-1)*2)
+parametros[:, 0] = 10**((parame[:,2]-1)*2)
+parametros[:, 4] = 10**((parame[:,2]-1)*2)
+parametros[:, 5] = 10**((parame[:,2]-1)*2)
+
+for col, param in zip(df, parametros):
+    if col in df.columns.to_numpy()[8:]: continue
+    plt.figure()
+    df[col].hist(bins="auto", facecolor='c', edgecolor="black", alpha=0.4, label='Sistemas Biestables')
+    plt.hist(param, bins="auto", facecolor='r', edgecolor="black", alpha=0.4, label='Todos')
+    plt.xlabel(f"{col}")
+    plt.ylabel("# sistemas")
+    plt.legend()
     # plt.savefig(f"resultados/2022_04_04-histogramas_{col}.pdf")
     # plt.close()
