@@ -92,7 +92,7 @@ for par, par_num in zip(pares, pares_num):
     plt.colorbar()
     plt.xlabel(par[0])
     plt.ylabel(par[1])
-    plt.savefig(f'resultados/2022_03_30-{par[0]}_{par[1]}.pdf')
+    # plt.savefig(f'resultados/2022_03_30-{par[0]}_{par[1]}.pdf')
     plt.show()
     plt.close()
 
@@ -108,31 +108,59 @@ for i_par, par in enumerate(pares):
 
 #Histogramas de los parametros
 n_parametros = 8
-n_barrido = 100
-parame = lhs.lhs(n_parametros, n_barrido)
+n_barrido = 10000
+parame = np.concatenate((lhs.lhs(n_parametros, n_barrido, random_seed=0), lhs.lhs(n_parametros, n_barrido, random_seed=1)))
 
 #Elegimos entre que valores queremos la distribucion
-parametros= np.copy(parame)
+parametros_todos = np.copy(parame)
 
 #Permito solo que los k chiquitos se muevan entre 10**(-2) y 10**2
-parametros[:, 2] = 10**((parame[:,2]-0.5)*4)
-parametros[:, 3] = 10**((parame[:,3]-0.5)*4)
-parametros[:, 6] = 10**((parame[:,6]-0.5)*4)
-parametros[:, 7] = 10**((parame[:,7]-0.5)*4)
+parametros_todos[:, 2] = 10**((parame[:,2]-0.5)*4)
+parametros_todos[:, 3] = 10**((parame[:,3]-0.5)*4)
+parametros_todos[:, 6] = 10**((parame[:,6]-0.5)*4)
+parametros_todos[:, 7] = 10**((parame[:,7]-0.5)*4)
 
 #Y que que los K grandes se muevan entre entre 0.01 y 1
-parametros[:, 0] = 10**((parame[:,2]-1)*2)
-parametros[:, 0] = 10**((parame[:,2]-1)*2)
-parametros[:, 4] = 10**((parame[:,2]-1)*2)
-parametros[:, 5] = 10**((parame[:,2]-1)*2)
+parametros_todos[:, 0] = 10**((parame[:,2]-1)*2)
+parametros_todos[:, 0] = 10**((parame[:,2]-1)*2)
+parametros_todos[:, 4] = 10**((parame[:,2]-1)*2)
+parametros_todos[:, 5] = 10**((parame[:,2]-1)*2)
 
-for col, param in zip(df, parametros):
+#Reacomodo los parámetros para poder recorrerlos por tipo de parámetro y no por sistema
+parametros_todos = parametros_todos.T
+
+#Ahora sí, los gráficos. En escala log-log
+for col, param in zip(df, parametros_todos):
     if col in df.columns.to_numpy()[8:]: continue
     plt.figure()
-    df[col].hist(bins="auto", facecolor='c', edgecolor="black", alpha=0.4, label='Sistemas Biestables')
-    plt.hist(param, bins="auto", facecolor='r', edgecolor="black", alpha=0.4, label='Todos')
+    parametro = df.loc[:, col].to_numpy()
+
+    hist, bins = np.histogram(param, bins='auto')
+    logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
+    plt.hist(param, bins=logbins, facecolor='r', edgecolor="black", alpha=0.4, label='Todos')
+
+    hist, bins = np.histogram(parametro, bins='auto')
+    logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
+    plt.hist(parametro, bins=logbins, facecolor='c', edgecolor="black", alpha=0.4, label='Sistemas Biestables')
+    
     plt.xlabel(f"{col}")
-    plt.ylabel("# sistemas")
+    plt.ylabel("# Sistemas")
     plt.legend()
-    # plt.savefig(f"resultados/2022_04_04-histogramas_{col}.pdf")
-    # plt.close()
+    plt.savefig(f"resultados/2022_04_11-histogramas_log_{col}.pdf")
+    plt.close()
+
+#Y en escala no log-log
+for col, param in zip(df, parametros_todos):
+    if col in df.columns.to_numpy()[8:]: continue
+    plt.figure()
+    parametro = df.loc[:, col].to_numpy()
+    
+    plt.hist(param, bins='auto', facecolor='r', edgecolor="black", alpha=0.4, label='Todos', density=True, stacked=True)
+
+    plt.hist(parametro, bins='auto', facecolor='c', edgecolor="black", alpha=0.4, label='Sistemas Biestables', density=True, stacked=True)
+    
+    plt.xlabel(f"{col}")
+    plt.ylabel("# Sistemas")
+    plt.legend()
+    plt.savefig(f"resultados/2022_04_04-histogramas_{col}.pdf")
+    plt.close()
