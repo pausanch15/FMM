@@ -8,7 +8,7 @@ import runge_kuta as rk
 plt.ion()
 
 #%%
-def integra_FN(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2, TY2, dY2, alpha, tiempo_max, pasos):
+def integra_FPN(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2, TY2, dY2, alpha, tiempo_max):
     '''
     Las condiciones iniciales que usa son A=0 y B=0.
     '''
@@ -38,15 +38,15 @@ def integra_FN(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2,
         Y=vars[2]
     
         # Sistema de ecuaciones
-        dX = ((1-alpha)*C1+alpha*C2+alpha*(X**2))/(1+alpha*(X**2)) - ((1-alpha)*dXY1+alpha*dYX2)*Y*(X/(1+((1-alpha)*X)/KYX1)) - ((1-alpha)dX1+alpha*dX2)*X        
+        dX = ((1-alpha)*C1+alpha*C2+alpha*(X**2))/(1+alpha*(X**2)) - ((1-alpha)*dYX1+alpha*dYX2)*Y*(X/(1+((1-alpha)*X)/KYX1)) - ((1-alpha)*dX1+alpha*dX2)*X        
         dy = ((1-alpha)*Ty1+alpha*Ty2)*(X/(1+X)) - ((1-alpha)*dy1+alpha*dy2)*y        
-        dY = ((1-alpha)*TY1+alpha*TY2)*y - ((1-alpha)dy1+alpha*dY2)*Y
+        dY = ((1-alpha)*TY1+alpha*TY2)*y - ((1-alpha)*dy1+alpha*dY2)*Y
         
         return np.array([dX, dy, dY])
 
     #Integramos
-    condiciones_iniciales = [0, 0]
+    condiciones_iniciales = [0, 0, 0]
     params = [C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2, TY2, dY2, alpha]
-    tiempo, variables = rk.integrar(modelo, *params, condiciones_iniciales, tiempo_max)
+    tiempo, variables = rk.integrar(modelo, params, condiciones_iniciales, tiempo_max)
 
     return tiempo, variables
