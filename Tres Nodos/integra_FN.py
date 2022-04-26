@@ -46,7 +46,7 @@ def integra_FN(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, tiempo_max):
 
     return tiempo, variables
 
-def integra_FN_estimulo(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, tiempo_max=1000, S_alto=100, S_bajo=0.1, N_estimulo=10000, tiempo_max_estimulo=1000, tiempo_subida=100, tiempo_bajada=300):
+def integra_FN_estimulo(dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, tiempo_max=1000, S_alto=100, S_bajo=0.1, N_estimulo=10000, tiempo_max_estimulo=1000, tiempo_subida=100, tiempo_bajada=300, condiciones_iniciales = [0, 0, 0]):
     '''
     Las condiciones iniciales que usa son X=y=Y=0
     Devuelve (tiempo, variables, tiempo_estimulo, estimulo)
@@ -54,14 +54,14 @@ def integra_FN_estimulo(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, tiempo_max=1000
     #Defino el modelo
     def modelo(vars, params, interpolar_estimulo, tiempo):
         #Parámetros
-        C1 = params[0] 
-        dX1 = params[1] 
-        dYX1 = params[2]
-        KYX1 = params[3]
-        Ty1 = params[4] 
-        dy1 = params[5]
-        TY1 = params[6]
-        dY1 = params[7]
+        C1 = interpolar_estimulo(tiempo) #aca lo interpola
+        dX1 = params[0]
+        dYX1 = params[1]
+        KYX1 = params[2]
+        Ty1 = params[3] 
+        dy1 = params[4]
+        TY1 = params[5]
+        dY1 = params[6]
 
         # Variables
         X=vars[0]
@@ -88,11 +88,10 @@ def integra_FN_estimulo(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, tiempo_max=1000
     estimulo = np.where(tiempo_estimulo<tiempo_bajada, subida, caida)
 
     #Integramos
-    condiciones_iniciales = [0, 0, 0]
     tiempo_min = tiempo_bajada + 20
     
     interpolar_estimulo = interpolate.interp1d(tiempo_estimulo, estimulo)
-    params = [C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1]
+    params = [dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1]
     tiempo, variables = rks.integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
 
     #Devuelvo
