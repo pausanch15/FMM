@@ -101,7 +101,8 @@ def integra_FN_estimulo(dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, tiempo_max=1000, re
     tiempo_estimulo, estimulo = escalon(resolucion, ti, tf, S_min, S_max, tau, ts, tb)
     
     #Integramos
-    tiempo_min = tb + 20
+    # tiempo_min = tb + 20
+    tiempo_min = tf-1
     tiempo_max = tf-1
     interpolar_estimulo = interpolate.interp1d(tiempo_estimulo, estimulo)
     params = [dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1]

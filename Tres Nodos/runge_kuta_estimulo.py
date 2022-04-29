@@ -15,7 +15,7 @@ def rk4(modelo,params, interpolar_estimulo, tiempo, variables, dt):
 
 #Al integrador llama al runge kutta, así que tmb le tengo que pasar el interpolador
 def integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min, tiempo_inicial = 0,
-             error_min = 10**-6, error_max = 10**-4, max_iter=10000):
+             error_min = 10**-6, error_max = 10**-4, max_iter=1000000):
     
     cant_variables = len(condiciones_iniciales)
     
@@ -47,6 +47,7 @@ def integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_
             if error < error_min:
                 dt = 2 * dt
         if tiempo[i]>tiempo_min:
-          if np.max(np.abs(variables[:,i]-variables[:,i-1]))<0.000001 and i>1:
+          # if np.max(np.abs(variables[:,i]-variables[:,i-1]))<0.000001 and i>1:
+          if i>1:
               transitorio = False
     return tiempo[:i],variables[:,:i]
