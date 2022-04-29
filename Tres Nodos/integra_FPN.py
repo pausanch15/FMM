@@ -10,29 +10,20 @@ import runge_kuta_estimulo as rks
 plt.ion()
 
 #%%
-def integra_FPN(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2, TY2, dY2, alpha, tiempo_max):
+def integra_FPN(C2, dYX2, dX2, Ty2, dy2, TY2, dY2, tiempo_max):
     '''
     Las condiciones iniciales que usa son A=0 y B=0.
     '''
     #Defino el modelo
     def modelo(vars, params):
         #Parámetros
-        C1 = params[0] 
-        dX1 = params[1] 
-        dYX1 = params[2]
-        KYX1 = params[3]
-        Ty1 = params[4] 
-        dy1 = params[5]
-        TY1 = params[6]
-        dY1 = params[7]
-        C2 = params[8]
-        dYX2 = params[9]
-        dX2 = params[10]
-        Ty2 = params[11]
-        dy2 = params[12]
-        TY2 = params[13]
-        dY2 = params[14]
-        alpha = params[15]
+        C2 = params[0]
+        dYX2 = params[1]
+        dX2 = params[2]
+        Ty2 = params[3]
+        dy2 = params[4]
+        TY2 = params[5]
+        dY2 = params[6]
 
         # Variables
         X=vars[0]
@@ -40,20 +31,35 @@ def integra_FPN(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2
         Y=vars[2]
     
         # Sistema de ecuaciones
-        dX = ((1-alpha)*C1+alpha*C2+alpha*(X**2))/(1+alpha*(X**2)) - ((1-alpha)*dYX1+alpha*dYX2)*Y*(X/(1+((1-alpha)*X)/KYX1)) - ((1-alpha)*dX1+alpha*dX2)*X        
-        dy = ((1-alpha)*Ty1+alpha*Ty2)*(X/(1+X)) - ((1-alpha)*dy1+alpha*dy2)*y        
-        dY = ((1-alpha)*TY1+alpha*TY2)*y - ((1-alpha)*dy1+alpha*dY2)*Y
+        dX = (C2+(X**2))/(1+(X**2)) - dYX2*X*Y - dX2*X       
+        dy = Ty2*((X)/(X+1)) - dy2*y
+        dY = TY2*y - dY2*y
         
         return np.array([dX, dy, dY])
 
     #Integramos
     condiciones_iniciales = [0, 0, 0]
-    params = [C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2, TY2, dY2, alpha]
+    params = [C2, dYX2, dX2, Ty2, dy2, TY2, dY2]
     tiempo, variables = rk.integrar(modelo, params, condiciones_iniciales, tiempo_max)
 
     return tiempo, variables
 
-def integra_FPN_estimulo(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2, TY2, dY2, alpha, tiempo_max=1000, S_alto=100, S_bajo=0.1, N_estimulo=10000, tiempo_max_estimulo=1000, tiempo_subida=100, tiempo_bajada=300):
+#%%
+def escalon(resolucion, ti, tf, S_min, S_max, tau, ts, tb):    
+    #Eje del tiempo
+    tiempo = np.linspace(ti, tf, resolucion)
+    
+    #Eje de estímulo
+    S = np.ones(resolucion)
+    
+    #Hago el escalon
+    ts = int(ts*(1/tf)*resolucion)
+    tb = int(tb*(1/tf)*resolucion)
+    S[0:ts] = S_min
+    S[ts:tb] = S_max
+    S[tb:] = S_min
+    
+def integra_FPN_estimulo(C2, dYX2, dX2, Ty2, dy2, TY2, dY2, tiempo_max=1000, resolucion=1000, ti=0, tf=100, S_min=0, S_max=3, tau=10, ts=30, tb=50, condiciones_iniciales=[0, 0, 0]):
     '''
     Las condiciones iniciales que usa son X=y=Y=0
     Devuelve (tiempo, variables, tiempo_estimulo, estimulo)
@@ -61,22 +67,13 @@ def integra_FPN_estimulo(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2,
     #Defino el modelo
     def modelo(vars, params, interpolar_estimulo, tiempo):
         #Parámetros
-        C1 = params[0] 
-        dX1 = params[1] 
-        dYX1 = params[2]
-        KYX1 = params[3]
-        Ty1 = params[4] 
-        dy1 = params[5]
-        TY1 = params[6]
-        dY1 = params[7]
-        C2 = params[8]
-        dYX2 = params[9]
-        dX2 = params[10]
-        Ty2 = params[11]
-        dy2 = params[12]
-        TY2 = params[13]
-        dY2 = params[14]
-        alpha = params[15]
+        C2 = interpolar_estimulo(tiempo) #aca lo interpola
+        dYX2 = params[0]
+        dX2 = params[1]
+        Ty2 = params[2]
+        dy2 = params[3]
+        TY2 = params[4]
+        dY2 = params[5]
 
         # Variables
         X=vars[0]
@@ -84,30 +81,20 @@ def integra_FPN_estimulo(C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2,
         Y=vars[2]
     
         # Sistema de ecuaciones
-        dX = ((1-alpha)*C1+alpha*C2+alpha*(X**2))/(1+alpha*(X**2)) - ((1-alpha)*dYX1+alpha*dYX2)*Y*(X/(1+((1-alpha)*X)/KYX1)) - ((1-alpha)*dX1+alpha*dX2)*X        
-        dy = ((1-alpha)*Ty1+alpha*Ty2)*(X/(1+X)) - ((1-alpha)*dy1+alpha*dy2)*y        
-        dY = ((1-alpha)*TY1+alpha*TY2)*y - ((1-alpha)*dy1+alpha*dY2)*Y
+        dX = (C2+(X**2))/(1+(X**2)) - dYX2*X*Y - dX2*X       
+        dy = Ty2*((X)/(X+1)) - dy2*y
+        dY = TY2*y - dY2*y
         
         return np.array([dX, dy, dY])
 
     #Defino el estímulo con caída exponencial
-    tiempo_estimulo = np.linspace(0,tiempo_max_estimulo,N_estimulo)
-    
-    x = np.where(tiempo_estimulo>tiempo_bajada, tiempo_estimulo, np.nan)
-    x_inicio_caida = len(np.where(np.isnan(x))[0])
-    caida = S_alto*np.exp(-(x/S_alto))
-    caida = S_alto*(S_alto/caida[x_inicio_caida])*np.exp(-(x/S_alto))
-    
-    subida = S_alto*np.ones(N_estimulo)*(tiempo_estimulo>tiempo_subida)
-    
-    estimulo = np.where(tiempo_estimulo<tiempo_bajada, subida, caida)
+    tiempo_estimulo, estimulo = escalon(resolucion, ti, tf, S_min, S_max, tau, ts, tb)
 
     #Integramos
-    condiciones_iniciales = [0, 0, 0]
-    tiempo_min = tiempo_bajada + 20
-    
+    tiempo_min = tb + 20
+    tiempo_max = tf-1
     interpolar_estimulo = interpolate.interp1d(tiempo_estimulo, estimulo)
-    params = [C1, dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, C2, dYX2, dX2, Ty2, dy2, TY2, dY2, alpha]
+    params = [C2, dYX2, dX2, Ty2, dy2, TY2, dY2]
     tiempo, variables = rks.integrar(modelo, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
 
     #Devuelvo
