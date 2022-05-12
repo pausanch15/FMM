@@ -42,7 +42,7 @@ def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=100, S_b
     
         # Sistema de ecuaciones
         dA = S*k_sa*(1-A)/(K_sa+1-A) + B*k_ba*(1-A)/(K_ba+1-A) - k_ba*A/(K_ba+A)
-        dB = S*k_sb*(1-B)/(K_sb+1-B) + A*k_ab*(1-B)/(K_ab+1-B) - k_ab*B/(K_ab+B)
+        dB = k_sb*(1-B)/(K_sb+1-B) + A*k_ab*(1-B)/(K_ab+1-B) - k_ab*B/(K_ab+B)
         
         return np.array([dA,dB])
     
@@ -68,7 +68,7 @@ def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=100, S_b
     
         # Sistema de ecuaciones
         dA = S*k_sa*(1-A)/(K_sa+1-A) + B*k_ba*(1-A)/(K_ba+1-A) - k_ba*A/(K_ba+A)
-        dB = S*k_sb*(1-B)/(K_sb+1-B) + A*k_ab*(1-B)/(K_ab+1-B) - k_ab*B/(K_ab+B)
+        dB = k_sb*(1-B)/(K_sb+1-B) + A*k_ab*(1-B)/(K_ab+1-B) - k_ab*B/(K_ab+B)
         
         return np.array([dA,dB])
 
@@ -92,13 +92,13 @@ def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=100, S_b
     N_estimulo = 10000 #resolucion para el estimulo
     tiempo_max_estimulo = 1000 #tiempo hasta donde llega
     tiempo_estimulo = np.linspace(0,tiempo_max_estimulo,N_estimulo) #vector de tiempo para el estimulo
-    tiempo_subida = tiempo_wos[-1] + 10
+    tiempo_subida = 0
     tiempo_bajada = tiempo_subida + 50
     #Estimulo, multiplico un vector de unos por uno de ceros y unos (falses y trues de la desigualdad) que me da el escalón
     estimulo = S_alto*np.ones(N_estimulo)*(tiempo_estimulo>tiempo_subida)*(tiempo_estimulo<tiempo_bajada) 
     estimulo = estimulo + S_bajo*np.ones(N_estimulo)*((tiempo_estimulo<tiempo_subida)+(tiempo_estimulo>tiempo_bajada))
         
-    condiciones_iniciales = [0,0]
+    condiciones_iniciales = [A_wos[-1], B_wos[-1]]
     tiempo_min = tiempo_bajada + 20
     tiempo_max = 1000
     

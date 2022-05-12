@@ -36,10 +36,10 @@ parametros[:, 6] = 10**((parame[:,6]-0.5)*4)
 parametros[:, 7] = 10**((parame[:,7]-0.5)*4)
 
 #Y que que los K grandes se muevan entre entre 0.01 y 1
-parametros[:, 0] = 10**((parame[:,2]-1)*2)
-parametros[:, 0] = 10**((parame[:,2]-1)*2)
-parametros[:, 4] = 10**((parame[:,2]-1)*2)
-parametros[:, 5] = 10**((parame[:,2]-1)*2)
+parametros[:, 0] = 10**((parame[:,0]-1)*2)
+parametros[:, 1] = 10**((parame[:,1]-1)*2)
+parametros[:, 4] = 10**((parame[:,4]-1)*2)
+parametros[:, 5] = 10**((parame[:,5]-1)*2)
 
 #Defino lo necesario para integrar
 tiempo_max = 100

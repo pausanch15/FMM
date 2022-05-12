@@ -30,8 +30,8 @@ if fname in os.listdir():
     
     #Por ahora solo encontré un sistema biestable
     tiempo_max = 100
-    S_max = 1
-    S_min = 0
+    S_max = 3
+    S_min = 0.1
     pasos = 1000
     
     for n, area in enumerate(areas):
