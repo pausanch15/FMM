@@ -47,24 +47,38 @@ else:
 
     with open(f'2022_05_12-mem_A.pkl', 'wb') as f:
                 pickle.dump(mem_A, f)                
-    with open(f'2022_05_12-mem_A.pkl', 'wb') as f:
+    with open(f'2022_05_12-mem_B.pkl', 'wb') as f:
                 pickle.dump(mem_B, f)
+
+plt.ioff()
+#Veo qué está pasando al calcular memoria
+for n, area in enumerate(areas):
+    params = df.loc[areas[n], :].to_numpy()[:-5]
+    S_on = df.loc[areas[n], :].to_numpy()[-2]
+    S_off = df.loc[areas[n], :].to_numpy()[-1]
+    S_bajo = (S_on + S_off)/2
+
+    mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
+    print(f"{n=}")
+    plt.show()
+plt.ion()
+
+#Saco los valores mayores a 1
+i_mem_A = np.where(mem_A>1)
+i_mem_B = np.where(mem_B>1)
+
+areas = np.delete(areas, i_mem_B[0])
+anchos = np.delete(anchos, i_mem_B[0])
+altos_on = np.delete(altos_on, i_mem_B[0])
+altos_off = np.delete(altos_off, i_mem_B[0])
+mem_A = np.delete(mem_A, i_mem_B[0])
+mem_B = np.delete(mem_B, i_mem_B[0])
 
 #Histograma de áreas
 plt.figure()
 plt.hist(areas, bins='auto', facecolor='c', density=True, stacked=True, edgecolor = "black")
 plt.title('Histograma Áreas')
 plt.grid(zorder=0)
-
-#Histograma de memoria en A y B
-fig, ax = plt.subplots(2, 1)
-ax[0].hist(mem_A, bins='auto', facecolor='c', density=True, stacked=True, edgecolor = "black")
-ax[0].set_title('Memoria en A')
-ax[0].grid()
-
-ax[1].hist(mem_B, bins='auto', facecolor='c', density=True, stacked=True, edgecolor = "black")
-ax[1].set_title('Memoria en B')
-ax[1].grid()
 
 #Plots
 ejes_x = [areas, anchos, altos_on, altos_off]
