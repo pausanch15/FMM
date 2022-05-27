@@ -28,9 +28,13 @@ tiempo, variables, tiempo_estimulo, estimulo = fpndesf.integra_FPN_estimulo(dYX2
 
 X, y, Y = variables*epsilon
 
+#Todos los picos
+
+#Picos de las reververaciones
 tb = 530
+umbral_memoria = 0.001 #Diferencia entre la amplitud de los picos durante el escalón y los que consideramos reververaciones
 i_tb = np.where(tiempo>tb)[0][0]
-picos, caracteristicas = find_peaks(X[i_tb:], height=X[i_tb])
+picos, caracteristicas = find_peaks(X[i_tb:], height=X[i_tb]+umbral_memoria)
 altura_picos = caracteristicas['peak_heights']
 
 #Plots
@@ -39,8 +43,13 @@ plt.plot(tiempo, X, label='X')
 plt.plot(tiempo[i_tb:][picos], altura_picos, 'o', label='Memoria')
 plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
 plt.grid()
-plt.title(f'{f=:.2}')
 plt.legend()
 plt.show()
-# plt.savefig(f'2022_05_26-memoria-barrido_f_{f}.png')
-# plt.close()
+
+#%%
+#Empiezo a calcular las cantidades que propone el paper
+t_primer_pico_rev = tiempo[i_tb:][picos[0]] #Tiempo del primer pico de las reververaciones
+t_ultimo_pico_rev = tiempo[i_tb:][picos[-1]] #Tiempo del ultimo pico de las reververaciones
+
+Nr = len(picos)
+Tr = t_ultimo_pico_rev - t_primer_pico_rev
