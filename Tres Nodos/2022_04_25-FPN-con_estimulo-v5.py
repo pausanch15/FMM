@@ -25,22 +25,22 @@ TY2 = 0.3
 dY2 = 0.1
 epsilon = 0.01
 
-# for f in f_s:
-    # tiempo, variables, tiempo_estimulo, estimulo = fpndesf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
-# 
-    # X, y, Y = variables*epsilon
-# 
-    # plt.figure()
-    # plt.plot(tiempo, X, label='X')
-    # plt.plot(tiempo, y, label='y')
-    # plt.plot(tiempo, Y, label='Y')
-    # plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-    # plt.grid()
-    # plt.title(f'{f=:.2}')
-    # plt.legend()
-    # plt.show()
-    # plt.savefig(f'2022_05_26-barrido_f_{f}.png')
-    # plt.close()
+for f in f_s:
+    tiempo, variables, tiempo_estimulo, estimulo = fpndesf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
+
+    X, y, Y = variables*epsilon
+
+    plt.figure()
+    plt.plot(tiempo, X, label='X')
+    plt.plot(tiempo, y, label='y')
+    plt.plot(tiempo, Y, label='Y')
+    plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
+    plt.grid()
+    plt.title(f'{f=:.2}')
+    plt.legend()
+    plt.show()
+    plt.savefig(f'resultados/2022_05_26-barrido_f_{f}.png')
+    plt.close()
 
 #Barro en dYX2
 f = 1
@@ -51,22 +51,22 @@ TY2 = 0.3
 dY2 = 0.1
 epsilon = 0.01
 
-# for dYX2 in dYX2_s:
-    # tiempo, variables, tiempo_estimulo, estimulo = fpndesf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
-# 
-    # X, y, Y = variables*epsilon
-# 
-    # plt.figure()
-    # plt.plot(tiempo, X, label='X')
-    # plt.plot(tiempo, y, label='y')
-    # plt.plot(tiempo, Y, label='Y')
-    # plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-    # plt.grid()
-    # plt.title(f'{dYX2=:.2}')
-    # plt.legend()
-    # plt.show()
-    # plt.savefig(f'2022_05_26-barrido_dYX2_{dYX2}.png')
-    # plt.close()
+for dYX2 in dYX2_s:
+    tiempo, variables, tiempo_estimulo, estimulo = fpndesf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
+
+    X, y, Y = variables*epsilon
+
+    plt.figure()
+    plt.plot(tiempo, X, label='X')
+    plt.plot(tiempo, y, label='y')
+    plt.plot(tiempo, Y, label='Y')
+    plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
+    plt.grid()
+    plt.title(f'{dYX2=:.2}')
+    plt.legend()
+    plt.show()
+    plt.savefig(f'resultados/2022_05_26-barrido_dYX2_{dYX2}.png')
+    plt.close()
 
 #Para el barrido en f, cuento los picos que hay una vez que empieza a decaer el escalón.
 dYX2 = 0.14
@@ -92,16 +92,16 @@ for f in f_s:
     memoria_f.append(len(picos))
 
     #Plots
-    # plt.figure()
-    # plt.plot(tiempo, X, label='X')
-    # plt.plot(tiempo[i_tb:][picos], altura_picos, 'o', label='Memoria')
-    # plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-    # plt.grid()
-    # plt.title(f'{f=:.2}')
-    # plt.legend()
-    # plt.show()
-    # plt.savefig(f'2022_05_26-memoria-barrido_f_{f}.png')
-    # plt.close()
+    plt.figure()
+    plt.plot(tiempo, X, label='X')
+    plt.plot(tiempo[i_tb:][picos], altura_picos, 'o', label='Memoria')
+    plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
+    plt.grid()
+    plt.title(f'{f=:.2}')
+    plt.legend()
+    plt.show()
+    plt.savefig(f'resultados/2022_05_26-memoria-barrido_f_{f}.png')
+    plt.close()
 
 #Para el barrido en dYX2, cuento los picos que hay una vez que empieza a decaer el escalón.
 f = 1

@@ -24,7 +24,7 @@ altura_escalon = 0.1
 f = 1
 epsilon = 0.01
 
-tiempo, variables, tiempo_estimulo, estimulo = fpndesf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=altura_escalon, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
+tiempo, variables, tiempo_estimulo, estimulo = fpndesf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=3000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=altura_escalon, tau=200, ts=30, tb=1030, condiciones_iniciales=[0.01, 0.01, 0.01])
 
 X, y, Y = variables*epsilon
 
@@ -33,7 +33,7 @@ picos_todos, caracteristicas_todos = find_peaks(X, height=X)
 altura_picos_todos = caracteristicas_todos['peak_heights']
 
 #Picos de las reververaciones
-tb = 530
+tb = 1030
 umbral_memoria = 0.001 #Diferencia entre la amplitud de los picos durante el escalón y los que consideramos reververaciones
 i_tb = np.where(tiempo>tb)[0][0]
 picos, caracteristicas = find_peaks(X[i_tb:], height=X[i_tb]+umbral_memoria)
@@ -57,7 +57,7 @@ t_ultimo_pico_rev = tiempo[i_tb:][picos[-1]] #Tiempo del ultimo pico de las reve
 
 Nr = len(picos)
 Tr = t_ultimo_pico_rev - t_primer_pico_rev
-Tm = t_ultimo_pico_rev - t_primer_pico
+Tm = tiempo[tb] - t_primer_pico
 
 #Ploteo
 plt.figure()
@@ -70,8 +70,8 @@ plt.vlines(t_primer_pico_rev, altura_picos[0], -0.01, linestyle='dashed', color=
 plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.01, linestyle='dashed', color='orange')
 
 #Plot Tm
-plt.hlines(-0.02, t_primer_pico, t_ultimo_pico_rev, label='Tm', color='green')
-plt.vlines(t_primer_pico, altura_picos_todos[0], -0.02, linestyle='dashed', color='green')
+plt.hlines(-0.02, tiempo[i_tb], t_ultimo_pico_rev, label='Tm', color='green')
+plt.vlines(tiempo[i_tb], altura_picos_todos[0], -0.02, linestyle='dashed', color='green')
 plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.02, linestyle='dashed', color='green')
 
 plt.grid()
