@@ -29,6 +29,8 @@ tiempo, variables, tiempo_estimulo, estimulo = fpndesf.integra_FPN_estimulo(dYX2
 X, y, Y = variables*epsilon
 
 #Todos los picos
+picos_todos, caracteristicas_todos = find_peaks(X, height=X)
+altura_picos_todos = caracteristicas_todos['peak_heights']
 
 #Picos de las reververaciones
 tb = 530
@@ -40,6 +42,7 @@ altura_picos = caracteristicas['peak_heights']
 #Plots
 plt.figure()
 plt.plot(tiempo, X, label='X')
+# plt.plot(tiempo[picos_todos], altura_picos_todos, '.', label='Todos los Picos')
 plt.plot(tiempo[i_tb:][picos], altura_picos, 'o', label='Memoria')
 plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
 plt.grid()
@@ -48,8 +51,29 @@ plt.show()
 
 #%%
 #Empiezo a calcular las cantidades que propone el paper
+t_primer_pico = tiempo[picos_todos[0]] #Tiempo del primer pico de todos
 t_primer_pico_rev = tiempo[i_tb:][picos[0]] #Tiempo del primer pico de las reververaciones
 t_ultimo_pico_rev = tiempo[i_tb:][picos[-1]] #Tiempo del ultimo pico de las reververaciones
 
 Nr = len(picos)
 Tr = t_ultimo_pico_rev - t_primer_pico_rev
+Tm = t_ultimo_pico_rev - t_primer_pico
+
+#Ploteo
+plt.figure()
+plt.plot(tiempo, X, label='X')
+plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
+
+#Plot Tr
+plt.hlines(-0.01, t_primer_pico_rev, t_ultimo_pico_rev, label='Tr', color='orange')
+plt.vlines(t_primer_pico_rev, altura_picos[0], -0.01, linestyle='dashed', color='orange')
+plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.01, linestyle='dashed', color='orange')
+
+#Plot Tm
+plt.hlines(-0.02, t_primer_pico, t_ultimo_pico_rev, label='Tm', color='green')
+plt.vlines(t_primer_pico, altura_picos_todos[0], -0.02, linestyle='dashed', color='green')
+plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.02, linestyle='dashed', color='green')
+
+plt.grid()
+plt.legend()
+plt.show()
