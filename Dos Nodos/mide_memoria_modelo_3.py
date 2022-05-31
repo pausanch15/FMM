@@ -12,7 +12,7 @@ import runge_kuta_estimulo as rks
 plt.ion()
 
 #La función
-def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=100, S_bajo=0.1, plot_estimulo=False, plot_memoria=False):
+def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=10, S_bajo=0.1, plot_estimulo=False, plot_memoria=False):
     '''
     parametros: lista de parámetros del modelo SIN el S
     S_alto y S_bajo son esos valores para el escalón
@@ -75,7 +75,7 @@ def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=100, S_b
     params = [k_sa, k_sb, K_sa, K_sb, k_ba, k_ab, K_ba, K_ab]
     
     #Integro sin estímulo
-    tiempo_min = 100
+    tiempo_min = 1000
     tiempo_max = 1000
     S = S_bajo
     
@@ -90,38 +90,40 @@ def mide_memoria(K_sa, K_sb, k_ba, k_ab, K_ba, K_ab, k_sa, k_sb, S_alto=100, S_b
     #Integro con estímulo  
     #Definimos el estimulo variable
     N_estimulo = 10000 #resolucion para el estimulo
-    tiempo_max_estimulo = 1000 #tiempo hasta donde llega
+    tiempo_max_estimulo = 2000 #tiempo hasta donde llega
     tiempo_estimulo = np.linspace(0,tiempo_max_estimulo,N_estimulo) #vector de tiempo para el estimulo
     tiempo_subida = 0
     tiempo_bajada = tiempo_subida + 50
     #Estimulo, multiplico un vector de unos por uno de ceros y unos (falses y trues de la desigualdad) que me da el escalón
     estimulo = S_alto*np.ones(N_estimulo)*(tiempo_estimulo>tiempo_subida)*(tiempo_estimulo<tiempo_bajada) 
     estimulo = estimulo + S_bajo*np.ones(N_estimulo)*((tiempo_estimulo<tiempo_subida)+(tiempo_estimulo>tiempo_bajada))
+    estimulo[0] = S_bajo
         
     condiciones_iniciales = [A_wos[-1], B_wos[-1]]
     tiempo_min = tiempo_bajada + 20
-    tiempo_max = 1000
     
     interpolar_estimulo = interpolate.interp1d(tiempo_estimulo,estimulo)
     tiempo_ws, variables_ws = rks.integrar(modelo_ws, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
+
+    variables_ws = np.concatenate((variables_wos, variables_ws), axis=1)
     
     A_ws = variables_ws[0]
     B_ws = variables_ws[1]
 
     #Grafico los sistemas y el escalon si plot_estimulo es True
-    if plot_estimulo == True:
+    if plot_estimulo == True and plot_memoria == True:
         plt.figure()
-        plt.plot(tiempo_estimulo[tiempo_estimulo<tiempo_ws[-1]], estimulo[tiempo_estimulo<tiempo_ws[-1]], label='Estímulo', color='k')
-        plt.xlabel('Tiempo'); plt.ylabel('Estímulo'); plt.grid()
+        #Construyo los tiempos necesarios para evaluar el estimulo
+        estimulo_bajo = S_bajo*np.ones(len(tiempo_wos))
+        estimulo = np.concatenate((estimulo_bajo,interpolar_estimulo(tiempo_ws)))
+        tiempo_ws = np.concatenate((tiempo_wos, tiempo_ws+tiempo_wos[-1]))
+        plt.plot(tiempo_ws, estimulo)
 
-    if plot_memoria == True:
-        plt.figure()
-        plt.plot(tiempo_ws, A_ws, label='A', color='c')
-        plt.plot(tiempo_ws, B_ws, label='B', color='g')
-        plt.xlabel('Tiempo'); plt.ylabel('A, B'); plt.legend(); plt.grid()
+        #Ploteo A(t)
+        plt.plot(tiempo_ws, A_ws)
 
     #Calculo la memoria
     memoria_A = A_ws[-1] - A_wos[-1]
     memoria_B = B_ws[-1] - B_wos[-1]
 
-    return [memoria_A, memoria_B]
+    return [memoria_A, A_ws]

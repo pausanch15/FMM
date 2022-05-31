@@ -9,6 +9,7 @@ import integra_FPN_desacoplado as fpndes
 from scipy import interpolate
 import runge_kuta_estimulo as rks
 import plotly.graph_objects as go
+import plotly.express as px
 plt.ion()
 
 #%%
@@ -67,6 +68,8 @@ for step in np.arange(0, 5, 0.1):
     S_alto_actual = step*0.015
     tiempo, variables, tiempo_estimulo, estimulo = fpndes.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=S_alto_actual, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
     X, y, Y = variables*epsilon
+
+    px.line(x=tiempo_estimulo, y=estimulo, color='#000000')
     
     fig.add_trace(
         go.Scatter(
