@@ -1,4 +1,4 @@
-#Para loscasos en los que sí hay reververaciones, intento calcular lascantidades que propone el paper de Mitra
+#Para los casos en los que sí hay reververaciones, intento calcular las cantidades que propone el paper de Mitra
 
 #%%
 #Librerías
@@ -12,7 +12,7 @@ from scipy.signal import find_peaks
 plt.ion()
 
 #%%
-#Encontrar los picos de las reververacionesdebería ser exctamente igual que antes
+#Encontrar los picos de las reververaciones debería ser exctamente igual que antes
 #Lo que cambia es que hay que pedir que solo se tengan en cuenta los mayores que los que tiene el sistema durante el escalón.
 dYX2 = 0.18 
 dX2 = 0.1 
@@ -57,7 +57,8 @@ t_ultimo_pico_rev = tiempo[i_tb:][picos[-1]] #Tiempo del ultimo pico de las reve
 
 Nr = len(picos)
 Tr = t_ultimo_pico_rev - t_primer_pico_rev
-Tm = tiempo[tb] - t_primer_pico
+Tm = t_ultimo_pico_rev - tiempo[i_tb]
+Tpr = Tm - Tr
 
 #Ploteo
 plt.figure()
@@ -71,8 +72,13 @@ plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.01, linestyle='dashed', color
 
 #Plot Tm
 plt.hlines(-0.02, tiempo[i_tb], t_ultimo_pico_rev, label='Tm', color='green')
-plt.vlines(tiempo[i_tb], altura_picos_todos[0], -0.02, linestyle='dashed', color='green')
+plt.vlines(tiempo[i_tb], altura_escalon, -0.02, linestyle='dashed', color='green')
 plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.02, linestyle='dashed', color='green')
+
+#Plot Tpr
+plt.hlines(-0.03, tiempo[i_tb], t_primer_pico_rev, label='Tpr', color='red')
+plt.vlines(tiempo[i_tb], altura_escalon, -0.03, linestyle='dashed', color='red')
+plt.vlines(t_primer_pico_rev, altura_picos[0], -0.03, linestyle='dashed', color='red')
 
 plt.grid()
 plt.legend()
