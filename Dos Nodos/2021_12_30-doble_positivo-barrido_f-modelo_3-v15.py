@@ -1,4 +1,4 @@
-#Hago pruebas y trabajo sobre la función edl mide_memoria_modelo_3.py
+#Hago pruebas y trabajo sobre la función del mide_memoria_modelo_3.py
 #Librerías
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,7 +10,10 @@ from scipy import interpolate
 import runge_kuta_estimulo as rks
 plt.ion()
 
-#%% Defino el modelo con y sin el estimulo
+#%%
+#A partir de acá, empieza lo que a posterior quiero poner en otro .py que tenga la función que mide memoria
+
+#Defino el modelo con y sin el estimulo
 def modelo_wos(varis,params):
     
     S = params[0]
@@ -62,7 +65,8 @@ def modelo_ws(varis, params, interpolar_estimulo, tiempo):
     dB =   k_sb*(1-B)/(K_sb+1-B) + A*k_ab*(1-B)/(K_ab+1-B) - k_ab*B/(K_ab+B)
     
     return np.array([dA,dB])
-#%% Armo el estímulo
+
+#Armo el estímulo
 def armar_estimulo_pulso(t_subida,ancho,t_max=2000,N_puntos=10000,plot=False):
     t_estimulo = np.linspace(0,t_max,N_puntos) #vector de tiempo para el estimulo
     t_bajada = t_subida + ancho
@@ -75,7 +79,8 @@ def armar_estimulo_pulso(t_subida,ancho,t_max=2000,N_puntos=10000,plot=False):
         plt.plot(t_estimulo,estimulo)
         
     return t_estimulo,estimulo
-#%%
+
+#Acá está la función propiamente
 #La función
 def mide_memoria(params, S_alto=100, S_bajo=0.1):
     '''
@@ -143,6 +148,7 @@ print(mem_B)
 print()
 
 #%%
+#En el código mide_memoria_modelo_3.py puse todo lo que dije arriba, acá pruebo que me de lo mismo que al correr todo en este archivo... y no pasa
 #Pruebo la función de mide_memoria_modelo_3 con el ejemplo que usó Fede
 S_alto=10; S_bajo=0.1; t_max=2000; N_puntos=10000
 params = np.array([1.20032999e-02, 2.19836442e-01, 1.44079207e-02, 4.13998718e+00, 1.20032999e-02, 1.20032999e-02, 1.34102344e-01, 5.70161534e+01])
