@@ -34,6 +34,7 @@ tiempo_decaimiento = tiempo[i_tb:]
 picos_todos, caracteristicas_todos = find_peaks(X, height=X)
 altura_picos_todos = caracteristicas_todos['peak_heights']
 
+#Me quedo con el pico máximo
 i_pico_max = np.where(altura_picos_todos==np.max(altura_picos_todos))[0][0]
 pico_max = picos_todos[i_pico_max]
 altura_pico_max = altura_picos_todos[i_pico_max]
@@ -46,6 +47,9 @@ X_decaimiento = X[i_tb:]
 picos_NE, caracteristicas_NE = find_peaks(X_decaimiento, height=X_decaimiento)
 altura_picos_NE = caracteristicas_NE['peak_heights']
 c_NE = len(picos_NE) #cotador_NoEstricto
+
+#Hago un promedio entre todos los picos durante el estímulo cuya amplitud es menor que la del mayor.
+altura_picos_escalon = np.zeros_like(altura_picos_todos)
 
 #Contador Estricto: cuento solo los picos con mas/menos un porcentaje de la amplitud del mayor pico una vez que empieza a bajar el estímulo
 porcentaje_umbral = 10
