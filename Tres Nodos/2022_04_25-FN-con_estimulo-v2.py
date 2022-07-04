@@ -49,12 +49,14 @@ altura_picos_NE = caracteristicas_NE['peak_heights']
 c_NE = len(picos_NE) #cotador_NoEstricto
 
 #Hago un promedio entre todos los picos durante el estímulo cuya amplitud es menor que la del mayor.
-altura_picos_escalon = np.zeros_like(altura_picos_todos)
+tiempo_picos_escalon = np.where(picos_todos<i_tb, picos_todos, 0)
+altura_picos_escalon = np.where(picos_todos<i_tb, altura_picos_todos, 0)
+prom_picos_escalon = np.mean(altura_picos_escalon)
 
-#Contador Estricto: cuento solo los picos con mas/menos un porcentaje de la amplitud del mayor pico una vez que empieza a bajar el estímulo
-porcentaje_umbral = 10
+#Contador Estricto: cuento solo los picos con mas/menos un porcentaje de la amplitud del promedio de la altura de los picos durante el escalón
+porcentaje_umbral = 20
 umbral = porcentaje_umbral/100
-picos_E, caracteristicas_E = find_peaks(X_decaimiento, height=altura_pico_max*umbral)
+picos_E, caracteristicas_E = find_peaks(X_decaimiento, height=prom_picos_escalon*umbral)
 altura_picos_E = caracteristicas_E['peak_heights']
 c_E = len(picos_E) #cotador_Estricto
 
@@ -65,32 +67,9 @@ plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
 plt.plot(tiempo_decaimiento[picos_E], altura_picos_E, 'o', label='Contador Estricto')
 plt.plot(tiempo_decaimiento[picos_NE], altura_picos_NE, '.', label='Contador No Estricto')
 plt.plot(tiempo[picos_todos][i_pico_max], altura_pico_max, 'o', label='Pico Máximo')
+plt.hlines(prom_picos_escalon, 0, 200, color='deeppink', label='Promedio Picos Escalón')
 plt.grid()
 plt.title('FN Con los Valores del Paper')
 plt.legend()
 plt.show()
 
-
-# #%%
-# #Contador No Estricto: cuento todos los picos una vez que empieza a bajar el estímulo
-# picos_todos, caracteristicas_todos = find_peaks(X, height=X)
-# altura_picos_todos = caracteristicas_todos['peak_heights']
-# c_NE = len(picos_todos) #cotador_NoEstricto
-# 
-# #Contador Estricto: cuento solo los picos con mas/menos un porcentaje de la amplitud del mayor pico una vez que empieza a bajar el estímulo
-# porcentaje_umbral = 20
-# umbral = porcentaje_umbral/100
-# picos_may, caracteristicas_may = find_peaks(X, height=np.max(X)*umbral)
-# altura_picos_may = caracteristicas_may['peak_heights']
-# c_E = len(picos_may) #cotador_Estricto
-# 
-# #Grafico
-# plt.figure()
-# plt.plot(tiempo, X, label='X')
-# plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-# plt.plot(tiempo[picos_may], altura_picos_may, 'o', label='Contador Estricto')
-# plt.plot(tiempo[picos_todos], altura_picos_todos, '.', label='Contador No Estricto')
-# plt.grid()
-# plt.title('FN Con los Valores del Paper')
-# plt.legend()
-# plt.show()
