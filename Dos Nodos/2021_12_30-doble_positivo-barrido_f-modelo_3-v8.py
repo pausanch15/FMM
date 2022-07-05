@@ -15,7 +15,7 @@ plt.ion()
 
 #%%
 #Levanto el csv y veo algunos plots
-fname = '2022_03_07-parametros_biestables-modelo_3.csv'
+fname = '2022_07_04-parametros_biestables-modelo_3.csv'
 df = pd.read_csv(fname, index_col=0)
 
 #Armo un array con todas las áreas biestables

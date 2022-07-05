@@ -15,7 +15,7 @@ plt.ion()
 
 #%%
 #Me fijo si el csv existe. Si no existe, lo creo. Si existe, lo levanto y mido la memoria en los sistemas
-fname = '2022_02_14-parametros_biestables-modelo_3.csv'
+fname = '2022_07_04-parametros_biestables-modelo_3.csv'
 
 if fname in os.listdir():
     #Levanto el csv y veo algunos plots
@@ -23,6 +23,9 @@ if fname in os.listdir():
     
     #Armo un array con todas las áreas biestables
     areas = df.index.to_numpy()
+
+    #Me fijo cuántos sistemas biestables obtuve
+    print(f'Hay {len(areas)} sistemas biestables')
 
     #Arrays donde me voy a guardar los valores de memoria
     mem_A = np.zeros_like(areas)
@@ -36,6 +39,8 @@ if fname in os.listdir():
     
     for n, area in enumerate(areas):
         if n%10 == 0:
+            print(f'Va por el área {n}')
+            print()
             params = df.loc[areas[n], :].to_numpy()[:-5]
             A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
         
@@ -53,7 +58,7 @@ if fname in os.listdir():
             S_bajo = (S_on + S_off)/2
             
             # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
-            mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
+            # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
 
 else:
     #Traigo todos los archivos pickle que haya en el directorio
