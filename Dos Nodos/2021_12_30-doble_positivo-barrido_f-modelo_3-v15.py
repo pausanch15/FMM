@@ -96,6 +96,7 @@ def mide_memoria(params, S_alto=100, S_bajo=0.1):
     tiempo_max = 1000
     
     params = np.insert(params, 0, S_bajo) #Agrego S_bajo a params
+    print(f'En este código params es {params}')
     condiciones_iniciales = [0, 0]
     tiempo_wos, variables_wos = rk.integrar(modelo_wos, params, condiciones_iniciales, tiempo_max)
     A_wos = variables_wos[0]
@@ -151,10 +152,10 @@ print()
 #En el código mide_memoria_modelo_3.py puse todo lo que dije arriba, acá pruebo que me de lo mismo que al correr todo en este archivo... y no pasa
 #Pruebo la función de mide_memoria_modelo_3 con el ejemplo que usó Fede
 S_alto=10; S_bajo=0.1; t_max=2000; N_puntos=10000
-params = np.array([1.20032999e-02, 2.19836442e-01, 1.44079207e-02, 4.13998718e+00, 1.20032999e-02, 1.20032999e-02, 1.34102344e-01, 5.70161534e+01])
-condiciones_iniciales = [0, 0]
+# params = np.array([1.20032999e-02, 2.19836442e-01, 1.44079207e-02, 4.13998718e+00, 1.20032999e-02, 1.20032999e-02, 1.34102344e-01, 5.70161534e+01])
+# condiciones_iniciales = [0, 0]
 
-mem_A, mem_B = mm.mide_memoria(*params, S_alto, S_bajo, plot_mem=True, plot_est=True)
+mem_A, mem_B = mm.mide_memoria(1.20032999e-02, 2.19836442e-01, 1.44079207e-02, 4.13998718e+00, 1.20032999e-02, 1.20032999e-02, 1.34102344e-01, 5.70161534e+01, S_alto, S_bajo, plot_mem=True, plot_est=True)
 
 print(mem_A)
 print(mem_B)

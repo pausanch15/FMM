@@ -57,8 +57,8 @@ if fname in os.listdir():
             S_off = df.loc[areas[n], :].to_numpy()[-1]
             S_bajo = (S_on + S_off)/2
             
-            # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
-            # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=True, plot_memoria=True)
+            mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto, S_bajo, plot_mem=False, plot_est=False)
+            # mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto, S_bajo, plot_mem=True, plot_est=True)
 
 else:
     #Traigo todos los archivos pickle que haya en el directorio

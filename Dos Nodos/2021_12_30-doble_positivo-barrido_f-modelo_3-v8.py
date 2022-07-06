@@ -25,10 +25,10 @@ altos_on = df.loc[:, 'Alto On'].to_numpy()
 altos_off = df.loc[:, 'Alto Off'].to_numpy()
 
 #Calculo la memoria de los sistemas, si no la calculé antes
-if '2022_03_07-mem_A.pkl' in os.listdir() and '2022_03_07-mem_B.pkl' in os.listdir():
-    with open(f'2022_03_07-mem_A.pkl', 'rb') as f:
+if '2022_07_04-mem_A.pkl' in os.listdir() and '2022_07_04-mem_B.pkl' in os.listdir():
+    with open(f'2022_07_04-mem_A.pkl', 'rb') as f:
                 mem_A = pickle.load(f)                
-    with open(f'2022_03_07-mem_B.pkl', 'rb') as f:
+    with open(f'2022_07_04-mem_B.pkl', 'rb') as f:
                 mem_B = pickle.load(f)
 
 else:
@@ -42,12 +42,18 @@ else:
         S_off = df.loc[areas[n], :].to_numpy()[-1]
         S_bajo = (S_on + S_off)/2
 
-        mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_estimulo=False, plot_memoria=False)
+        mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_mem=True, plot_est=False)
 
-    with open(f'2022_03_07-mem_A.pkl', 'wb') as f:
+        #Guardo la figura de la memoria
+        plt.savefig(f'resultados/2022_07_04-memoria_{n}.pdf')
+        plt.close()
+
+    with open(f'2022_07_04-mem_A.pkl', 'wb') as f:
                 pickle.dump(mem_A, f)                
-    with open(f'2022_03_07-mem_B.pkl', 'wb') as f:
+    with open(f'2022_07_04-mem_B.pkl', 'wb') as f:
                 pickle.dump(mem_B, f)
+
+    print('Ya guardó los cálculos de memoria')
 
 #%%
 #En la memoria hay algunos valores que dan muy altos (ridículamente altos). Reviso esos sistemas
