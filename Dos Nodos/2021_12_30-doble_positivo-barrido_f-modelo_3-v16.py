@@ -111,13 +111,29 @@ for parametro, nombre in zip(ejes_x, labels_x):
 #mem_A_fallados, mem_Bfallados, areas_falladas, anchos_fallados, altos_on_fallados, altos_off_fallados, i_fallados
 
 #Primero hago la de mirar las curvas dosis respuesta a ver si el valor de S_bajo que estoy poniendo tiene sentido
+#n = 0 #Sistema fallado que estoy mirando
 
-#Integro un solo sistema fallado
-n = 0 #Sistema fallado que estoy mirando
+tiempo_max = 100
+S_max = 2
+S_min = 0
+pasos = 1000
 
-params = df.loc[areas[i_fallados[n]], :].to_numpy()[:-5]
-S_on = df.loc[areas[i_fallados[n]], :].to_numpy()[-2]
-S_off = df.loc[areas[i_fallados[n]], :].to_numpy()[-1]
-S_bajo = (S_on + S_off)/2
+plt.close()
+for n in range(325):
+    params = df.loc[areas[i_fallados[n]], :].to_numpy()[:-5]
+    S_on = df.loc[areas[i_fallados[n]], :].to_numpy()[-2]
+    S_off = df.loc[areas[i_fallados[n]], :].to_numpy()[-1]
+    S_bajo = (S_on + S_off)/2
+    A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
+    plt.figure()
+    plt.plot(S, A_s, 'o', label='A')
+    plt.plot(S, B_s, '.', label='B')
+    plt.vlines(S_bajo, 0, np.max(A_s), label='S_bajo Usado')
+    plt.grid()
+    plt.legend()
+    plt.title(f'Sistema {n}
+    plt.show()
+    plt.savefig(f'histeresis_{n}.pdf')
+    plt.close()
 
-mem_A_actual, mem_B_actual = mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_mem=True, plot_est=False)
+# mem_A_actual, mem_B_actual = mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_mem=True, plot_est=False)
