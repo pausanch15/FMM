@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import mide_biestabilidad_v3 as mb
 import runge_kuta as rk
+import runge_kuta_estimulo as rks
 import going_up_comming_down_doble_positivo_modelo_3_v2 as gucd
 import pandas as pd
 import mide_memoria_modelo_3 as mm
@@ -12,6 +13,7 @@ import os
 from glob import glob
 import pickle
 from scipy.stats import pearsonr, spearmanr
+from scipy import interpolate
 plt.ion()
 
 #%%
@@ -66,11 +68,11 @@ plt.grid(zorder=0)
 
 #Histograma de memoria en A y B
 fig, ax = plt.subplots(2, 1)
-ax[0].hist(mem_A_ok, bins='auto', facecolor='c', density=True, stacked=True, edgecolor = "black")
+ax[0].hist(mem_A_ok, bins=100, facecolor='c', density=True, stacked=True, edgecolor = "black")
 ax[0].set_title('Memoria en A')
 ax[0].grid()
 
-ax[1].hist(mem_B_ok, bins='auto', facecolor='c', density=True, stacked=True, edgecolor = "black")
+ax[1].hist(mem_B_ok, bins=100, facecolor='c', density=True, stacked=True, edgecolor = "black")
 ax[1].set_title('Memoria en B')
 ax[1].grid()
 
@@ -96,18 +98,26 @@ for i, ax in enumerate(axs.flatten()):
 
 plt.show()
 
-#Mido correlación con los coeficientes que propuso Ale
+#Mido correlación con el coeficiente de Spearman
 for parametro, nombre in zip(ejes_x, labels_x):
-    r_pearson_A, pv_pearson_A = pearsonr(parametro, mem_A)
-    r_pearson_B, pv_pearson_B = pearsonr(parametro, mem_B)
+    r_spearman_A, pv_spearman_A = spearmanr(parametro, mem_A_ok)
+    r_spearman_B, pv_spearman_B = spearmanr(parametro, mem_B_ok)
 
-    r_spearman_A, pv_spearman_A = spearmanr(parametro, mem_A)
-    r_spearman_B, pv_spearman_B = spearmanr(parametro, mem_B)
-
-    print(f'Para la memoria en A, el coeficiente de Pearson entre memoria y {nombre} es {r_pearson_A} con un p-valor de {pv_pearson_A}.')
-    print(f'Para la memoria en B, el coeficiente de Pearson entre memoria y {nombre} es {r_pearson_B} con un p-valor de {pv_pearson_B}.')
-
-    print(f'Para la memoria en A, el coeficiente de Spearman entre memoria y {nombre} es {r_spearman_A} con un p-valor de {pv_spearman_A}.')
-    print(f'Para la memoria en B, el coeficiente de Spearman entre memoria y {nombre} es {r_spearman_B} con un p-valor de {pv_spearman_B}.')
-
+    print(f'Para la memoria en A: Coeficiente y PValor para {nombre}: {r_spearman_A}, {pv_spearman_A}')
+    print(f'Para la memoria en B: Coeficiente y PValor para {nombre}: {r_spearman_B}, {pv_spearman_B}')
     print()
+
+#Para los casos que salieron mal, intento volver a medir 
+#mem_A_fallados, mem_Bfallados, areas_falladas, anchos_fallados, altos_on_fallados, altos_off_fallados, i_fallados
+
+#Primero hago la de mirar las curvas dosis respuesta a ver si el valor de S_bajo que estoy poniendo tiene sentido
+
+#Integro un solo sistema fallado
+n = 0 #Sistema fallado que estoy mirando
+
+params = df.loc[areas[i_fallados[n]], :].to_numpy()[:-5]
+S_on = df.loc[areas[i_fallados[n]], :].to_numpy()[-2]
+S_off = df.loc[areas[i_fallados[n]], :].to_numpy()[-1]
+S_bajo = (S_on + S_off)/2
+
+mem_A_actual, mem_B_actual = mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_mem=True, plot_est=False)
