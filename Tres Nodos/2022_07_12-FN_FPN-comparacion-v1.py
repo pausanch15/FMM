@@ -68,7 +68,7 @@ tiempo, variables, tiempo_estimulo, estimulo = fn.integra_FN_estimulo(dX1, dYX1,
 X, y, Y = variables
 
 #Aplico contadores y ploteo
-picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables, tb=70, porcentaje_umbral=20)
+picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables, tb=70, porcentaje_umbral=60)
 
 plt.figure()
 plt.plot(tiempo, X, label='X')
@@ -95,7 +95,7 @@ epsilon = 0.01
 X, y, Y = variables*epsilon
 
 #Aplico contadores y ploteo
-picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=20)
+picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=60)
 
 plt.figure()
 plt.plot(tiempo, X, label='X')
@@ -117,7 +117,7 @@ for f in f_s:
     epsilon = 0.01
     X, y, Y = variables*epsilon
     
-    picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=20)
+    picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=60)
     
     plt.figure()
     plt.plot(tiempo, X, label='X')
