@@ -1,4 +1,4 @@
-#En este archivo comparo el contador estricto y no estricto en FN y FPN sin reverberaciones
+#Hace lo mismo que v1 pero obtiene una figura con el numero de picos segùn cada contador para cada sistema
 
 #%%
 #Librerías
@@ -53,33 +53,6 @@ def aplica_contadores(tiempo, variables, tb, porcentaje_umbral = 20):
     return [picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento]
 
 #%%
-#Defino el sistema FN
-C1 = 4.5
-dX1 = 0.01
-dYX1 = 7
-KYX1 = 0.04
-Ty1 = 0.35
-dy1 = 0.4
-TY1 = 0.67
-dY1 = 0.25
-
-tiempo, variables, tiempo_estimulo, estimulo = fn.integra_FN_estimulo(dX1, dYX1, KYX1, Ty1, dy1, TY1, dY1, tiempo_max=1000, resolucion=1000, ti=0, tf=200, S_min=0, S_max=5, tau=20, ts=20, tb=70, condiciones_iniciales=[0.01, 0.01, 0.01])
-
-X, y, Y = variables
-
-#Aplico contadores y ploteo
-picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables, tb=70, porcentaje_umbral=60)
-
-plt.figure()
-plt.plot(tiempo, X, label='X')
-plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-plt.plot(tiempo_decaimiento[picos_E], altura_picos_E, 'o', label='Contador Estricto')
-plt.plot(tiempo_decaimiento[picos_NE], altura_picos_NE, '.', label='Contador No Estricto')
-plt.grid()
-plt.title('FN Con los Valores del Paper')
-plt.legend()
-plt.show()
-
 #Defino el sistema FPN
 dYX2 = 0.14
 dX2 = 0.1
@@ -87,67 +60,58 @@ Ty2 = 0.21
 dy2 = 0.1
 TY2 = 0.3
 dY2 = 0.1
-f = 1
 
-tiempo, variables, tiempo_estimulo, estimulo = fpndespf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
-
-epsilon = 0.01
-X, y, Y = variables*epsilon
-
-#Aplico contadores y ploteo
-picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=60)
-
-plt.figure()
-plt.plot(tiempo, X, label='X')
-plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-plt.plot(tiempo_decaimiento[picos_E], altura_picos_E, 'o', label='Contador Estricto')
-plt.plot(tiempo_decaimiento[picos_NE], altura_picos_NE, '.', label='Contador No Estricto')
-plt.grid()
-plt.title('FPN Con los Valores del Paper')
-plt.legend()
-plt.show()
-
-#Barro en f y hago esto mismo
-del(f)
-f_s = np.linspace(0.7, 1.1, 10)
-epsilon = 0.01
+#Barro en f y uso los dos contadores
+f_s = np.linspace(0.7, 1.12, 20)
+N_NE = []
+N_E = []
 
 for f in f_s:
     tiempo, variables, tiempo_estimulo, estimulo = fpndespf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
     
+    epsilon = 0.01
     X, y, Y = variables*epsilon
     
     picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=60)
-    
-    plt.figure()
-    plt.plot(tiempo, X, label='X')
-    plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-    plt.plot(tiempo_decaimiento[picos_E], altura_picos_E, 'o', label='Contador Estricto')
-    plt.plot(tiempo_decaimiento[picos_NE], altura_picos_NE, '.', label='Contador No Estricto')
-    plt.grid()
-    plt.title(f'f={f}')
-    plt.legend()
-    plt.show()
 
-#Barro en dYX2 y hago esto mismo
-del(f, dYX2)
+    N_NE.append(len(picos_NE))
+    N_E.append(len(picos_E))
+
+#Plot
+plt.figure()
+plt.plot(f_s, N_NE, '-o', label='Contador No Estricto')
+plt.plot(f_s, N_E, '-o', label='Contador Estricto')
+plt.grid()
+plt.legend()
+plt.xlabel('f')
+plt.ylabel('Número de Picos')
+plt.show()
+
+#Barro en dYX2 y uso los dos contadores
+del(f, dYX2, N_NE, N_E)
 f = 1
-epsilon = 0.01
-dYX2_s = np.linspace(0.14, 0.26, 10)
+
+dYX2_s = np.linspace(0.14, 0.26, 20)
+N_NE = []
+N_E = []
 
 for dYX2 in dYX2_s:
     tiempo, variables, tiempo_estimulo, estimulo = fpndespf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
     
+    epsilon = 0.01
     X, y, Y = variables*epsilon
     
     picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=60)
-    
-    plt.figure()
-    plt.plot(tiempo, X, label='X')
-    plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-    plt.plot(tiempo_decaimiento[picos_E], altura_picos_E, 'o', label='Contador Estricto')
-    plt.plot(tiempo_decaimiento[picos_NE], altura_picos_NE, '.', label='Contador No Estricto')
-    plt.grid()
-    plt.title(f'dYX2={dYX2}')
-    plt.legend()
-    plt.show()
+
+    N_NE.append(len(picos_NE))
+    N_E.append(len(picos_E))
+
+#Plot
+plt.figure()
+plt.plot(dYX2_s, N_NE, '-o', label='Contador No Estricto')
+plt.plot(dYX2_s, N_E, '-o', label='Contador Estricto')
+plt.grid()
+plt.legend()
+plt.xlabel('dYX2')
+plt.ylabel('Número de Picos')
+plt.show()
