@@ -34,7 +34,7 @@ def modelo(vars, params, interpolar_estimulo, tiempo):
     B=vars[1]
 
     # Sistema de ecuaciones
-    dA = S*k_sa*(1-A)/(K_sa + 1-A) - k_ba*B*A/(K_ba+A) 
+    dA = S*k_sa*(1-A)/(K_sa + 1-A) - k_ba*B*A/(K_ba+A)
     dB =   k_sb*(1-B)/(K_sb + 1-B) - k_ab*A*B/(K_ab+B) 
     
     return np.array([dA,dB])
