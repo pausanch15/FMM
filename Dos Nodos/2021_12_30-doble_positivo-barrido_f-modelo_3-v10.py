@@ -15,7 +15,7 @@ from multiprocessing import Pool
 plt.ion()
 
 #Junto ambos dataframes en uno solo, o lo traigo si ya está hecho
-fname = '2022_03_07-parametros_biestables-modelo_3-todos_juntos.csv'
+fname = '2022_07_25-parametros_biestables-modelo_3-todos_juntos.csv'
 if fname in os.listdir():
     #Levanto el csv y veo algunos plots
     df = pd.read_csv(fname, index_col=0)
