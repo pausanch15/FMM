@@ -21,8 +21,8 @@ if fname in os.listdir():
     df = pd.read_csv(fname, index_col=0)
     
 else:
-    df1 = pd.read_csv('2022_02_14-parametros_biestables-modelo_3.csv', index_col=0)
-    df2 = pd.read_csv('2022_03_07-parametros_biestables-modelo_3.csv', index_col=0)
+    df1 = pd.read_csv('2022_07_04-parametros_biestables-modelo_3.csv', index_col=0)
+    df2 = pd.read_csv('2022_07_25-parametros_biestables-modelo_3.csv', index_col=0)
     df = pd.concat([df1,df2])
     df.to_csv(fname)
     del(df1, df2)

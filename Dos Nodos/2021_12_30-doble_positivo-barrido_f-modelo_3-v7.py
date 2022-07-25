@@ -15,7 +15,7 @@ plt.ion()
 
 #%%
 #Me fijo si el csv existe. Si no existe, lo creo. Si existe, lo levanto y mido la memoria en los sistemas
-fname = '2022_07_04-parametros_biestables-modelo_3.csv'
+fname = '2022_07_25-parametros_biestables-modelo_3.csv'
 
 if fname in os.listdir():
     #Levanto el csv y veo algunos plots

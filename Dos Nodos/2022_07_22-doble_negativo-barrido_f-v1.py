@@ -41,7 +41,7 @@ pasos = 1000
 areas = []
 
 for params, i in zip(parametros, tqdm(range(n_barrido))):
-    A_s, B_s, S = gucd.gucd_modelo_3(*params, tiempo_max, S_max, S_min, pasos)
+    A_s, B_s, S = gucd.gucd(*params, tiempo_max, S_max, S_min, pasos)
     resultado_medicion = mb.mide_biestabilidad(A_s, S)
     if str(type(resultado_medicion)) != r"<class 'NoneType'>":
             if len(resultado_medicion) > 1:
