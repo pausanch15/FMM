@@ -146,6 +146,25 @@ for i, ax in enumerate(axs.flatten()):
 
 plt.show()
 
+#Figura de correlación entre las memorias mayores de ambas variables y los valores de altos on y off
+#Altos On
+plt.figure()
+plt.plot(ejes_x_A_may[-2], mem_A_may, '.', label='A: rSpearman=0.73')
+plt.plot(ejes_x_B_may[-2], mem_B_may, '.', label='B: rSpearman=0.41')
+plt.xlabel(labels_x[-2])
+plt.ylabel('Memoria')
+plt.legend()
+plt.grid()
+
+#Altos Off
+plt.figure()
+plt.plot(ejes_x_A_may[-1], mem_A_may, '.', label='A: rSpearman=0.86')
+plt.plot(ejes_x_B_may[-1], mem_B_may, '.', label='B: rSpearman=0.67')
+plt.xlabel(labels_x[-1])
+plt.ylabel('Memoria')
+plt.legend()
+plt.grid()
+
 #%%
 #Calculo correlación ignorando los casos de memoria 0. Uso solo el coeficiente de Spearman porque tiene más sentido por lo que contó Fede
 for par_A, par_B, nombre in zip(ejes_x_A_may, ejes_x_B_may, labels_x):
