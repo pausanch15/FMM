@@ -45,8 +45,8 @@ else:
         mem_A[n], mem_B[n] = mm.mide_memoria(*params, S_alto=2, S_bajo=S_bajo, plot_mem=True, plot_est=False)
 
         #Guardo la figura de la memoria
-        plt.savefig(f'resultados/2022_07_25-memoria_{n}.pdf')
-        plt.close()
+        # plt.savefig(f'resultados/2022_07_25-memoria_{n}.pdf')
+        # plt.close()
 
     with open(f'2022_07_25-mem_A.pkl', 'wb') as f:
                 pickle.dump(mem_A, f)                

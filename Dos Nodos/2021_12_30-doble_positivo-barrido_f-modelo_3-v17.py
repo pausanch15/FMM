@@ -18,6 +18,7 @@ from scipy import interpolate
 import random
 from itertools import combinations
 import latin_hypercube_sampling as lhs
+plt.style.use('seaborn-pastel')
 plt.ion()
 
 #%%
