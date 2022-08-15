@@ -27,15 +27,15 @@ X, y, Y = variables
 epsilon = 0.01
 X, y, Y = variables*epsilon
 
-# plt.figure()
-# plt.plot(tiempo, X, label='X')
-# plt.plot(tiempo, y, label='y')
-# plt.plot(tiempo, Y, label='Y')
-# plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-# plt.grid()
-# plt.title('FPN Con los Valores del Paper')
-# plt.legend()
-# plt.show()
+plt.figure()
+plt.plot(tiempo, X, label='X')
+plt.plot(tiempo, y, label='y')
+plt.plot(tiempo, Y, label='Y')
+plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
+plt.grid()
+plt.title('FPN Con los Valores del Paper')
+plt.legend()
+plt.show()
 
 #Trato de ver las reververaciones que encontramos con Ale
 dYX2 = 0.18

@@ -67,7 +67,7 @@ for f in f_s:
     plt.grid()
     plt.legend()
     plt.show()
-    plt.savefig(f'resultados/barrido_f_{f}.pdf')
+    # plt.savefig(f'resultados/barrido_f_{f}.pdf')
     plt.close()
 
 #Ploteo los taus en función del valor de f
@@ -112,7 +112,7 @@ for dYX2 in dYX2_s:
     plt.grid()
     plt.legend()
     plt.show()
-    plt.savefig(f'resultados/barrido_dYX2_{dYX2}.pdf')
+    # plt.savefig(f'resultados/barrido_dYX2_{dYX2}.pdf')
     plt.close()
 
 #Ploteo los taus en función del valor de f
