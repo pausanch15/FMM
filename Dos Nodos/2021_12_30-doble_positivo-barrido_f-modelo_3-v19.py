@@ -19,6 +19,8 @@ from itertools import combinations
 import latin_hypercube_sampling as lhs
 
 #Cosas de matplotlib para hacer los gráficos
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
 plt.style.use('ggplot')
 plt.rc("text", usetex=True)
 plt.rc('font', family='serif')
@@ -84,7 +86,9 @@ for i, area in enumerate(areas):
 plt.figure()
 hist, bins = np.histogram(areas_ok, bins='auto')
 logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
-plt.hist(areas_ok, bins=logbins, density=True, stacked=True, edgecolor="grey")
+# plt.hist(areas_ok, bins=logbins, density=True, stacked=True, alpha=0.3)
+hist, bins = np.histogram(areas_ok, bins=logbins, density=True)
+plt.step(bins[:-1], hist, where='post')
 plt.xscale('log')
 plt.yscale('log')
 plt.yticks(fontsize=15, color='black')
@@ -92,7 +96,8 @@ plt.xticks(fontsize=15, color='black')
 plt.xlabel('Tamaño', fontsize=15, color='black')
 plt.ylabel('Cantidad de Áreas', fontsize=15, color='black')
 plt.grid(zorder=-1)
-plt.savefig('Figuras/histareasposloglog.pdf', dpi=300, box_inches='tight')
+plt.tight_layout()
+plt.savefig('Figuras/histareasposloglog.pdf', dpi=300, transparent=True)
 
 #%%
 #Gráficos que ven correlación pintando los valores de memoria menores a 0.1 de otro color, y les pongo un alpha para ver la densidad de puntos en el gráfico
@@ -135,8 +140,8 @@ for i, ax in enumerate(axs.flatten()):
     ax.set_xlabel(labels_x[i], fontsize=15, color='black')
     ax.set_ylabel('Memoria A', fontsize=15, color='black')
     ax.tick_params(labelsize=15, color='black', labelcolor='black')
-    ax.grid()
-    ax.legend()
+    ax.grid(1)
+    ax.legend(fontsize=15)
 plt.savefig('Figuras/corrmemApos.pdf', dpi=300, box_inches='tight')
 
 #Para la memoria en B
@@ -147,8 +152,8 @@ for i, ax in enumerate(axs.flatten()):
     ax.set_xlabel(labels_x[i], fontsize=15, color='black')
     ax.set_ylabel('Memoria B', fontsize=15, color='black')
     ax.tick_params(labelsize=15, color='black', labelcolor='black')
-    ax.grid()
-    ax.legend()
+    ax.grid(1)
+    ax.legend(fontsize=15)
 plt.savefig('Figuras/corrmemBpos.pdf', dpi=300, box_inches='tight')
 
 #Figura de correlación entre las memorias mayores de ambas variables y los valores de altos on y off
@@ -156,11 +161,11 @@ plt.savefig('Figuras/corrmemBpos.pdf', dpi=300, box_inches='tight')
 plt.figure()
 plt.plot(ejes_x_A_may[-2], mem_A_may, '.', label='A: rSpearman=0.73')
 plt.plot(ejes_x_B_may[-2], mem_B_may, '.', label='B: rSpearman=0.41')
-plt.xlabel(labels_x[-2], color='black')
-plt.ylabel('Memoria', color='black')
+plt.xlabel(labels_x[-2], color='black', fontsize=15)
+plt.ylabel('Memoria', color='black', fontsize=15)
 plt.yticks(fontsize=15, color='black')
 plt.xticks(fontsize=15, color='black')
-plt.legend()
+plt.legend(fontsize=15)
 plt.grid()
 plt.savefig('Figuras/altosonpos.pdf', dpi=300, box_inches='tight')
 
@@ -168,11 +173,11 @@ plt.savefig('Figuras/altosonpos.pdf', dpi=300, box_inches='tight')
 plt.figure()
 plt.plot(ejes_x_A_may[-1], mem_A_may, '.', label='A: rSpearman=0.86')
 plt.plot(ejes_x_B_may[-1], mem_B_may, '.', label='B: rSpearman=0.67')
-plt.xlabel(labels_x[-1], color='black')
-plt.ylabel('Memoria', color='black')
+plt.xlabel(labels_x[-1], color='black', fontsize=15)
+plt.ylabel('Memoria', color='black', fontsize=15)
 plt.yticks(fontsize=15, color='black')
 plt.xticks(fontsize=15, color='black')
-plt.legend()
+plt.legend(fontsize=15)
 plt.grid()
 plt.savefig('Figuras/altosoffpos.pdf', dpi=300, box_inches='tight')
 
@@ -244,23 +249,25 @@ parametros_todos = parametros.T
 #Ahora sí, los gráficos. En escala log-log
 for col, param in zip(df, parametros_todos):
     if col in df.columns.to_numpy()[8:]: continue
-    plt.figure()
-    plt.xscale('log')
-    parametro = df.loc[:, col].to_numpy()
+    if str(col) == 'K_ab':
+        plt.figure()
+        plt.xscale('log')
+        parametro = df.loc[:, col].to_numpy()
 
-    hist, bins = np.histogram(param, bins=50)
-    logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
-    plt.hist(param, bins=logbins, facecolor='r', edgecolor="black", alpha=0.4, label='Todos')
+        hist, bins = np.histogram(param, bins=50)
+        logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
+        plt.hist(param, bins=logbins, edgecolor="black", label='Todos')
 
-    hist, bins = np.histogram(parametro, bins=50)
-    logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
-    plt.hist(parametro, bins=logbins, facecolor='c', edgecolor="black", alpha=0.4, label='Sistemas Biestables')
-    
-    plt.xlabel(f"{col}")
-    plt.ylabel("# Sistemas")
-    plt.legend()
-    # plt.savefig(f"resultados/2022_04_11-histogramas_log_{col}.pdf")
-    # plt.close()
+        hist, bins = np.histogram(parametro, bins=50)
+        logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
+        plt.hist(parametro, bins=logbins, edgecolor="black", label='Sistemas Biestables')
+
+        plt.yticks(fontsize=15, color='black')
+        plt.xticks(fontsize=15, color='black')
+        plt.xlabel(f"{col}", fontsize=15, color='black')
+        plt.ylabel("Cantidad de Sistemas", fontsize=15, color='black')
+        plt.legend(fontsize=15)
+        plt.savefig('Figuras/histejemploparampos.pdf', dpi=300, box_inches='tight')
 
 #Separando por k chiquitos y K grandes
 k_chicos = ['k_ba', 'k_ab', 'k_sa', 'k_sb']
