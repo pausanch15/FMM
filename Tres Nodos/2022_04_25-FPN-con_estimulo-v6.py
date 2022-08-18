@@ -11,6 +11,14 @@ import runge_kuta_estimulo as rks
 from scipy.signal import find_peaks
 plt.ion()
 
+#Cosas de matplotlib para hacer los gráficos
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
+plt.style.use('ggplot')
+plt.rc("text", usetex=True)
+plt.rc('font', family='serif')
+plt.ion()
+
 #%%
 #Encontrar los picos de las reververaciones debería ser exctamente igual que antes
 #Lo que cambia es que hay que pedir que solo se tengan en cuenta los mayores que los que tiene el sistema durante el escalón.
@@ -39,15 +47,20 @@ i_tb = np.where(tiempo>tb)[0][0]
 picos, caracteristicas = find_peaks(X[i_tb:], height=X[i_tb]+umbral_memoria)
 altura_picos = caracteristicas['peak_heights']
 
-#Plots
+#%%
+#Ploteo los picos de reverberaciones
 plt.figure()
 plt.plot(tiempo, X, label='X')
 # plt.plot(tiempo[picos_todos], altura_picos_todos, '.', label='Todos los Picos')
 plt.plot(tiempo[i_tb:][picos], altura_picos, 'o', label='Memoria')
 plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-plt.grid()
-plt.legend()
-plt.show()
+plt.grid(1)
+plt.legend(fontsize=15)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.xlabel('Tiempo', fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig('Figuras/picosrev.pdf', dpi=300)
 
 #%%
 #Empiezo a calcular las cantidades que propone el paper
@@ -60,26 +73,31 @@ Tr = t_ultimo_pico_rev - t_primer_pico_rev
 Tm = t_ultimo_pico_rev - tiempo[i_tb]
 Tpr = Tm - Tr
 
-#Ploteo
+#%%
+#Plots
 plt.figure()
 plt.plot(tiempo, X, label='X')
 plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
 
 #Plot Tr
-plt.hlines(-0.01, t_primer_pico_rev, t_ultimo_pico_rev, label='Tr', color='orange')
-plt.vlines(t_primer_pico_rev, altura_picos[0], -0.01, linestyle='dashed', color='orange')
-plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.01, linestyle='dashed', color='orange')
+plt.hlines(-0.01, t_primer_pico_rev, t_ultimo_pico_rev, label=r'$\tau_R$', color='#348ABD')
+plt.vlines(t_primer_pico_rev, altura_picos[0], -0.01, linestyle='dashed', color='#348ABD')
+plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.01, linestyle='dashed', color='#348ABD')
 
 #Plot Tm
-plt.hlines(-0.02, tiempo[i_tb], t_ultimo_pico_rev, label='Tm', color='green')
-plt.vlines(tiempo[i_tb], altura_escalon, -0.02, linestyle='dashed', color='green')
-plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.02, linestyle='dashed', color='green')
+plt.hlines(-0.02, tiempo[i_tb], t_ultimo_pico_rev, label=r'$\tau_M$', color='#988ED5')
+plt.vlines(tiempo[i_tb], altura_escalon, -0.02, linestyle='dashed', color='#988ED5')
+plt.vlines(t_ultimo_pico_rev, altura_picos[-1], -0.02, linestyle='dashed', color='#988ED5')
 
 #Plot Tpr
-plt.hlines(-0.03, tiempo[i_tb], t_primer_pico_rev, label='Tpr', color='red')
-plt.vlines(tiempo[i_tb], altura_escalon, -0.03, linestyle='dashed', color='red')
-plt.vlines(t_primer_pico_rev, altura_picos[0], -0.03, linestyle='dashed', color='red')
+plt.hlines(-0.03, tiempo[i_tb], t_primer_pico_rev, label=r'$\tau_{PR}$', color='#777777')
+plt.vlines(tiempo[i_tb], altura_escalon, -0.03, linestyle='dashed', color='#777777')
+plt.vlines(t_primer_pico_rev, altura_picos[0], -0.03, linestyle='dashed', color='#777777')
 
-plt.grid()
-plt.legend()
-plt.show()
+plt.grid(1)
+plt.legend(fontsize=15)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.xlabel('Tiempo', fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig('Figuras/tausrev.pdf', dpi=300)

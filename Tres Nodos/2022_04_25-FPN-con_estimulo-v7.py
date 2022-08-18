@@ -10,6 +10,14 @@ import runge_kuta_estimulo as rks
 from scipy.signal import find_peaks
 plt.ion()
 
+#Cosas de matplotlib para hacer los gráficos
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
+plt.style.use('ggplot')
+plt.rc("text", usetex=True)
+plt.rc('font', family='serif')
+plt.ion()
+
 #%%
 #Defino una función para hallar los taus 
 def encuentra_taus(X):
@@ -61,26 +69,31 @@ for f in f_s:
     Tpr_s.append(Tpr)
 
     #Plots
-    plt.figure()
-    plt.plot(tiempo, X, label='X')
-    plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-    plt.grid()
-    plt.legend()
-    plt.show()
-    # plt.savefig(f'resultados/barrido_f_{f}.pdf')
-    plt.close()
+    # plt.figure()
+    # plt.plot(tiempo, X, label='X')
+    # plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
+    # plt.grid()
+    # plt.legend()
+    # plt.show()
+    # # plt.savefig(f'resultados/barrido_f_{f}.pdf')
+    # plt.close()
 
+#%%
 #Ploteo los taus en función del valor de f
 plt.figure()
-plt.plot(f_s, Nr_s, '-o', label='Nr')
-plt.plot(f_s, Tr_s, '-o', label='Tr')
-plt.plot(f_s, Tm_s, '-o', label='Tm')
-plt.plot(f_s, Tpr_s, '-o', label='Tpr')
-plt.xlabel('f')
-plt.grid()
-plt.legend()
-plt.show()
+plt.plot(f_s, Nr_s, '-o', label=r'$N_R$')
+plt.plot(f_s, Tr_s, '-o', label=r'$\tau_R$')
+plt.plot(f_s, Tm_s, '-o', label=r'$\tau_M$')
+plt.plot(f_s, Tpr_s, '-o', label=r'$\tau_{PR}$')
+plt.grid(1)
+plt.legend(fontsize=15)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.xlabel('$f$', fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig('Figuras/taubarrf.pdf', dpi=300)
 
+#%%
 #Barrido en feedback negativo
 f = 1
 dX2 = 0.1 
@@ -106,22 +119,26 @@ for dYX2 in dYX2_s:
     Tpr_s.append(Tpr)
 
     #Plots
-    plt.figure()
-    plt.plot(tiempo, X, label='X')
-    plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-    plt.grid()
-    plt.legend()
-    plt.show()
-    # plt.savefig(f'resultados/barrido_dYX2_{dYX2}.pdf')
-    plt.close()
+    # plt.figure()
+    # plt.plot(tiempo, X, label='X')
+    # plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
+    # plt.grid()
+    # plt.legend()
+    # plt.show()
+    # # plt.savefig(f'resultados/barrido_dYX2_{dYX2}.pdf')
+    # plt.close()
 
-#Ploteo los taus en función del valor de f
+#%%
+#Ploteo los taus en función del valor de dYX2
 plt.figure()
-plt.plot(f_s, Nr_s, '-o', label='Nr')
-plt.plot(f_s, Tr_s, '-o', label='Tr')
-plt.plot(f_s, Tm_s, '-o', label='Tm')
-plt.plot(f_s, Tpr_s, '-o', label='Tpr')
-plt.xlabel('dYX2')
-plt.grid()
-plt.legend()
-plt.show()
+plt.plot(f_s, Nr_s, '-o', label=r'$N_R$')
+plt.plot(f_s, Tr_s, '-o', label=r'$\tau_R$')
+plt.plot(f_s, Tm_s, '-o', label=r'$\tau_M$')
+plt.plot(f_s, Tpr_s, '-o', label=r'$\tau_{PR}$')
+plt.grid(1)
+plt.legend(fontsize=15, loc=7)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.xlabel('$d_{YX2}$', fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig('Figuras/taubarrdyx2.pdf', dpi=300)
