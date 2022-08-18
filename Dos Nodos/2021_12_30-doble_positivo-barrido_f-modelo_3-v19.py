@@ -20,6 +20,7 @@ import latin_hypercube_sampling as lhs
 
 #Cosas de matplotlib para hacer los gráficos
 import matplotlib as mpl
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 mpl.rcParams.update(mpl.rcParamsDefault)
 plt.style.use('ggplot')
 plt.rc("text", usetex=True)
@@ -217,17 +218,45 @@ k_sb_s = np.delete(df.loc[:, parametros[7]].to_numpy(), i_fallados)
 parametros_num = [K_sa_s, K_sb_s, k_ba_s, k_ab_s, K_ba_s, K_ab_s, k_sa_s, k_sb_s]
 pares_num = list(combinations(parametros_num, 2))
 
+axis_labels = [(r'$k_{BA}$', r'$K_{AB}$'), (r'$K_{SB}$', r'$k_{SB}$')]
+
 #Hago todas las combinaciones posibles
+colors = plt.rcParams['axes.prop_cycle'].by_key()['color'][:-3]
+cmap1 = LinearSegmentedColormap.from_list("mycmap", colors)
+
 for par, par_num in zip(pares, pares_num):
-    plt.figure()
-    #Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
-    plt.scatter(*par_num, c=mem_A_ok, marker=".",cmap="cividis")    
-    plt.colorbar()
-    plt.xlabel(par[0])
-    plt.ylabel(par[1])
-    # plt.savefig(f'resultados/2022_03_30-{par[0]}_{par[1]}.pdf')
-    plt.show()
-    # plt.close()
+    if par==('k_ba', 'K_ab'):
+        plt.figure()
+        #Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
+        plt.scatter(*par_num, c=mem_A_ok, marker="o", cmap=cmap1, edgecolor='k', linewidths=0.3)
+        # plt.scatter(*par_num, c=mem_A_ok, marker=".")
+        cb = plt.colorbar()
+        for t in cb.ax.get_yticklabels():
+             t.set_fontsize(20)
+        plt.xlabel(axis_labels[0][0], fontsize=15, color='black')
+        plt.ylabel(axis_labels[0][1], fontsize=15, color='black')
+        plt.yticks(fontsize=15, color='black')
+        plt.xticks(fontsize=15, color='black')
+        plt.legend(fontsize=15)
+        plt.grid(True)
+        plt.tight_layout()
+        plt.savefig('Figuras/Kabkbapos.pdf', dpi=300)
+    if par==('K_sb', 'k_sb'):
+        plt.figure()
+        #Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
+        plt.scatter(*par_num, c=mem_A_ok, marker="o", cmap=cmap1, edgecolor='k', linewidths=0.3)
+        # plt.scatter(*par_num, c=mem_A_ok, marker=".")
+        cb = plt.colorbar()
+        for t in cb.ax.get_yticklabels():
+             t.set_fontsize(20)
+        plt.xlabel(axis_labels[1][0], fontsize=15, color='black')
+        plt.ylabel(axis_labels[1][1], fontsize=15, color='black')
+        plt.yticks(fontsize=15, color='black')
+        plt.xticks(fontsize=15, color='black')
+        plt.legend(fontsize=15)
+        plt.grid(True)
+        plt.tight_layout()
+        plt.savefig('Figuras/ksbKsbpos.pdf', dpi=300)
 
 #%%
 #Histogramas de los parametros
