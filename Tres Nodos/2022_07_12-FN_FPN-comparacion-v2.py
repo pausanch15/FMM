@@ -12,6 +12,14 @@ from scipy.signal import find_peaks
 import runge_kuta_estimulo as rks
 plt.ion()
 
+#Cosas de matplotlib para hacer los gráficos
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
+plt.style.use('ggplot')
+plt.rc("text", usetex=True)
+plt.rc('font', family='serif')
+plt.ion()
+
 #%%
 #Función que implementa los contadores
 def aplica_contadores(tiempo, variables, tb, porcentaje_umbral = 20):
@@ -61,6 +69,7 @@ dy2 = 0.1
 TY2 = 0.3
 dY2 = 0.1
 
+#%%
 #Barro en f y uso los dos contadores
 f_s = np.linspace(0.7, 1.12, 20)
 N_NE = []
@@ -80,13 +89,17 @@ for f in f_s:
 #Plot
 plt.figure()
 plt.plot(f_s, N_NE, '-o', label='Contador No Estricto')
-plt.plot(f_s, N_E, '-o', label='Contador Estricto')
-plt.grid()
-plt.legend()
-plt.xlabel('f')
-plt.ylabel('Número de Picos')
-plt.show()
+plt.plot(f_s, N_E, '-s', label='Contador Estricto')
+plt.grid(1)
+plt.xlabel('$f$', fontsize=15, color='black')
+plt.ylabel('Número de Picos', fontsize=15, color='black')
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.legend(fontsize=15)
+plt.tight_layout()
+plt.savefig('Figuras/contadoresbarridof.pdf', dpi=300)
 
+#%%
 #Barro en dYX2 y uso los dos contadores
 del(f, dYX2, N_NE, N_E)
 f = 1
@@ -109,9 +122,12 @@ for dYX2 in dYX2_s:
 #Plot
 plt.figure()
 plt.plot(dYX2_s, N_NE, '-o', label='Contador No Estricto')
-plt.plot(dYX2_s, N_E, '-o', label='Contador Estricto')
-plt.grid()
-plt.legend()
-plt.xlabel('dYX2')
-plt.ylabel('Número de Picos')
-plt.show()
+plt.plot(dYX2_s, N_E, '-s', label='Contador Estricto')
+plt.grid(1)
+plt.xlabel('$d_{YX2}$', fontsize=15, color='black')
+plt.ylabel('Número de Picos', fontsize=15, color='black')
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.legend(fontsize=15)
+plt.tight_layout()
+plt.savefig('Figuras/contadoresbarridodyx2.pdf', dpi=300)

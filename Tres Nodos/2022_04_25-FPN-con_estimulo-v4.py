@@ -10,6 +10,14 @@ from scipy import interpolate
 import runge_kuta_estimulo as rks
 plt.ion()
 
+#Cosas de matplotlib para hacer los gráficos
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
+plt.style.use('ggplot')
+plt.rc("text", usetex=True)
+plt.rc('font', family='serif')
+plt.ion()
+
 #%%
 #Integramos
 #Primero con los parámetros que propone el paper
@@ -28,15 +36,20 @@ epsilon = 0.01
 X, y, Y = variables*epsilon
 
 plt.figure()
-plt.plot(tiempo, X, label='X')
-plt.plot(tiempo, y, label='y')
-plt.plot(tiempo, Y, label='Y')
+plt.plot(tiempo, X, label='$X$')
+plt.plot(tiempo, y, label='$y$')
+plt.plot(tiempo, Y, label='$Y$')
 plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-plt.grid()
-plt.title('FPN Con los Valores del Paper')
-plt.legend()
-plt.show()
+plt.grid(1)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.title('FPN', fontsize=15)
+plt.legend(fontsize=15)
+plt.xlabel('Tiempo', fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig('Figuras/FPNvalpaper.pdf', dpi=300)
 
+#%%
 #Trato de ver las reververaciones que encontramos con Ale
 dYX2 = 0.18
 altura_escalon = 0.1
@@ -48,11 +61,15 @@ epsilon = 0.01
 X, y, Y = variables*epsilon
 
 plt.figure()
-plt.plot(tiempo, X, label='X')
-plt.plot(tiempo, y, label='y')
-plt.plot(tiempo, Y, label='Y')
+plt.plot(tiempo, X, label='$X$')
+plt.plot(tiempo, y, label='$y$')
+plt.plot(tiempo, Y, label='$Y$')
 plt.plot(tiempo_estimulo, estimulo, 'k', label='Estímulo')
-plt.grid()
-plt.title('FPN Con Reververaciones')
-plt.legend()
-plt.show()
+plt.grid(1)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.title('FPN con Reverberaciones', fontsize=15)
+plt.legend(fontsize=15)
+plt.xlabel('Tiempo', fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig('Figuras/revFPN.pdf', dpi=300)
