@@ -51,6 +51,7 @@ with open(f'2022_07_25-mem_B.pkl', 'rb') as f:
 mem_A = np.concatenate((mem_A_04, mem_A_25))
 mem_B = np.concatenate((mem_B_04, mem_B_25))
 
+#%%
 #De estas ya sé que muchas fallaron. Las saco, estudio cosas en los que sí salieron bien y posteriormente recalculo la memoria de los sistemas que no salieron bien
 #Corridas de 2022_07_04 y 2022_07_25 juntas
 i_fallados_04 = np.array([0, 7, 8, 13, 16, 17, 28, 29, 33, 35, 40, 41, 46, 52, 55, 56, 57, 60, 62, 63, 64, 65, 68, 73, 80, 89, 91, 92, 93, 96, 104, 107, 109, 115, 125, 134, 135, 141, 145, 146, 149, 156, 159, 160, 168, 169, 176, 179, 184, 185, 186, 198, 203, 205, 208, 217, 218, 221, 223, 224, 225, 230, 231, 232, 233, 236, 237, 239, 243, 245, 247, 250, 254, 260, 262, 263, 264, 266, 280, 283, 284, 285, 286, 289, 291, 295, 296, 298, 299, 304, 307, 311, 314, 317, 324, 325, 327, 328, 329, 333, 334, 344, 351, 354, 357, 363, 366, 377, 380, 382, 383, 387, 389, 391, 392, 400, 402, 403, 409, 410, 411, 414, 415, 424, 426, 428, 429, 434, 437, 438, 440, 441, 442, 445, 446, 449, 452, 454, 455, 457, 459, 463, 464, 468, 470, 476, 477, 478, 481, 491, 495, 496, 497, 498, 501, 502, 504, 506, 508, 510, 512, 513, 520, 525, 526, 530, 531, 532, 533, 537, 541, 542, 543, 544, 545, 551, 552, 556, 557, 558, 559, 563, 565, 566, 570, 580, 584, 585, 589, 590, 591, 596, 597, 600, 605, 616, 621, 624, 625, 629, 630, 639, 344, 348, 352, 356, 660, 661, 663, 664, 667, 671, 675, 677, 679, 682, 684, 685, 698, 699, 702, 708, 710, 721, 730, 731, 733, 737, 738, 742, 743, 745, 751, 756, 757])
@@ -132,30 +133,37 @@ for e, ej in enumerate(ejes):
         ej.append(eje)
         del(eje)
 
+#%%
 #Para la memoria en A
-fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(10, 5))
+fig, axs = plt.subplots(2, 2, sharey=True, figsize=(10, 5))
 for i, ax in enumerate(axs.flatten()):
     ax.plot(ejes_x_A_may[i], mem_A_may, '.', label='Mayores a 0.1')
     ax.plot(ejes_x_A_men[i], mem_A_men, '.', label='Menores a 0.1')
     ax.set_xlabel(labels_x[i], fontsize=15, color='black')
-    ax.set_ylabel('Memoria A', fontsize=15, color='black')
+    if i%2==0:
+        ax.set_ylabel('Memoria A', fontsize=15, color='black')
     ax.tick_params(labelsize=15, color='black', labelcolor='black')
     ax.grid(1)
     ax.legend(fontsize=15)
-plt.savefig('Figuras/corrmemApos.pdf', dpi=300, box_inches='tight')
+# plt.savefig('Figuras/corrmemApos.pdf', dpi=300, box_inches='tight')
+plt.tight_layout()
+plt.savefig('Figuras/corrmemApos.pdf', dpi=300)
 
 #Para la memoria en B
-fig, axs = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(10, 5))
+fig, axs = plt.subplots(2, 2, sharey=True, figsize=(10, 5))
 for i, ax in enumerate(axs.flatten()):
     ax.plot(ejes_x_B_may[i], mem_B_may, '.', label='Mayores a 0.1')
     ax.plot(ejes_x_B_men[i], mem_B_men, '.', label='Menores a 0.1')
     ax.set_xlabel(labels_x[i], fontsize=15, color='black')
-    ax.set_ylabel('Memoria B', fontsize=15, color='black')
+    if i%2==0:
+        ax.set_ylabel('Memoria B', fontsize=15, color='black')
     ax.tick_params(labelsize=15, color='black', labelcolor='black')
     ax.grid(1)
     ax.legend(fontsize=15)
-plt.savefig('Figuras/corrmemBpos.pdf', dpi=300, box_inches='tight')
+plt.tight_layout()
+plt.savefig('Figuras/corrmemBpos.pdf', dpi=300)
 
+#%%
 #Figura de correlación entre las memorias mayores de ambas variables y los valores de altos on y off
 #Altos On
 plt.figure()
@@ -166,8 +174,9 @@ plt.ylabel('Memoria', color='black', fontsize=15)
 plt.yticks(fontsize=15, color='black')
 plt.xticks(fontsize=15, color='black')
 plt.legend(fontsize=15)
-plt.grid()
-plt.savefig('Figuras/altosonpos.pdf', dpi=300, box_inches='tight')
+plt.grid(True)
+plt.tight_layout()
+plt.savefig('Figuras/altosonpos.pdf', dpi=300)
 
 #Altos Off
 plt.figure()
@@ -178,8 +187,9 @@ plt.ylabel('Memoria', color='black', fontsize=15)
 plt.yticks(fontsize=15, color='black')
 plt.xticks(fontsize=15, color='black')
 plt.legend(fontsize=15)
-plt.grid()
-plt.savefig('Figuras/altosoffpos.pdf', dpi=300, box_inches='tight')
+plt.grid(True)
+plt.tight_layout()
+plt.savefig('Figuras/altosoffpos.pdf', dpi=300)
 
 #%%
 #Calculo correlación ignorando los casos de memoria 0. Uso solo el coeficiente de Spearman porque tiene más sentido por lo que contó Fede
@@ -246,29 +256,38 @@ parametros_todos = parametros.T
 #Dejo anotado el orden que tiene que tener la lista siempre
 # ['K_sa', 'K_sb', 'k_ba', 'k_ab', 'K_ba', 'K_ab', 'k_sa', 'k_sb', 'Ancho', 'Alto Off', 'Alto On', S_on. S_off]
 
+#%%
 #Ahora sí, los gráficos. En escala log-log
 for col, param in zip(df, parametros_todos):
     if col in df.columns.to_numpy()[8:]: continue
     if str(col) == 'K_ab':
         plt.figure()
         plt.xscale('log')
+        plt.yscale('log')
         parametro = df.loc[:, col].to_numpy()
 
         hist, bins = np.histogram(param, bins=50)
         logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
-        plt.hist(param, bins=logbins, edgecolor="black", label='Todos')
+        # plt.hist(param, bins=logbins, edgecolor="black", label='Todos')
+        hist, bins = np.histogram(param, bins=logbins)
+        plt.step(bins[:-1], hist, where='post', label='Todos')
 
         hist, bins = np.histogram(parametro, bins=50)
         logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
-        plt.hist(parametro, bins=logbins, edgecolor="black", label='Sistemas Biestables')
+        # plt.hist(parametro, bins=logbins, edgecolor="black", label='Sistemas Biestables')
+        hist, bins = np.histogram(parametro, bins=logbins)
+        plt.step(bins[:-1], hist, where='post', label='Sistemas Biestables')
 
         plt.yticks(fontsize=15, color='black')
         plt.xticks(fontsize=15, color='black')
         plt.xlabel(f"{col}", fontsize=15, color='black')
         plt.ylabel("Cantidad de Sistemas", fontsize=15, color='black')
         plt.legend(fontsize=15)
-        plt.savefig('Figuras/histejemploparampos.pdf', dpi=300, box_inches='tight')
+        plt.grid(1)
+        plt.tight_layout()
+        plt.savefig('Figuras/histejemploparampos.pdf', dpi=300)
 
+#%%
 #Separando por k chiquitos y K grandes
 k_chicos = ['k_ba', 'k_ab', 'k_sa', 'k_sb']
 K_grandes =['K_sa', 'K_sb', 'K_ba', 'K_ab']
@@ -284,10 +303,15 @@ for col in df:
 
         hist, bins = np.histogram(parametro, bins=50)
         logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
-        plt.hist(parametro, bins=logbins, edgecolor="black", alpha=0.4, label=f"{col}")
+        # plt.hist(parametro, bins=logbins, edgecolor="black", alpha=0.4, label=f"{col}")
+        hist, bins = np.histogram(parametro, bins=logbins)
+        plt.step(bins[:-1], hist, where='post', label=f"{col}")
 
-plt.ylabel("# Sistemas")
-plt.legend()
+plt.ylabel("Cantidad de Sistemas", fontsize=15, color='black')
+plt.legend(fontsize=15)
+plt.grid(1)
+plt.tight_layout()
+plt.savefig('Figuras/histkchicospos.pdf', dpi=300)
 
 #K grandes
 plt.figure()
@@ -300,7 +324,13 @@ for col in df:
 
         hist, bins = np.histogram(parametro, bins=50)
         logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
-        plt.hist(parametro, bins=logbins, edgecolor="black", alpha=0.4, label=f"{col}")
+        # plt.hist(parametro, bins=logbins, edgecolor="black", alpha=0.4, label=f"{col}")
+        hist, bins = np.histogram(parametro, bins=logbins)
+        plt.step(bins[:-1], hist, where='post', label=f"{col}")
 
-plt.ylabel("# Sistemas")
-plt.legend()
+plt.ylabel("Cantidad de Sistemas", fontsize=15, color='black')
+plt.legend(fontsize=15)
+plt.grid(1)
+plt.tight_layout()
+plt.savefig('Figuras/histKgrandespos.pdf', dpi=300)
+
