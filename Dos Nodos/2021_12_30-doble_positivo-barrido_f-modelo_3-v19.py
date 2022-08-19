@@ -97,7 +97,7 @@ plt.yticks(fontsize=15, color='black')
 plt.xticks(fontsize=15, color='black')
 plt.xlabel('Tamaño', fontsize=15, color='black')
 plt.ylabel('Cantidad de Áreas', fontsize=15, color='black')
-plt.grid(zorder=-1)
+plt.grid(True)
 plt.tight_layout()
 plt.savefig('Figuras/histareasposloglog.pdf', dpi=300, transparent=True)
 
@@ -136,7 +136,7 @@ for e, ej in enumerate(ejes):
 
 #%%
 #Para la memoria en A
-fig, axs = plt.subplots(2, 2, sharey=True, figsize=(10, 5))
+fig, axs = plt.subplots(2, 2, sharey=True, figsize=(7, 7))
 for i, ax in enumerate(axs.flatten()):
     ax.plot(ejes_x_A_may[i], mem_A_may, '.', label='Mayores a 0.1')
     ax.plot(ejes_x_A_men[i], mem_A_men, '.', label='Menores a 0.1')
@@ -151,7 +151,7 @@ plt.tight_layout()
 plt.savefig('Figuras/corrmemApos.pdf', dpi=300)
 
 #Para la memoria en B
-fig, axs = plt.subplots(2, 2, sharey=True, figsize=(10, 5))
+fig, axs = plt.subplots(2, 2, sharey=True, figsize=(7, 7))
 for i, ax in enumerate(axs.flatten()):
     ax.plot(ejes_x_B_may[i], mem_B_may, '.', label='Mayores a 0.1')
     ax.plot(ejes_x_B_men[i], mem_B_men, '.', label='Menores a 0.1')
