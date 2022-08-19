@@ -8,6 +8,15 @@ import runge_kuta_estimulo as rks
 from scipy import interpolate #funciones para interpolar
 plt.ion()
 
+#Cosas de matplotlib para hacer los gráficos
+import matplotlib as mpl
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+mpl.rcParams.update(mpl.rcParamsDefault)
+plt.style.use('ggplot')
+plt.rc("text", usetex=True)
+plt.rc('font', family='serif')
+plt.ion()
+
 #%%
 #Le paso al modelo el interpolador del estimulo para que lo interpole a cada paso
 def modelo(vars, params, interpolar_estimulo, tiempo):
@@ -140,18 +149,20 @@ for f in F:
     tiempos.append(tiempo)
     As.append(variables[0])
 
-# plt.rc("text", usetex=True)
 fig, axs = plt.subplots(2, 3, sharex=True, sharey=True)
-fig.suptitle(f'Estímulo Pulso', fontsize=13)
 for i, ax in enumerate(axs.flatten()):
-    ax.plot(tiempo_estimulo, estimulo, '--', color='k', alpha=0.35)
-    ax.plot(tiempos[i], As[i], color='c')
-    ax.set_xlabel('Tiempo')
-    ax.set_ylabel('A')
-    ax.annotate(f"f={F[i]}", (65, 0.2), fontsize=10)
-    ax.set_xlim(0, 15)
-plt.show()
-# plt.savefig('2021_10_12-pulso_corto_zoom.pdf', dpi=300, bbox_inches='tight')
+    ax.plot(tiempo_estimulo, estimulo, '-', color='k')
+    ax.plot(tiempos[i], As[i])
+    if i>=3:
+        ax.set_xlabel('Tiempo', fontsize=15, color='black')
+    if i%3==0:
+        ax.set_ylabel('A', fontsize=15, color='black')
+    ax.annotate(f"$f={F[i]}$", (10, 0.2), fontsize=15)
+    ax.tick_params(labelsize=15, color='black', labelcolor='black')
+    ax.set_xlim(0, 20)
+    ax.grid(True)
+plt.tight_layout()
+plt.savefig('Figuras/pulsocorto.pdf', dpi=300, bbox_inches='tight')
 
 #%%
 #Ahora para los dos pulsos
@@ -177,18 +188,21 @@ for f in F:
     tiempos.append(tiempo)
     As.append(variables[0])
 
-# plt.rc("text", usetex=True)
 fig, axs = plt.subplots(2, 3, sharex=True, sharey=True)
-fig.suptitle(f'Estímulo Dos Pulso', fontsize=13)
 for i, ax in enumerate(axs.flatten()):
-    ax.plot(tiempo_estimulo, estimulo, '--', color='k', alpha=0.35)
-    ax.plot(tiempos[i], As[i], color='c')
-    ax.set_xlabel('Tiempo')
-    ax.set_ylabel('A')
-    ax.annotate(f"f={F[i]}", (65, 0.2), fontsize=10)
-    ax.set_xlim(0, 50)
+    ax.plot(tiempo_estimulo, estimulo, '-', color='k')
+    ax.plot(tiempos[i], As[i])
+    if i>=3:
+        ax.set_xlabel('Tiempo', fontsize=15, color='black')
+    if i%3==0:
+        ax.set_ylabel('A', fontsize=15, color='black')
+    ax.annotate(f"$f={F[i]}$", (28, 0.8), fontsize=15)
+    ax.set_xlim(0, 60)
+    ax.tick_params(labelsize=15, color='black', labelcolor='black')
+    ax.grid(1)
+    # ax.legend(fontsize=15)
 plt.show()
-# plt.savefig('2021_10_12-dos_pulsos_zoom.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('Figuras/dospulsos.pdf', dpi=300, bbox_inches='tight')
 
 #%%
 #Varío el tiempo entre pulsos para los dos pulsos aplicados al f=1.7, que corresponde a biestabilidad reversible.
@@ -209,7 +223,8 @@ plt.legend()
 plt.show()
 
 #%%
-F = [1.6, 1.65, 1.7, 1.75, 1.8, 1.9, 2]
+# F = [1.6, 1.65, 1.7, 1.75, 1.8, 1.9, 2]
+F = [1.7, 1.9]
 
 for f in F:
     tiempos = []
@@ -238,16 +253,18 @@ for f in F:
         As.append(variables[0])
         estimulos.append(estimulo)
 
-    # plt.rc("text", usetex=True)
     fig, axs = plt.subplots(2, 3, sharex=True, sharey=True)
-    fig.suptitle(f'Estímulo Dos Pulso: f={f}', fontsize=13)
     for i, ax in enumerate(axs.flatten()):
-        ax.plot(tiempo_estimulo, estimulos[i], '--', color='k', alpha=0.35)
-        ax.plot(tiempos[i], As[i], color='c')
-        ax.set_xlabel('Tiempo')
-        ax.set_ylabel('A')
-        ax.set_xlim(0, 30)
-        ax.grid()
-    # plt.show()
-    plt.savefig(f'2021_10_14-dos_pulsos_reversible_f={f}.pdf', dpi=300, bbox_inches='tight')
+        ax.plot(tiempo_estimulo, estimulos[i], '-', color='k')
+        ax.plot(tiempos[i], As[i])
+        if i>=3:
+            ax.set_xlabel('Tiempo', fontsize=15, color='black')
+        if i%3==0:
+            ax.set_ylabel('A', fontsize=15, color='black')
+        ax.set_xlim(0, 50)
+        ax.grid(True)
+        ax.tick_params(labelsize=15, color='black', labelcolor='black')
+        
+    plt.tight_layout()
+    plt.savefig(f'Figuras/dospulsosreversiblef={f}.pdf', dpi=300)
          

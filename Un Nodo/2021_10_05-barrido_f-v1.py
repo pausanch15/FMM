@@ -6,6 +6,15 @@ import numpy as np
 import runge_kuta as rk
 plt.ion()
 
+#Cosas de matplotlib para hacer los gráficos
+import matplotlib as mpl
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+mpl.rcParams.update(mpl.rcParamsDefault)
+plt.style.use('ggplot')
+plt.rc("text", usetex=True)
+plt.rc('font', family='serif')
+plt.ion()
+
 #%%
 '''
 Camino de Ida
@@ -158,18 +167,20 @@ S = np.concatenate((S_ida, S_vuelta))
 
 #%%
 #La figura que intenta ser como la del paper
-plt.rc("text", usetex=True)
 fig, axs = plt.subplots(3, 5, figsize=(30, 10), sharex=True, sharey=True)
-fig.suptitle(f'Barrido: f entre {f_min} y {f_max}, tiempo máximo de {tiempo_max}', fontsize=20)
 for i, ax in enumerate(axs.flatten()):
-    ax.plot(S[:int(len(S)/2)], A_s[i][:int(len(A_s[i])/2)], 'o', fillstyle='none', label='Ida', color='indianred')
-    # ax.plot(S[int(len(S)/2):], A_s[i][int(len(A_s[i])/2):], 'o', fillstyle='none', label='Vuelta', color='royalblue')
-    ax.plot(S[int(len(S)/2):], A_s[i][int(len(A_s[i])/2):], '.', label='Vuelta', color='royalblue')
-    ax.legend(loc='lower right')
-    ax.set_xlabel('Input')
-    ax.set_ylabel('A')
-    ax.annotate(f"f={F[i]:.2}", (0.8, 0.3), fontsize=10)
-plt.show()
+    ax.plot(S[:int(len(S)/2)], A_s[i][:int(len(A_s[i])/2)], 'o', fillstyle='none', label='Ida')
+    ax.plot(S[int(len(S)/2):], A_s[i][int(len(A_s[i])/2):], '.', label='Vuelta')
+    # ax.legend(loc='lower right', fontsize=15)
+    ax.legend(fontsize=15)
+    ax.grid(1)
+    if i%5==0:
+        ax.set_ylabel('A', fontsize=15, color='black')
+    if i>=10:
+        ax.set_xlabel('Input', fontsize=15, color='black')
+    ax.annotate(f"$f=${F[i]:.2}", (0.8, 0.3), fontsize=15)
+    ax.tick_params(labelsize=15, color='black', labelcolor='black')
 
 #Guardo como tiempo_max_f_min_f_max.pdf
-plt.savefig(f'{tiempo_max}_{f_min}_{f_max}.pdf', dpi=300, bbox_inches='tight')
+plt.tight_layout()
+plt.savefig(f'Figuras/barridof.pdf', dpi=300, bbox_inches='tight')
