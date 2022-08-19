@@ -11,6 +11,15 @@ import runge_kuta_estimulo as rks #El que sí acepta estímulos dependientes de 
 from scipy import interpolate
 plt.ion()
 
+#Cosas de matplotlib para hacer los gráficos
+import matplotlib as mpl
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+mpl.rcParams.update(mpl.rcParamsDefault)
+plt.style.use('ggplot')
+plt.rc("text", usetex=True)
+plt.rc('font', family='serif')
+plt.ion()
+
 #%%
 #El modelo que se va a integrar con estímulo y sin él
 #wos = without stimulus
@@ -161,27 +170,27 @@ for awos_int, aws_int in zip(A_wos_int, A_ws_int):
     A_ws_ev.append(aws_int(t))
 
 #Ploteo para comparar los resultados originales con los interpolados y extrapolados.
-for i in range(len(A_wos)):
-    plt.rc("text", usetex=True)
-    fig, axs = plt.subplots(2, 1, sharex=True, sharey=True)
-    fig.suptitle(f'Valor de Feedback f={F[i]}', fontsize=16)
-    
-    axs[0].plot(t_wos[i], A_wos[i], label='Sin Estímulo', color='k')
-    axs[0].plot(t_ws[i], A_ws[i], label='Con Estímulo', color='c')
-    axs[0].set_title('Originales')
-    axs[0].legend()
-    axs[0].grid()
-    axs[0].set_ylabel('A')
-    axs[0].set_xlim(0, 15)
-
-    axs[1].plot(t, A_wos_ev[i], label='Sin Estímulo', color='k')
-    axs[1].plot(t, A_ws_ev[i], label='Con Estímulo', color='c')
-    axs[1].set_title('Interpolados')
-    axs[1].legend()
-    axs[1].grid()
-    axs[1].set_xlabel('Tiempo')
-    axs[1].set_ylabel('A')
-    axs[1].set_xlim(0, 15)
+# for i in range(len(A_wos)):
+    # plt.rc("text", usetex=True)
+    # fig, axs = plt.subplots(2, 1, sharex=True, sharey=True)
+    # fig.suptitle(f'Valor de Feedback f={F[i]}', fontsize=16)
+    # 
+    # axs[0].plot(t_wos[i], A_wos[i], label='Sin Estímulo', color='k')
+    # axs[0].plot(t_ws[i], A_ws[i], label='Con Estímulo', color='c')
+    # axs[0].set_title('Originales')
+    # axs[0].legend()
+    # axs[0].grid()
+    # axs[0].set_ylabel('A')
+    # axs[0].set_xlim(0, 15)
+# 
+    # axs[1].plot(t, A_wos_ev[i], label='Sin Estímulo', color='k')
+    # axs[1].plot(t, A_ws_ev[i], label='Con Estímulo', color='c')
+    # axs[1].set_title('Interpolados')
+    # axs[1].legend()
+    # axs[1].grid()
+    # axs[1].set_xlabel('Tiempo')
+    # axs[1].set_ylabel('A')
+    # axs[1].set_xlim(0, 15)
 
     # plt.savefig(f'2020_10_22-interpolacion_f={F[i]}.pdf', dpi=300, bbox_inches='tight')
 
@@ -196,14 +205,19 @@ for awos, aws in zip(A_wos_ev, A_ws_ev):
         # if ti < tiempo_escalon*2:
             # M[-1][i] = 'nan'
 
+#%%
 #Hago la figura que dijo Ale
 plt.figure()
-plt.plot(tiempo_estimulo, estimulo, 'k--', label='Estímulo', alpha=0.45)
+plt.plot(tiempo_estimulo, estimulo, 'k-', label='Estímulo')
 for i in range(len(F)):
-    plt.plot(t, M[i], label=f'f={F[i]}')
-plt.legend(loc='upper right')
+    plt.plot(t, M[i], label=f'$f={F[i]}$')
+plt.legend(loc='upper right', fontsize=15)
 plt.grid()
 plt.xlim(0, 15)
-plt.ylabel('Contador de Memoria')
-plt.xlabel('Tiempo')
-plt.savefig(f'2020_10_22-memoria_muchos_f_t=15.pdf', dpi=300, bbox_inches='tight')
+plt.ylabel('$A$', fontsize=15, color='black')
+plt.xlabel('Tiempo', fontsize=15, color='black')
+plt.grid(True)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig(f'Figuras/respuestavstiempomuchosf.pdf', dpi=300, bbox_inches='tight')
