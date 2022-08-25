@@ -72,8 +72,8 @@ dY2 = 0.1
 #%%
 #Barro en f y uso los dos contadores
 f_s = np.linspace(0.7, 1.12, 20)
-N_NE = []
-N_E = []
+N_NE_f = []
+N_E_f = []
 
 for f in f_s:
     tiempo, variables, tiempo_estimulo, estimulo = fpndespf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
@@ -83,30 +83,30 @@ for f in f_s:
     
     picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=60)
 
-    N_NE.append(len(picos_NE))
-    N_E.append(len(picos_E))
+    N_NE_f.append(len(picos_NE))
+    N_E_f.append(len(picos_E))
 
 #Plot
-plt.figure()
-plt.plot(f_s, N_NE, '-o', label='Contador No Estricto')
-plt.plot(f_s, N_E, '-s', label='Contador Estricto')
-plt.grid(1)
-plt.xlabel('$f$', fontsize=15, color='black')
-plt.ylabel('Número de Picos', fontsize=15, color='black')
-plt.yticks(fontsize=15, color='black')
-plt.xticks(fontsize=15, color='black')
-plt.legend(fontsize=15)
-plt.tight_layout()
-plt.savefig('Figuras/contadoresbarridof.pdf', dpi=300)
+# plt.figure()
+# plt.plot(f_s, N_NE, '-o', label='Contador No Estricto')
+# plt.plot(f_s, N_E, '-s', label='Contador Estricto')
+# plt.grid(1)
+# plt.xlabel('$f$', fontsize=15, color='black')
+# plt.ylabel('Número de Picos', fontsize=15, color='black')
+# plt.yticks(fontsize=15, color='black')
+# plt.xticks(fontsize=15, color='black')
+# plt.legend(fontsize=15)
+# plt.tight_layout()
+# plt.savefig('Figuras/contadoresbarridof.pdf', dpi=300)
 
 #%%
 #Barro en dYX2 y uso los dos contadores
-del(f, dYX2, N_NE, N_E)
+del(dYX2)
 f = 1
 
 dYX2_s = np.linspace(0.14, 0.26, 20)
-N_NE = []
-N_E = []
+N_NE_d = []
+N_E_d = []
 
 for dYX2 in dYX2_s:
     tiempo, variables, tiempo_estimulo, estimulo = fpndespf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
@@ -116,18 +116,40 @@ for dYX2 in dYX2_s:
     
     picos_NE, altura_picos_NE, picos_E, altura_picos_E, tiempo_decaimiento = aplica_contadores(tiempo, variables*epsilon, tb=530, porcentaje_umbral=60)
 
-    N_NE.append(len(picos_NE))
-    N_E.append(len(picos_E))
+    N_NE_d.append(len(picos_NE))
+    N_E_d.append(len(picos_E))
 
 #Plot
-plt.figure()
-plt.plot(dYX2_s, N_NE, '-o', label='Contador No Estricto')
-plt.plot(dYX2_s, N_E, '-s', label='Contador Estricto')
-plt.grid(1)
-plt.xlabel('$d_{YX2}$', fontsize=15, color='black')
-plt.ylabel('Número de Picos', fontsize=15, color='black')
-plt.yticks(fontsize=15, color='black')
-plt.xticks(fontsize=15, color='black')
-plt.legend(fontsize=15)
+# plt.figure()
+# plt.plot(dYX2_s, N_NE, '-o', label='Contador No Estricto')
+# plt.plot(dYX2_s, N_E, '-s', label='Contador Estricto')
+# plt.grid(1)
+# plt.xlabel('$d_{YX2}$', fontsize=15, color='black')
+# plt.ylabel('Número de Picos', fontsize=15, color='black')
+# plt.yticks(fontsize=15, color='black')
+# plt.xticks(fontsize=15, color='black')
+# plt.legend(fontsize=15)
+# plt.tight_layout()
+# plt.savefig('Figuras/contadoresbarridodyx2.pdf', dpi=300)
+
+#%%
+#Ploteo las figuras juntas, compartiendo los ejes
+fig, axs = plt.subplots(1, 2, sharex=False, sharey=True, figsize=(10, 5))
+
+axs[0].plot(f_s, N_NE_f, '-o', label='Contador No Estricto')
+axs[0].plot(f_s, N_E_f, '-s', label='Contador Estricto')
+axs[0].legend(fontsize=15)
+axs[0].set_xlabel(r'$f$', fontsize=15)
+axs[0].tick_params(labelsize=15, color='black', labelcolor='black')
+axs[0].grid(1)
+
+axs[1].plot(dYX2_s, N_NE_d, '-o', label='Contador No Estricto')
+axs[1].plot(dYX2_s, N_E_d, '-s', label='Contador Estricto')
+axs[1].legend(fontsize=15)
+axs[1].set_xlabel(r'$d_{YX2}$', fontsize=15, color='black')
+axs[1].tick_params(labelsize=15, color='black', labelcolor='black')
+axs[1].grid(1)
+
 plt.tight_layout()
-plt.savefig('Figuras/contadoresbarridodyx2.pdf', dpi=300)
+
+plt.savefig('Figuras/contadoresbarridofydyx2.pdf', dpi=300)

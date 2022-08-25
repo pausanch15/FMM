@@ -54,7 +54,7 @@ dY2 = 0.1
 altura_escalon = 0.1
 epsilon = 0.01
 
-Nr_s, Tr_s, Tm_s, Tpr_s = [], [], [], []
+f_Nr_s, f_Tr_s, f_Tm_s, f_Tpr_s = [], [], [], []
 
 f_s = np.linspace(0.88, 1.11, 50)
 
@@ -63,10 +63,10 @@ for f in f_s:
 
     X, y, Y = variables*epsilon
     Nr, Tr, Tm, Tpr = encuentra_taus(X)
-    Nr_s.append(Nr)
-    Tr_s.append(Tr)
-    Tm_s.append(Tm)
-    Tpr_s.append(Tpr)
+    f_Nr_s.append(Nr)
+    f_Tr_s.append(Tr)
+    f_Tm_s.append(Tm)
+    f_Tpr_s.append(Tpr)
 
     #Plots
     # plt.figure()
@@ -81,10 +81,10 @@ for f in f_s:
 #%%
 #Ploteo los taus en función del valor de f
 plt.figure()
-plt.plot(f_s, Nr_s, '-o', label=r'$N_R$')
-plt.plot(f_s, Tr_s, '-o', label=r'$\tau_R$')
-plt.plot(f_s, Tm_s, '-o', label=r'$\tau_M$')
-plt.plot(f_s, Tpr_s, '-o', label=r'$\tau_{PR}$')
+plt.plot(f_s, f_Nr_s, '-o', label=r'$N_R$')
+plt.plot(f_s, f_Tr_s, '-o', label=r'$\tau_R$')
+plt.plot(f_s, f_Tm_s, '-o', label=r'$\tau_M$')
+plt.plot(f_s, f_Tpr_s, '-o', label=r'$\tau_{PR}$')
 plt.grid(1)
 plt.legend(fontsize=15)
 plt.yticks(fontsize=15, color='black')
@@ -104,7 +104,7 @@ dY2 = 0.1
 altura_escalon = 0.1
 epsilon = 0.01
 
-Nr_s, Tr_s, Tm_s, Tpr_s = [], [], [], []
+d_Nr_s, d_Tr_s, d_Tm_s, d_Tpr_s = [], [], [], []
 
 dYX2_s = np.linspace(0.15, 0.22, 50)
 
@@ -113,10 +113,10 @@ for dYX2 in dYX2_s:
 
     X, y, Y = variables*epsilon
     Nr, Tr, Tm, Tpr = encuentra_taus(X)
-    Nr_s.append(Nr)
-    Tr_s.append(Tr)
-    Tm_s.append(Tm)
-    Tpr_s.append(Tpr)
+    d_Nr_s.append(Nr)
+    d_Tr_s.append(Tr)
+    d_Tm_s.append(Tm)
+    d_Tpr_s.append(Tpr)
 
     #Plots
     # plt.figure()
@@ -131,10 +131,10 @@ for dYX2 in dYX2_s:
 #%%
 #Ploteo los taus en función del valor de dYX2
 plt.figure()
-plt.plot(f_s, Nr_s, '-o', label=r'$N_R$')
-plt.plot(f_s, Tr_s, '-o', label=r'$\tau_R$')
-plt.plot(f_s, Tm_s, '-o', label=r'$\tau_M$')
-plt.plot(f_s, Tpr_s, '-o', label=r'$\tau_{PR}$')
+plt.plot(dYX2_s, d_Nr_s, '-o', label=r'$N_R$')
+plt.plot(dYX2_s, d_Tr_s, '-o', label=r'$\tau_R$')
+plt.plot(dYX2_s, d_Tm_s, '-o', label=r'$\tau_M$')
+plt.plot(dYX2_s, d_Tpr_s, '-o', label=r'$\tau_{PR}$')
 plt.grid(1)
 plt.legend(fontsize=15, loc=7)
 plt.yticks(fontsize=15, color='black')
@@ -142,3 +142,99 @@ plt.xticks(fontsize=15, color='black')
 plt.xlabel('$d_{YX2}$', fontsize=15, color='black')
 plt.tight_layout()
 plt.savefig('Figuras/taubarrdyx2.pdf', dpi=300)
+
+#%%
+#Hago la figura con los dos ejes, como sugirió Fede
+#Primero para el barrido en f
+#Creating figure
+fig = plt.figure(figsize=(8, 5))
+ 
+#Plotting taus
+ax = fig.add_subplot(111)
+ax.plot(f_s, f_Tr_s, '-o', label=r'$\tau_R$')
+ax.plot(f_s, f_Tm_s, '-o', label=r'$\tau_M$')
+ax.plot(f_s, f_Tpr_s, '-o', label=r'$\tau_{PR}$')
+ 
+#Creating Twin axes for Nr
+ax2 = ax.twinx()
+ax2.plot(f_s, f_Nr_s, '-o', label=r'$N_R$', color='#777777')
+ 
+#Adding legend
+ax.legend(loc='lower left', fontsize=15)
+ax2.legend(loc='upper right', fontsize=15)
+ 
+#adding grid
+ax.grid(1)
+ 
+#Adding labels
+ax.set_xlabel(r"$f$", fontsize=15, color='black')
+ax.set_ylabel(r"Tiempo", fontsize=15, color='black')
+ax2.set_ylabel(r"Número de Picos", fontsize=15, color='black')
+
+#Pongo el estilo estrecho, y guardo
+ax.tick_params(labelsize=15, color='black', labelcolor='black')
+ax2.tick_params(labelsize=15, color='black', labelcolor='black')
+plt.tight_layout()
+plt.savefig('Figuras/taubarrf.pdf', dpi=300)
+
+#Ahora para el barrido en dYX2
+#Creating figure
+fig = plt.figure(figsize=(8, 5))
+ 
+#Plotting taus
+ax = fig.add_subplot(111)
+ax.plot(dYX2_s, d_Tr_s, '-o', label=r'$\tau_R$')
+ax.plot(dYX2_s, d_Tm_s, '-o', label=r'$\tau_M$')
+ax.plot(dYX2_s, d_Tpr_s, '-o', label=r'$\tau_{PR}$')
+ 
+#Creating Twin axes for Nr
+ax2 = ax.twinx()
+ax2.plot(dYX2_s, d_Nr_s, '-o', label=r'$N_R$', color='#777777')
+ 
+#Adding legend
+ax.legend(loc='lower left', fontsize=15)
+ax2.legend(loc='upper right', fontsize=15)
+ 
+#adding grid
+ax.grid(1)
+ 
+#Adding labels
+ax.set_xlabel(r"$d_{YX2}$", fontsize=15, color='black')
+ax.set_ylabel(r"Tiempo", fontsize=15, color='black')
+ax2.set_ylabel(r"Número de Picos", fontsize=15, color='black')
+
+#Pongo el estilo estrecho, y guardo
+ax.tick_params(labelsize=15, color='black', labelcolor='black')
+ax2.tick_params(labelsize=15, color='black', labelcolor='black')
+plt.tight_layout()
+plt.savefig('Figuras/taubarrdyx2.pdf', dpi=300)
+
+#%%
+#Agrego la figura que muestra Tm/tau paraambos barridos
+tau = 200
+
+f_Tm_s = np.array(f_Tm_s)
+d_Tm_s = np.array(d_Tm_s)
+
+f_Tm_s_tau = f_Tm_s/tau
+d_Tm_s_tau = d_Tm_s/tau
+
+plt.figure()
+plt.plot(f_s, f_Tm_s_tau, '-o', label=r'$\tau_M/\tau$')
+plt.grid(1)
+plt.legend(fontsize=15)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.xlabel('$f$', fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig('Figuras/taumsobretaubarrf.pdf', dpi=300)
+
+plt.figure()
+plt.plot(dYX2_s, d_Tm_s_tau, '-o', label=r'$\tau_M/\tau$')
+plt.grid(1)
+plt.legend(fontsize=15)
+plt.yticks(fontsize=15, color='black')
+plt.xticks(fontsize=15, color='black')
+plt.xlabel('$d_{YX2}$', fontsize=15, color='black')
+plt.tight_layout()
+plt.savefig('Figuras/taumsobretaubarrdyx2.pdf', dpi=300)
