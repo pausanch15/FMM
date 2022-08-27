@@ -71,7 +71,7 @@ dY2 = 0.1
 
 #%%
 #Barro en f y uso los dos contadores
-f_s = np.linspace(0.7, 1.12, 20)
+f_s = np.linspace(0.7, 1, 20)
 N_NE_f = []
 N_E_f = []
 
@@ -88,8 +88,8 @@ for f in f_s:
 
 #Plot
 # plt.figure()
-# plt.plot(f_s, N_NE, '-o', label='Contador No Estricto')
-# plt.plot(f_s, N_E, '-s', label='Contador Estricto')
+# plt.plot(f_s, N_NE_f, '-o', label='Contador No Estricto')
+# plt.plot(f_s, N_E_f, '-s', label='Contador Estricto')
 # plt.grid(1)
 # plt.xlabel('$f$', fontsize=15, color='black')
 # plt.ylabel('Número de Picos', fontsize=15, color='black')
@@ -153,3 +153,38 @@ axs[1].grid(1)
 plt.tight_layout()
 
 plt.savefig('Figuras/contadoresbarridofydyx2.pdf', dpi=300)
+
+#%%
+#Intento agregar los grafiquitos adentro de la figura en el barrido en f
+fig, ax = plt.subplots(figsize=(10, 7))
+
+ax.plot(f_s, N_NE_f, '-o', label='Contador No Estricto')
+ax.plot(f_s, N_E_f, '-s', label='Contador Estricto')
+ax.legend(fontsize=15)
+ax.set_xlabel(r'$f$', fontsize=15)
+ax.tick_params(labelsize=15, color='black', labelcolor='black')
+ax.grid(1)
+
+#Plot en la zona de 0.8<f<0.9
+dYX2 = 0.14; dX2 = 0.1; Ty2 = 0.21; dy2 = 0.1; TY2 = 0.3; dY2 = 0.1; epsilon = 0.01
+f = f_s[1]
+tiempo, variables, tiempo_estimulo, estimulo = fpndespf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
+X, y, Y = variables*epsilon
+
+ax_ins = ax.inset_axes([0.715, 4.75, 0.15, 3], transform=ax.transData)
+ax_ins.plot(tiempo_estimulo, estimulo, color='k')
+ax_ins.plot(tiempo, X, color='#988ED5')
+ax_ins.set_xticks([])
+ax_ins.set_yticks([])
+
+#Plot en la zona de f=1
+dYX2 = 0.14; dX2 = 0.1; Ty2 = 0.21; dy2 = 0.1; TY2 = 0.3; dY2 = 0.1; epsilon = 0.01
+f = f_s[-1]
+tiempo, variables, tiempo_estimulo, estimulo = fpndespf.integra_FPN_estimulo(dYX2, dX2, Ty2, dy2, TY2, dY2, f, tiempo_max=2000, resolucion=10000, ti=0, tf=2000, S_min=0, S_max=0.04, tau=200, ts=30, tb=530, condiciones_iniciales=[0.01, 0.01, 0.01])
+X, y, Y = variables*epsilon
+
+ax_ins_1 = ax.inset_axes([0.88, 6.7, 0.15, 3], transform=ax.transData)
+ax_ins_1.plot(tiempo_estimulo, estimulo, color='k')
+ax_ins_1.plot(tiempo, X, color='#988ED5')
+ax_ins_1.set_xticks([])
+ax_ins_1.set_yticks([])
