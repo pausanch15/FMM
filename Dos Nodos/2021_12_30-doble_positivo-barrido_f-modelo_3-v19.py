@@ -88,9 +88,9 @@ for i, area in enumerate(areas):
 plt.figure()
 hist, bins = np.histogram(areas_ok, bins='auto')
 logbins = np.logspace(np.log10(bins[0]),np.log10(bins[-1]),len(bins))
-# plt.hist(areas_ok, bins=logbins, density=True, stacked=True, alpha=0.3)
+plt.hist(areas_ok, bins=logbins, density=True, stacked=True, alpha=0.3, color='#E24A33')
 hist, bins = np.histogram(areas_ok, bins=logbins, density=True)
-plt.step(bins[:-1], hist, where='post')
+plt.step(bins[:-1], hist, where='post', color='#E24A33')
 plt.xscale('log')
 plt.yscale('log')
 plt.yticks(fontsize=15, color='black')
@@ -225,38 +225,22 @@ colors = plt.rcParams['axes.prop_cycle'].by_key()['color'][:-3]
 cmap1 = LinearSegmentedColormap.from_list("mycmap", colors)
 
 for par, par_num in zip(pares, pares_num):
-    if par==('k_ba', 'K_ab'):
-        plt.figure()
-        #Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
-        plt.scatter(*par_num, c=mem_A_ok, marker="o", cmap=cmap1, edgecolor='k', linewidths=0.3)
-        # plt.scatter(*par_num, c=mem_A_ok, marker=".")
-        cb = plt.colorbar()
-        for t in cb.ax.get_yticklabels():
-             t.set_fontsize(20)
-        plt.xlabel(axis_labels[0][0], fontsize=15, color='black')
-        plt.ylabel(axis_labels[0][1], fontsize=15, color='black')
-        plt.yticks(fontsize=15, color='black')
-        plt.xticks(fontsize=15, color='black')
-        plt.legend(fontsize=15)
-        plt.grid(True)
-        plt.tight_layout()
-        plt.savefig('Figuras/Kabkbapos.pdf', dpi=300)
-    if par==('K_sb', 'k_sb'):
-        plt.figure()
-        #Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
-        plt.scatter(*par_num, c=mem_A_ok, marker="o", cmap=cmap1, edgecolor='k', linewidths=0.3)
-        # plt.scatter(*par_num, c=mem_A_ok, marker=".")
-        cb = plt.colorbar()
-        for t in cb.ax.get_yticklabels():
-             t.set_fontsize(20)
-        plt.xlabel(axis_labels[1][0], fontsize=15, color='black')
-        plt.ylabel(axis_labels[1][1], fontsize=15, color='black')
-        plt.yticks(fontsize=15, color='black')
-        plt.xticks(fontsize=15, color='black')
-        plt.legend(fontsize=15)
-        plt.grid(True)
-        plt.tight_layout()
-        plt.savefig('Figuras/ksbKsbpos.pdf', dpi=300)
+    plt.figure()
+    #Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
+    plt.scatter(*par_num, c=mem_A_ok, marker="o", cmap=cmap1, edgecolor='k', linewidths=0.3)
+    cb = plt.colorbar()
+    for t in cb.ax.get_yticklabels():
+         t.set_fontsize(20)
+    plt.xlabel(par[0], fontsize=15, color='black')
+    plt.ylabel(par[1], fontsize=15, color='black')
+    plt.yticks(fontsize=15, color='black')
+    plt.xticks(fontsize=15, color='black')
+    plt.legend(fontsize=15)
+    plt.grid(True)
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.tight_layout()
+    # plt.savefig('Figuras/Kabkbapos.pdf', dpi=300)
 
 #%%
 #Histogramas de los parametros
@@ -384,6 +368,8 @@ for i, ax in enumerate(axs.flatten()):
     hist, bins = np.histogram(parametro, bins=logbins)
     ax.step(bins[:-1], hist, where='post')
 
+    ax.hist(parametro, bins=logbins, alpha=0.3, color='#E24A33')
+
     if i%2==0:
         ax.set_ylabel('Cantidad de Sistemas', fontsize=15, color='black')
 
@@ -407,6 +393,8 @@ for i, ax in enumerate(axs.flatten()):
     
     hist, bins = np.histogram(parametro, bins=logbins)
     ax.step(bins[:-1], hist, where='post')
+
+    ax.hist(parametro, bins=logbins, alpha=0.3, color='#E24A33')
 
     if i%2==0:
         ax.set_ylabel('Cantidad de Sistemas', fontsize=15, color='black')
