@@ -207,7 +207,7 @@ for awos, aws in zip(A_wos_ev, A_ws_ev):
 
 #%%
 #Hago la figura que dijo Ale
-plt.figure()
+plt.figure(figsize=(7, 4))
 plt.plot(tiempo_estimulo, estimulo, 'k-', label='Estímulo')
 for i in range(len(F)):
     plt.plot(t, M[i], label=f'$f={F[i]}$')
@@ -220,4 +220,4 @@ plt.grid(True)
 plt.yticks(fontsize=15, color='black')
 plt.xticks(fontsize=15, color='black')
 plt.tight_layout()
-plt.savefig(f'Figuras/respuestavstiempomuchosf.pdf', dpi=300, bbox_inches='tight')
+plt.savefig(f'Figuras/respuestavstiempomuchosf.pdf', dpi=300)
