@@ -206,7 +206,19 @@ pares_num = list(combinations(parametros_num, 2))
 #Anoto los pares que quiero para guardar esas figuras
 pares_fig = [('k_ba', 'k_sb'), ('k_ab', 'k_sb'), ('k_ba', 'k_ab'), ('k_ab', 'k_sa'), ('k_ba', 'k_sa'), ('K_sa', 'k_sa')]
 
-pares_fig_nombre = [('$k_{BA}$', '$k_{SB}$'), ('$k_{AB}$', '$k_{SB}$'), ('$k_{BA}$', '$k_{AB}$'), ('$k_{AB}$', '$k_{SA}$'), ('$k_{BA}$', '$k_{SA}$'), ('$K_{SA}$', '$k_{SA}$')]
+pares_en_latex = {
+    'k_ba': '$k_{BA}$',
+    'k_sb': '$k_{SB}$',
+    'k_ab': '$k_{AB}$',
+    'k_sb': '$k_{SB}$',
+    'k_ba': '$k_{BA}$',
+    'k_ab': '$k_{AB}$',
+    'k_sa': '$k_{SA}$',
+    'k_ba': '$k_{BA}$',
+    'k_sa': '$k_{SA}$',
+    'K_sa': '$K_{SA}$',
+    'k_sa': '$k_{SA}$'
+}
 
 #Hago todas las combinaciones posibles
 colors = plt.rcParams['axes.prop_cycle'].by_key()['color'][:-3]
@@ -220,16 +232,15 @@ for i, par, par_num in zip(range(len(pares)), pares, pares_num):
         cb = plt.colorbar()
         for t in cb.ax.get_yticklabels():
              t.set_fontsize(20)
-        plt.xlabel(pares_fig_nombre[i][0], fontsize=15, color='black')
-        plt.ylabel(pares_fig_nombre[i][1], fontsize=15, color='black')
+        plt.xlabel(pares_en_latex[par[0]], fontsize=15, color='black')
+        plt.ylabel(pares_en_latex[par[1]], fontsize=15, color='black')
         plt.yticks(fontsize=15, color='black')
         plt.xticks(fontsize=15, color='black')
-        plt.legend(fontsize=15)
         plt.grid(True)
         plt.xscale('log')
         plt.yscale('log')
         plt.tight_layout()
-        # plt.savefig('Figuras/Kabkbapos.pdf', dpi=300)
+        plt.savefig(f'Figuras/comparacion_dobleneg_{par[0]}vs{par[1]}.pdf', dpi=300)
 
 #%%
 #Histogramas de los parametros

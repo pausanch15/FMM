@@ -200,6 +200,7 @@ for e, ej in enumerate(ejes):
             eje.append(arr[i])
         ej.append(eje)
         del(eje)
+        
 #Calculo correlación ignorando los casos de memoria 0. Uso solo el coeficiente de Spearman porque tiene más sentido por lo que contó Fede
 dn_A_rs_spearman = []
 dn_B_rs_spearman = []
@@ -217,6 +218,7 @@ for par_A, par_B, nombre in zip(ejes_x_A_may, ejes_x_B_may, labels_x):
 #Armo el gráfico de barras
 labels_x = ['Área', 'Ancho', 'Alto On', 'Altos Off']
 labels_y = ['rSpearman', 'P-Valor']
+scales = ['linear', 'log']
 
 A = [[dp_A_rs_spearman, dn_A_rs_spearman], [dp_A_pvs, dn_A_pvs]]
 B = [[dp_B_rs_spearman, dn_B_rs_spearman], [dp_B_pvs, dn_B_pvs]]
@@ -224,22 +226,33 @@ B = [[dp_B_rs_spearman, dn_B_rs_spearman], [dp_B_pvs, dn_B_pvs]]
 #Para la memoria en A
 fig, axs = plt.subplots(1, 2, sharey=False, sharex=False, figsize=(15, 5))
 for i, ax in enumerate(axs.flatten()):
-    ax.bar(labels_x, A[i][0], label='Doble Positivo', width=0.4)
-    ax.bar(labels_x, A[i][1], label='Doble Negativo', width=0.4)
-    ax.set_ylabel(labels_y[i], color='black', fontsize=15)
+    # ax.bar(labels_x, A[i][0], label='Doble Positivo', width=0.4)
+    # ax.bar(labels_x, A[i][1], label='Doble Negativo', width=0.4)
+    yaxis = np.arange(len(labels_x))
+    height=0.4
+    ax.barh(yaxis+height/2, A[i][0], label='Doble Positivo', height=height)
+    ax.barh(yaxis-height/2, A[i][1], label='Doble Negativo', height=height)
+    ax.set_xlabel(labels_y[i], color='black', fontsize=15)
     ax.tick_params(labelsize=15, color='black', labelcolor='black')
     ax.grid(1)
     ax.legend(fontsize=15)
+    ax.set_yticks(yaxis, labels_x)
+    ax.set_xscale(scales[i])
 plt.tight_layout()
+plt.savefig('Figuras/com_corr_memA.pdf', dpi=300)
 
 #Para la memoria en B
 fig, axs = plt.subplots(1, 2, sharey=False, sharex=False, figsize=(15, 5))
 for i, ax in enumerate(axs.flatten()):
-    ax.bar(labels_x, B[i][0], label='Doble Positivo', width=0.4)
-    ax.bar(labels_x, B[i][1], label='Doble Negativo', width=0.4)
-    ax.set_ylabel(labels_y[i], color='black', fontsize=15)
+    yaxis = np.arange(len(labels_x))
+    height=0.4
+    ax.barh(yaxis+height/2, B[i][0], label='Doble Positivo', height=0.4)
+    ax.barh(yaxis-height/2, B[i][1], label='Doble Negativo', height=0.4)
+    ax.set_xlabel(labels_y[i], color='black', fontsize=15)
     ax.tick_params(labelsize=15, color='black', labelcolor='black')
     ax.grid(1)
     ax.legend(fontsize=15)
+    ax.set_yticks(yaxis, labels_x)
+    ax.set_xscale(scales[i])
 plt.tight_layout()
-
+plt.savefig('Figuras/com_corr_memB.pdf', dpi=300)

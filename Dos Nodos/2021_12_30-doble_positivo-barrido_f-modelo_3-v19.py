@@ -218,30 +218,40 @@ k_sb_s = np.delete(df.loc[:, parametros[7]].to_numpy(), i_fallados)
 parametros_num = [K_sa_s, K_sb_s, k_ba_s, k_ab_s, K_ba_s, K_ab_s, k_sa_s, k_sb_s]
 pares_num = list(combinations(parametros_num, 2))
 
-axis_labels = [(r'$k_{BA}$', r'$K_{AB}$'), (r'$K_{SB}$', r'$k_{SB}$')]
+#Anoto los pares que quiero para guardar esas figuras
+pares_fig = [('k_ab', 'k_sb'), ('K_ba', 'K_ab'), ('K_sb', 'k_sb')]
+
+pares_en_latex = {
+    'k_ab': '$k_{AB}$',
+    'k_sb': '$k_{SB}$',
+    'K_ba': '$K_{BA}$',
+    'K_ab': '$K_{AB}$',
+    'K_sb': '$K_{SB}$',
+    'k_sb': '$k_{SB}$'
+}
 
 #Hago todas las combinaciones posibles
 colors = plt.rcParams['axes.prop_cycle'].by_key()['color'][:-3]
 cmap1 = LinearSegmentedColormap.from_list("mycmap", colors)
 
 for par, par_num in zip(pares, pares_num):
-    plt.figure()
-    #Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
-    plt.scatter(*par_num, c=mem_A_ok, marker="o", cmap=cmap1, edgecolor='k', linewidths=0.3)
-    cb = plt.colorbar()
-    for t in cb.ax.get_yticklabels():
-         t.set_fontsize(20)
-    plt.xlabel(par[0], fontsize=15, color='black')
-    plt.ylabel(par[1], fontsize=15, color='black')
-    plt.yticks(fontsize=15, color='black')
-    plt.xticks(fontsize=15, color='black')
-    plt.legend(fontsize=15)
-    plt.grid(True)
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.tight_layout()
-    # plt.savefig('Figuras/Kabkbapos.pdf', dpi=300)
-
+    if par in pares_fig:
+        plt.figure()
+        #Scatter para hacer el plot XYZ de a pares de parametros con la memoria respectiva
+        plt.scatter(*par_num, c=mem_A_ok, marker="o", cmap=cmap1, edgecolor='k', linewidths=0.3)
+        cb = plt.colorbar()
+        for t in cb.ax.get_yticklabels():
+             t.set_fontsize(20)
+        plt.xlabel(pares_en_latex[par[0]], fontsize=15, color='black')
+        plt.ylabel(pares_en_latex[par[1]], fontsize=15, color='black')
+        plt.yticks(fontsize=15, color='black')
+        plt.xticks(fontsize=15, color='black')
+        plt.grid(True)
+        plt.xscale('log')
+        plt.yscale('log')
+        plt.tight_layout()
+        plt.savefig(f'Figuras/comparacion_doblepos_{pares[0]}vs{pares[1]}.pdf', dpi=300)
+    
 #%%
 #Histogramas de los parametros
 n_parametros = 8
