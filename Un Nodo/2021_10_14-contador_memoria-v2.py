@@ -71,7 +71,7 @@ tiempo_max_estimulo = 100
 tiempo_estimulo = np.linspace(0,tiempo_max_estimulo,N_estimulo) 
 tiempo_escalon = 2 
 
-estimulo = np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon) - np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon*2)
+estimulo = (np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon) - np.ones(N_estimulo)*(tiempo_estimulo>tiempo_escalon*2))
 
 #%%
 #Los valores de f que van a ser interesantes de integrar en cada caso.
@@ -141,7 +141,7 @@ for f, eq_wos, eq_ws in zip(F, equilibrios_wos, equilibrios_ws):
     del(tiempo, variables, params, condiciones_iniciales)
 
     #Ahora con el estímulo
-    condiciones_iniciales = [eq_ws]
+    condiciones_iniciales = [eq_wos]
     params = [0, k1, k2, K2, n, k3]
     interpolar_estimulo = interpolate.interp1d(tiempo_estimulo,estimulo)
     tiempo, variables = rks.integrar(modelo_ws, params, interpolar_estimulo, condiciones_iniciales, tiempo_max, tiempo_min)
@@ -201,16 +201,16 @@ M = [] #Lista en la que voy a guardar los contadores
 
 for awos, aws in zip(A_wos_ev, A_ws_ev):
     M.append(aws - awos)
-    # for i, ti in enumerate(t):
-        # if ti < tiempo_escalon*2:
-            # M[-1][i] = 'nan'
+    for i, ti in enumerate(t):
+        if ti < tiempo_escalon*2:
+            M[-1][i] = 'nan'
 
 #%%
 #Hago la figura que dijo Ale
 plt.figure(figsize=(7, 4))
 plt.plot(tiempo_estimulo, estimulo, 'k-', label='Estímulo')
 for i in range(len(F)):
-    plt.plot(t, M[i], label=f'$f={F[i]}$')
+    plt.plot(t, A_ws_ev[i], label=f'$f={F[i]}$')
 plt.legend(loc='upper right', fontsize=15)
 plt.grid()
 plt.xlim(0, 15)
